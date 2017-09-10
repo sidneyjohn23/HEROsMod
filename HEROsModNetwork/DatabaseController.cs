@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using Terraria;
 
 // TODO, save position of ui windows, save separate client json
@@ -91,8 +92,9 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static HEROsModDatabase database;
 		private static DatabaseWorld currentDatabaseWorld;
+        private static SHA512 md5hash = System.Security.Cryptography.SHA512.Create();
 
-		public static void LoadSetting(string settingName)
+        public static void LoadSetting(string settingName)
 		{
 			ModUtils.DebugText("LoadSetting");
 			Directory.CreateDirectory(Main.SavePath);
@@ -360,7 +362,8 @@ namespace HEROsMod.HEROsModNetwork
 		{
 			foreach (var user in database.players)
 			{
-				if (user.username.ToLower() == username.ToLower() && user.password == password)
+                
+				if (user.username.ToLower() == username.ToLower() && user.password == BitConverter.ToString(md5hash.ComputeHash(password.ToByteArray())))
 				{
 					username = user.username;
 					playerID = user.ID;
@@ -380,13 +383,13 @@ namespace HEROsMod.HEROsModNetwork
 			if (database.players.Count == 0)
 			{
 				database.players.Add(
-					new DatabasePlayer() { username = username, password = password, ID = GetAvailablePlayerID(), group = -1 }
+					new DatabasePlayer() { username = username, password = BitConverter.ToString(md5hash.ComputeHash(password.ToByteArray())), ID = GetAvailablePlayerID(), group = -1 }
 				);
 			}
 			else
 			{
 				database.players.Add(
-					new DatabasePlayer() { username = username, password = password, ID = GetAvailablePlayerID() }
+					new DatabasePlayer() { username = username, password = BitConverter.ToString(md5hash.ComputeHash(password.ToByteArray())), ID = GetAvailablePlayerID() }
 				);
 			}
 			SaveSetting(jsonDatabaseFilename);
