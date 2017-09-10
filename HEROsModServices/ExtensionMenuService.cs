@@ -23,9 +23,11 @@ namespace HEROsMod.HEROsModServices
 			this.HotbarIcon.Tooltip = "Extension Tools";
 			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 
-			_extensionMenuHotbar = new ExtensionMenuWindow();
-			_extensionMenuHotbar.HotBarParent = HEROsMod.ServiceHotbar;
-			_extensionMenuHotbar.Hide();
+            _extensionMenuHotbar = new ExtensionMenuWindow()
+            {
+                HotBarParent = HEROsMod.ServiceHotbar
+            };
+            _extensionMenuHotbar.Hide();
 			this.AddUIView(_extensionMenuHotbar);
 
 			Hotbar = _extensionMenuHotbar;

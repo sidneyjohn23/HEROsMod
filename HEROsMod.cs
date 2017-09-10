@@ -232,12 +232,14 @@ namespace HEROsMod
 				_hotbar = new ServiceHotbar();
 				SelectionTool.Init();
 
-				//PrefixScraper.Scrape();
-				//UIKit.MasterView.menuScreen.AddChild(new UIKit.UIComponents.DropTableView(HEROsModVideo.Services.DropRateInfo.DropTableBuilder.DropTable.NPCDropTables[113], 350));
-				//UIKit.MasterView.gameScreen.AddChild(new HEROsModVideo.Services.Crafting.CraftingWindow());
-				UIKit.UIColorPicker colorPicker = new UIKit.UIColorPicker();
-				colorPicker.X = 200;
-				UIKit.MasterView.menuScreen.AddChild(colorPicker);
+                //PrefixScraper.Scrape();
+                //UIKit.MasterView.menuScreen.AddChild(new UIKit.UIComponents.DropTableView(HEROsModVideo.Services.DropRateInfo.DropTableBuilder.DropTable.NPCDropTables[113], 350));
+                //UIKit.MasterView.gameScreen.AddChild(new HEROsModVideo.Services.Crafting.CraftingWindow());
+                UIKit.UIColorPicker colorPicker = new UIKit.UIColorPicker()
+                {
+                    X = 200
+                };
+                UIKit.MasterView.menuScreen.AddChild(colorPicker);
 
 				//InventoryManager.Load();
 				//HEROsModVideo.Services.ChestDropsInfo.ChestDropBuilder.LoadCompiledData();

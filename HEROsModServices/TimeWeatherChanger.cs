@@ -31,12 +31,14 @@ namespace HEROsMod.HEROsModServices
 			this.HotbarIcon.Tooltip = "Change Time/Rain";
 			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 
-			//timeWeatherHotbar = new TimeWeatherControlHotbar();
-			//HEROsMod.ServiceHotbar.AddChild(timeWeatherHotbar);
+            //timeWeatherHotbar = new TimeWeatherControlHotbar();
+            //HEROsMod.ServiceHotbar.AddChild(timeWeatherHotbar);
 
-			timeWeatherHotbar = new TimeWeatherControlHotbar();
-			timeWeatherHotbar.HotBarParent = HEROsMod.ServiceHotbar;
-			timeWeatherHotbar.Hide();
+            timeWeatherHotbar = new TimeWeatherControlHotbar()
+            {
+                HotBarParent = HEROsMod.ServiceHotbar
+            };
+            timeWeatherHotbar.Hide();
 			this.AddUIView(timeWeatherHotbar);
 
 			Hotbar = timeWeatherHotbar;
@@ -199,29 +201,37 @@ namespace HEROsMod.HEROsModServices
 			UpdateWhenOutOfBounds = true;
 
 			UIImage bStopRain = new UIImage(HEROsMod.instance.GetTexture("Images/rainStop"));
-			UIImage bStartRain = new UIImage(HEROsMod.instance.GetTexture("Images/rainIcon"));
-			bStartRain.Tooltip = "Start Rain";
-			bStopRain.Tooltip = "Stop Rain";
+            UIImage bStartRain = new UIImage(HEROsMod.instance.GetTexture("Images/rainIcon"))
+            {
+                Tooltip = "Start Rain"
+            };
+            bStopRain.Tooltip = "Stop Rain";
 			bStartRain.onLeftClick += bStartRain_onLeftClick;
 			bStopRain.onLeftClick += bStopRain_onLeftClick;
 			buttonView.AddChild(bStopRain);
 			buttonView.AddChild(bStartRain);
 
 			UIImage bStopSandstorm = new UIImage(HEROsMod.instance.GetTexture("Images/rainStop"));
-			UIImage bStartSandstorm = new UIImage(HEROsMod.instance.GetTexture("Images/rainIcon"));
-			bStartSandstorm.Tooltip = "Start Sandstorm";
-			bStopSandstorm.Tooltip = "Stop Sandstorm";
+            UIImage bStartSandstorm = new UIImage(HEROsMod.instance.GetTexture("Images/rainIcon"))
+            {
+                Tooltip = "Start Sandstorm"
+            };
+            bStopSandstorm.Tooltip = "Stop Sandstorm";
 			bStartSandstorm.onLeftClick += bStartSandstorm_onLeftClick;
 			bStopSandstorm.onLeftClick += bStopSandstorm_onLeftClick;
 			buttonView.AddChild(bStopSandstorm);
 			buttonView.AddChild(bStartSandstorm);
 
-			UIImage nightButton = new UIImage(HEROsMod.instance.GetTexture("Images/moonIcon"));
-			nightButton.Tooltip = "Night";
-			nightButton.onLeftClick += nightButton_onLeftClick;
-			UIImage noonButton = new UIImage(HEROsMod.instance.GetTexture("Images/sunIcon"));
-			noonButton.Tooltip = "Noon";
-			noonButton.onLeftClick += noonButton_onLeftClick;
+            UIImage nightButton = new UIImage(HEROsMod.instance.GetTexture("Images/moonIcon"))
+            {
+                Tooltip = "Night"
+            };
+            nightButton.onLeftClick += nightButton_onLeftClick;
+            UIImage noonButton = new UIImage(HEROsMod.instance.GetTexture("Images/sunIcon"))
+            {
+                Tooltip = "Noon"
+            };
+            noonButton.onLeftClick += noonButton_onLeftClick;
 			bPause = new UIImage(TimeWeatherChanger.TimePaused ? playTexture : pauseTexture);
 			bPause.onLeftClick += bPause_onLeftClick;
 			bPause.Tooltip = TimeWeatherChanger.TimePaused ? "Resume Time" : "Pause Time";// "Toggle Freeze Time";
@@ -230,9 +240,11 @@ namespace HEROsMod.HEROsModServices
 			buttonView.AddChild(noonButton);
 			buttonView.AddChild(bPause);
 
-			UIImage sundialButton = new UIImage(HEROsMod.instance.GetTexture("Images/timeRain"));
-			sundialButton.Tooltip = "Force Enchanted Sundial";
-			sundialButton.onLeftClick += sundialButton_onLeftClick;
+            UIImage sundialButton = new UIImage(HEROsMod.instance.GetTexture("Images/timeRain"))
+            {
+                Tooltip = "Force Enchanted Sundial"
+            };
+            sundialButton.onLeftClick += sundialButton_onLeftClick;
 			buttonView.AddChild(sundialButton);
 
 			//float xPos = spacing;

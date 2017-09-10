@@ -17,11 +17,8 @@ namespace HEROsMod.HEROsModServices
 			get { return _enabled; }
 			set
 			{
-				if (GodModeToggled != null)
-				{
-					GodModeToggled(value, _enabled);
-				}
-				_enabled = value;
+                GodModeToggled?.Invoke(value, _enabled);
+                _enabled = value;
 			}
 		}
 

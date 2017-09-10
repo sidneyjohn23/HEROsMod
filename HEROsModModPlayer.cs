@@ -1,21 +1,11 @@
-﻿using HEROsMod.HEROsModNetwork;
-using HEROsMod.HEROsModServices;
-using HEROsMod.UIKit;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using HEROsMod.HEROsModServices;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
-using Terraria.UI;
 
 namespace HEROsMod
 {
-	public class HEROsModModPlayer : ModPlayer
+    public class HEROsModModPlayer : ModPlayer
 	{
 		public override bool Autoload(ref string name) => true;
 

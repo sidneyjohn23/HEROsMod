@@ -76,12 +76,13 @@ namespace HEROsMod.HEROsModServices
 			Anchor = AnchorPosition.Center;
 			CenterToParent();
 			UILabel title = new UILabel("Connected Players");
-			UIImage bClose = new UIImage(closeTexture);
-
-			bClose.Anchor = AnchorPosition.TopRight;
-			bClose.X = Width - spacing;
-			bClose.Y = spacing;
-			title.Scale = .6f;
+            UIImage bClose = new UIImage(closeTexture)
+            {
+                Anchor = AnchorPosition.TopRight,
+                X = Width - spacing,
+                Y = spacing
+            };
+            title.Scale = .6f;
 			title.X = spacing;
 			title.Y = spacing;
 			title.OverridesMouse = false;
@@ -117,16 +118,20 @@ namespace HEROsMod.HEROsModServices
 				Player player = Main.player[i];
 				if (player.active)
 				{
-					UIPlayerHead playerHead = new UIPlayerHead(player);
-					playerHead.X = 8;
-					playerHead.Y = yPos;
-					yPos += playerHead.Height;
-					UILabel label = new UILabel(player.name);
-					label.Scale = .5f;
-					label.Anchor = AnchorPosition.Left;
-					label.X = playerHead.X + playerHead.Width + 8;
-					label.Y = playerHead.Y + playerHead.Width / 2 + 8;
-					label.onLeftClick += label_onLeftClick;
+                    UIPlayerHead playerHead = new UIPlayerHead(player)
+                    {
+                        X = 8,
+                        Y = yPos
+                    };
+                    yPos += playerHead.Height;
+                    UILabel label = new UILabel(player.name)
+                    {
+                        Scale = .5f,
+                        Anchor = AnchorPosition.Left,
+                        X = playerHead.X + playerHead.Width + 8,
+                        Y = playerHead.Y + playerHead.Width / 2 + 8
+                    };
+                    label.onLeftClick += label_onLeftClick;
 					label.Tag = i;
 
 					scrollView.AddChild(playerHead);
@@ -136,12 +141,14 @@ namespace HEROsMod.HEROsModServices
 			// TODO changes to offline users might not prop to all admin?
 			if (HEROsModNetwork.LoginService.MyGroup.IsAdmin)
 			{
-				UILabel lOfflinePlayers = new UILabel("Offline Users");
-				lOfflinePlayers.Scale = .6f;
-				lOfflinePlayers.X = Spacing;
-				lOfflinePlayers.Y = yPos + Spacing;
-				lOfflinePlayers.ForegroundColor = Microsoft.Xna.Framework.Color.Yellow;
-				yPos = lOfflinePlayers.Y + lOfflinePlayers.Height;
+                UILabel lOfflinePlayers = new UILabel("Offline Users")
+                {
+                    Scale = .6f,
+                    X = Spacing,
+                    Y = yPos + Spacing,
+                    ForegroundColor = Microsoft.Xna.Framework.Color.Yellow
+                };
+                yPos = lOfflinePlayers.Y + lOfflinePlayers.Height;
 				scrollView.AddChild(lOfflinePlayers);
 				for (int i = 0; i < HEROsModNetwork.Network.RegisteredUsers.Count; i++)
 				{
@@ -156,12 +163,14 @@ namespace HEROsMod.HEROsModServices
 						//	ErrorLogger.Log("Continue on " + user.ID);
 						continue;
 					}
-					UILabel lUser = new UILabel(user.Username);
-					lUser.Scale = .5f;
-					lUser.X = 40 + Spacing * 2;
-					lUser.Y = yPos;
-					lUser.ForegroundColor = new Microsoft.Xna.Framework.Color(200, 200, 200);
-					yPos += lUser.Height;
+                    UILabel lUser = new UILabel(user.Username)
+                    {
+                        Scale = .5f,
+                        X = 40 + Spacing * 2,
+                        Y = yPos,
+                        ForegroundColor = new Microsoft.Xna.Framework.Color(200, 200, 200)
+                    };
+                    yPos += lUser.Height;
 					lUser.onLeftClick += lUser_onLeftClick;
 					lUser.Tag = user.ID;
 					scrollView.AddChild(lUser);
@@ -217,11 +226,8 @@ namespace HEROsMod.HEROsModServices
 			ClosePlayerInfo();
 			if (this.Parent != null)
 				this.Parent.RemoveChild(this);
-			if (Closed != null)
-			{
-				Closed(this, EventArgs.Empty);
-			}
-		}
+            Closed?.Invoke(this, EventArgs.Empty);
+        }
 	}
 
 	internal class PlayerInfo : UIWindow
@@ -464,22 +470,28 @@ namespace HEROsMod.HEROsModServices
 			for (int i = 50; i < 58; i++)
 			{
 				int index = i - 50;
-				Slot slot = new Slot(0, true);
-				slot.Scale = .6f;
-				slot.X = 8 + index % 2 * slot.Width;
+                Slot slot = new Slot(0, true)
+                {
+                    Scale = .6f
+                };
+                slot.X = 8 + index % 2 * slot.Width;
 				slot.Y = yPos + index / 2 * slot.Height;
 				itemsView.AddChild(slot);
 			}
-			Slot mouseSlot = new Slot(0, true);
-			mouseSlot.X = itemsView.GetLastChild().X + itemsView.GetLastChild().Width + 4;
-			mouseSlot.Y = itemsView.GetLastChild().Y + itemsView.GetLastChild().Height - mouseSlot.Height;
+            Slot mouseSlot = new Slot(0, true)
+            {
+                X = itemsView.GetLastChild().X + itemsView.GetLastChild().Width + 4
+            };
+            mouseSlot.Y = itemsView.GetLastChild().Y + itemsView.GetLastChild().Height - mouseSlot.Height;
 			itemsView.AddChild(mouseSlot);
 			float xPos = mouseSlot.X + mouseSlot.Width + 4;
 			for (int i = 0; i < 16; i++)
 			{
-				Slot slot = new Slot(0, true);
-				slot.Scale = .7f;
-				slot.X = xPos + i % 8 * slot.Width;
+                Slot slot = new Slot(0, true)
+                {
+                    Scale = .7f
+                };
+                slot.X = xPos + i % 8 * slot.Width;
 				slot.Y = yPos + i / 8 * slot.Height;
 				itemsView.AddChild(slot);
 			}
@@ -489,12 +501,14 @@ namespace HEROsMod.HEROsModServices
 			itemsView.Width = Width;
 			itemsView.Height = Height;
 
-			UILabel label = new UILabel("Mouse Item");
-			label.Scale = .5f;
-			label.Anchor = AnchorPosition.Left;
-			label.Y = mouseSlot.Y + mouseSlot.Height / 2 + 4;
-			label.X = mouseSlot.X + mouseSlot.Width + 4;
-			itemsView.AddChild(label);
+            UILabel label = new UILabel("Mouse Item")
+            {
+                Scale = .5f,
+                Anchor = AnchorPosition.Left,
+                Y = mouseSlot.Y + mouseSlot.Height / 2 + 4,
+                X = mouseSlot.X + mouseSlot.Width + 4
+            };
+            itemsView.AddChild(label);
 		}
 
 		private void itemSlot_ItemChanged(object sender, EventArgs e)

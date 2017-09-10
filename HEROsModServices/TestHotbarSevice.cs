@@ -17,9 +17,11 @@ namespace HEROsMod.HEROsModServices
 			this.HotbarIcon.Tooltip = "Test Hotbar";
 			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 
-			_testHotbarWindow = new TestHotbarWindow();
-			_testHotbarWindow.HotBarParent = HEROsMod.ServiceHotbar;
-			_testHotbarWindow.Hide();
+            _testHotbarWindow = new TestHotbarWindow()
+            {
+                HotBarParent = HEROsMod.ServiceHotbar
+            };
+            _testHotbarWindow.Hide();
 			this.AddUIView(_testHotbarWindow);
 		}
 
@@ -50,7 +52,7 @@ namespace HEROsMod.HEROsModServices
 
 	internal class TestHotbarWindow : UIHotbar
 	{
-		public UIView buttonView;
+		new public UIView buttonView;
 		public UIImage bStampTiles;
 		public UIImage bEyeDropper;
 		public UIImage bFlipHorizontal;
@@ -118,13 +120,13 @@ namespace HEROsMod.HEROsModServices
 			this.buttonView.Width = base.Width;
 		}
 
-		public void Hide()
+		new public void Hide()
 		{
 			hidden = true;
 			arrived = false;
 		}
 
-		public void Show()
+		new public void Show()
 		{
 			arrived = false;
 			hidden = false;

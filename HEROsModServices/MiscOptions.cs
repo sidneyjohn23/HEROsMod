@@ -17,9 +17,11 @@ namespace HEROsMod.HEROsModServices
 			this.HotbarIcon.Tooltip = "Misc. Options";
 			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 
-			_miscOptionsHotbar = new MiscOptionsWindow();
-			_miscOptionsHotbar.HotBarParent = HEROsMod.ServiceHotbar;
-			_miscOptionsHotbar.Hide();
+            _miscOptionsHotbar = new MiscOptionsWindow()
+            {
+                HotBarParent = HEROsMod.ServiceHotbar
+            };
+            _miscOptionsHotbar.Hide();
 			this.AddUIView(_miscOptionsHotbar);
 
 			Hotbar = _miscOptionsHotbar;

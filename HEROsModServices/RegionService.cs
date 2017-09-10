@@ -360,30 +360,34 @@ namespace HEROsMod.HEROsModServices
 			{
 				HEROsModNetwork.Region region = HEROsModNetwork.Network.Regions[i];
 				UIButton bEdit = new UIButton("Edit");
-				UIRect bg = new UIRect();
-				bg.X = LargeSpacing;
-				bg.Y = yPos;
-				bg.Height = bEdit.Height + SmallSpacing * 2;
-				bg.Width = scrollView.Width - 20 - LargeSpacing * 2;
-
-				yPos += bg.Height;
+                UIRect bg = new UIRect()
+                {
+                    X = LargeSpacing,
+                    Y = yPos,
+                    Height = bEdit.Height + SmallSpacing * 2,
+                    Width = scrollView.Width - 20 - LargeSpacing * 2
+                };
+                yPos += bg.Height;
 
 				bg.ForegroundColor = i % 2 == 0 ? Color.Transparent : Color.Blue * .1f;
 
-				UILabel label = new UILabel(region.Name);
-				label.X = Spacing;
-				label.Y = Spacing;
-				label.Scale = .5f;
-
-				bEdit.X = bg.Width - bEdit.Width - Spacing;
+                UILabel label = new UILabel(region.Name)
+                {
+                    X = Spacing,
+                    Y = Spacing,
+                    Scale = .5f
+                };
+                bEdit.X = bg.Width - bEdit.Width - Spacing;
 				bEdit.Y = SmallSpacing;
 				bEdit.Tag = i;
 				bEdit.onLeftClick += bEdit_onLeftClick;
 
-				UIRect regionColor = new UIRect();
-				regionColor.ForegroundColor = region.Color;
-				regionColor.Height = bg.Height - Spacing * 2;
-				regionColor.Width = regionColor.Height;
+                UIRect regionColor = new UIRect()
+                {
+                    ForegroundColor = region.Color,
+                    Height = bg.Height - Spacing * 2
+                };
+                regionColor.Width = regionColor.Height;
 				regionColor.Y = Spacing;
 
 				UILabel lX = new UILabel("X: " + region.X);
@@ -454,27 +458,30 @@ namespace HEROsMod.HEROsModServices
 				if (group == null) continue;
 
 				UIButton bRemove = new UIButton("Remove");
-				UIRect bg = new UIRect();
-				bg.X = LargeSpacing;
-				bg.Y = yPos;
-				bg.Height = bRemove.Height + SmallSpacing * 2;
-				bg.Width = scrollView.Width - 20 - LargeSpacing * 2;
-
-				yPos += bg.Height;
+                UIRect bg = new UIRect()
+                {
+                    X = LargeSpacing,
+                    Y = yPos,
+                    Height = bRemove.Height + SmallSpacing * 2,
+                    Width = scrollView.Width - 20 - LargeSpacing * 2
+                };
+                yPos += bg.Height;
 
 				bg.ForegroundColor = itemCount % 2 == 0 ? Color.Transparent : Color.Blue * .1f;
 
-				UILabel label = new UILabel("Group");
-				label.X = Spacing;
-				label.Y = Spacing;
-				label.Scale = .5f;
-
-				UILabel lName = new UILabel(group.Name);
-				lName.X = label.X + 100;
-				lName.Y = label.Y;
-				lName.Scale = label.Scale;
-
-				bRemove.X = bg.Width - bRemove.Width - Spacing;
+                UILabel label = new UILabel("Group")
+                {
+                    X = Spacing,
+                    Y = Spacing,
+                    Scale = .5f
+                };
+                UILabel lName = new UILabel(group.Name)
+                {
+                    X = label.X + 100,
+                    Y = label.Y,
+                    Scale = label.Scale
+                };
+                bRemove.X = bg.Width - bRemove.Width - Spacing;
 				bRemove.Y = SmallSpacing;
 				bRemove.Tag = group.ID;
 				bRemove.onLeftClick += RemoveGroup;
@@ -501,27 +508,30 @@ namespace HEROsMod.HEROsModServices
 				if (user == null) continue;
 
 				UIButton bRemove = new UIButton("Remove");
-				UIRect bg = new UIRect();
-				bg.X = LargeSpacing;
-				bg.Y = yPos;
-				bg.Height = bRemove.Height + SmallSpacing * 2;
-				bg.Width = scrollView.Width - 20 - LargeSpacing * 2;
-
-				yPos += bg.Height;
+                UIRect bg = new UIRect()
+                {
+                    X = LargeSpacing,
+                    Y = yPos,
+                    Height = bRemove.Height + SmallSpacing * 2,
+                    Width = scrollView.Width - 20 - LargeSpacing * 2
+                };
+                yPos += bg.Height;
 
 				bg.ForegroundColor = itemCount % 2 == 0 ? Color.Transparent : Color.Blue * .1f;
 
-				UILabel label = new UILabel("User");
-				label.X = Spacing;
-				label.Y = Spacing;
-				label.Scale = .5f;
-
-				UILabel lName = new UILabel(user.Username);
-				lName.X = label.X + 100;
-				lName.Y = label.Y;
-				lName.Scale = label.Scale;
-
-				bRemove.X = bg.Width - bRemove.Width - Spacing;
+                UILabel label = new UILabel("User")
+                {
+                    X = Spacing,
+                    Y = Spacing,
+                    Scale = .5f
+                };
+                UILabel lName = new UILabel(user.Username)
+                {
+                    X = label.X + 100,
+                    Y = label.Y,
+                    Scale = label.Scale
+                };
+                bRemove.X = bg.Width - bRemove.Width - Spacing;
 				bRemove.Y = SmallSpacing;
 				bRemove.Tag = user.ID;
 				bRemove.onLeftClick += RemovePlayer;
@@ -740,12 +750,14 @@ namespace HEROsMod.HEROsModServices
 				for (int i = 0; i < Network.RegisteredUsers.Count; i++)
 				{
 					UserWithID user = Network.RegisteredUsers[i];
-					UILabel userLabel = new UILabel(user.Username);
-					userLabel.Tag = user.ID;
-					userLabel.X = Spacing;
-					userLabel.Y = yPos;
-					userLabel.Scale = .35f;
-					yPos += userLabel.Height;
+                    UILabel userLabel = new UILabel(user.Username)
+                    {
+                        Tag = user.ID,
+                        X = Spacing,
+                        Y = yPos,
+                        Scale = .35f
+                    };
+                    yPos += userLabel.Height;
 					userLabel.onLeftClick += userLabel_onLeftClick;
 					scrollView.AddChild(userLabel);
 				}
@@ -755,12 +767,14 @@ namespace HEROsMod.HEROsModServices
 				for (int i = 0; i < Network.Groups.Count; i++)
 				{
 					Group group = Network.Groups[i];
-					UILabel groupLabel = new UILabel(group.Name);
-					groupLabel.Tag = group.ID;
-					groupLabel.X = Spacing;
-					groupLabel.Y = yPos;
-					groupLabel.Scale = .35f;
-					yPos += groupLabel.Height;
+                    UILabel groupLabel = new UILabel(group.Name)
+                    {
+                        Tag = group.ID,
+                        X = Spacing,
+                        Y = yPos,
+                        Scale = .35f
+                    };
+                    yPos += groupLabel.Height;
 					groupLabel.onLeftClick += groupLabel_onLeftClick;
 					scrollView.AddChild(groupLabel);
 				}

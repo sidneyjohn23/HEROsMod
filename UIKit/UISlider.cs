@@ -101,11 +101,8 @@ namespace HEROsMod.UIKit
 				sliderPos -= padding;
 				sliderPos /= Width - padding * 2;
 				this.Value = (MaxValue - minValue) * sliderPos + minValue;
-				if (valueChanged != null)
-				{
-					valueChanged(this, Value);
-				}
-			}
+                valueChanged?.Invoke(this, Value);
+            }
 		}
 
 		public virtual void DrawBackground(SpriteBatch spriteBatch)

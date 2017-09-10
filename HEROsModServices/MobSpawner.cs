@@ -91,15 +91,18 @@ namespace HEROsMod.HEROsModServices
 			//GetNPCList();
 
 			this.CanMove = true;
-			UILabel lTiltle = new UILabel("NPC Spawner");
-			lTiltle.OverridesMouse = false;
-			scrollView = new UIScrollView();
+            UILabel lTiltle = new UILabel("NPC Spawner")
+            {
+                OverridesMouse = false
+            };
+            scrollView = new UIScrollView();
 			searchBox = new UITextbox();
 			searchBox.KeyPressed += searchBox_KeyPressed;
-			mobInfo = new MobInfoPanel();
-			mobInfo.Visible = false;
-
-			AddChild(mobInfo);
+            mobInfo = new MobInfoPanel()
+            {
+                Visible = false
+            };
+            AddChild(mobInfo);
 
 			lTiltle.X = Spacing;
 			lTiltle.Y = Spacing;
@@ -113,35 +116,45 @@ namespace HEROsMod.HEROsModServices
 			scrollView.Width = 250;
 			scrollView.Height = 300;
 
-			//category = npcList;
-			//searchResults = category;
-			// BuildList();
+            //category = npcList;
+            //searchResults = category;
+            // BuildList();
 
-			bAllNPCs = new UIButton("All");
-			bAllNPCs.X = scrollView.X + scrollView.Width + Spacing;
-			bAllNPCs.Y = scrollView.Y;
-			bAllNPCs.onLeftClick += bAllNPCs_onLeftClick;
+            bAllNPCs = new UIButton("All")
+            {
+                X = scrollView.X + scrollView.Width + Spacing,
+                Y = scrollView.Y
+            };
+            bAllNPCs.onLeftClick += bAllNPCs_onLeftClick;
 			bAllNPCs.SetTextColor(Color.Yellow);
 
-			bTownNPCs = new UIButton("Town NPCs");
-			bTownNPCs.X = bAllNPCs.X;
-			bTownNPCs.Y = bAllNPCs.Y + bAllNPCs.Height + Spacing;
-			bTownNPCs.onLeftClick += bTownNPCs_onLeftClick;
+            bTownNPCs = new UIButton("Town NPCs")
+            {
+                X = bAllNPCs.X,
+                Y = bAllNPCs.Y + bAllNPCs.Height + Spacing
+            };
+            bTownNPCs.onLeftClick += bTownNPCs_onLeftClick;
 
-			bFriendly = new UIButton("Friendly");
-			bFriendly.X = bTownNPCs.X;
-			bFriendly.Y = bTownNPCs.Y + bTownNPCs.Height + Spacing;
-			bFriendly.onLeftClick += bFriendly_onLeftClick;
+            bFriendly = new UIButton("Friendly")
+            {
+                X = bTownNPCs.X,
+                Y = bTownNPCs.Y + bTownNPCs.Height + Spacing
+            };
+            bFriendly.onLeftClick += bFriendly_onLeftClick;
 
-			bBoss = new UIButton("Boss");
-			bBoss.X = bFriendly.X;
-			bBoss.Y = bFriendly.Y + bFriendly.Height + Spacing;
-			bBoss.onLeftClick += bBoss_onLeftClick;
+            bBoss = new UIButton("Boss")
+            {
+                X = bFriendly.X,
+                Y = bFriendly.Y + bFriendly.Height + Spacing
+            };
+            bBoss.onLeftClick += bBoss_onLeftClick;
 
-			bMod = new UIButton("Mod");
-			bMod.X = bBoss.X;
-			bMod.Y = bBoss.Y + bBoss.Height + Spacing;
-			bMod.onLeftClick += bMod_onLeftClick;
+            bMod = new UIButton("Mod")
+            {
+                X = bBoss.X,
+                Y = bBoss.Y + bBoss.Height + Spacing
+            };
+            bMod.onLeftClick += bMod_onLeftClick;
 			bMod.Tooltip = "";
 
 			bAllNPCs.AutoSize = false;
@@ -344,12 +357,14 @@ namespace HEROsMod.HEROsModServices
 			float yPos = Spacing;
 			for (int i = 0; i < searchResults.Count; i++)
 			{
-				UILabel label = new UILabel(searchResults[i].Name);
-				label.Tag = i;
-				label.Scale = .35f;
-				label.X = Spacing;
-				label.Y = yPos;
-				yPos += label.Height;
+                UILabel label = new UILabel(searchResults[i].Name)
+                {
+                    Tag = i,
+                    Scale = .35f,
+                    X = Spacing,
+                    Y = yPos
+                };
+                yPos += label.Height;
 				label.onLeftClick += label_onLeftClick;
 				label.onMouseEnter += label_onMouseEnter;
 				label.onMouseLeave += label_onMouseLeave;
@@ -576,11 +591,12 @@ namespace HEROsMod.HEROsModServices
 			CurrentNPC = null;
 			this.OverridesMouse = false;
 			this.UpdateWhenOutOfBounds = true;
-			mobImage = new UIImage();
-			mobImage.X = Spacing;
-			mobImage.Y = Spacing;
-
-			AddChild(mobImage);
+            mobImage = new UIImage()
+            {
+                X = Spacing,
+                Y = Spacing
+            };
+            AddChild(mobImage);
 		}
 
 		public void SetMobType(NPCStats npc)
@@ -598,11 +614,13 @@ namespace HEROsMod.HEROsModServices
 			//mobImage.ForegroundColor = CurrentNPC.AlphaColor;
 			AddChild(mobImage);
 
-			UIImage mobImage2 = new UIImage();
-			mobImage2.Texture = mobImage.Texture;
-			mobImage2.SourceRectangle = mobImage.SourceRectangle;
-			mobImage2.ForegroundColor = CurrentNPC.Color;
-			AddChild(mobImage2);
+            UIImage mobImage2 = new UIImage()
+            {
+                Texture = mobImage.Texture,
+                SourceRectangle = mobImage.SourceRectangle,
+                ForegroundColor = CurrentNPC.Color
+            };
+            AddChild(mobImage2);
 			//AddChild(mobImage2);
 
 			if (mobImage.Width > this.Width - Spacing * 2)
@@ -622,89 +640,109 @@ namespace HEROsMod.HEROsModServices
 
 			float statScale = .4f;
 
-			UILabel lID = new UILabel("ID");
-			lID.Scale = statScale;
-			lID.X = Spacing;
-			lID.Y = yPos;
-			AddChild(lID);
+            UILabel lID = new UILabel("ID")
+            {
+                Scale = statScale,
+                X = Spacing,
+                Y = yPos
+            };
+            AddChild(lID);
 
-			UILabel id = new UILabel(npc.NetID.ToString());
-			id.Scale = statScale;
-			id.Anchor = AnchorPosition.TopRight;
-			id.X = Width - Spacing;
-			id.Y = yPos;
-			AddChild(id);
+            UILabel id = new UILabel(npc.NetID.ToString())
+            {
+                Scale = statScale,
+                Anchor = AnchorPosition.TopRight,
+                X = Width - Spacing,
+                Y = yPos
+            };
+            AddChild(id);
 
 			yPos += lID.Height;
 
 			if (npc.Health > 0)
 			{
-				UILabel lHealth = new UILabel("Health");
-				lHealth.Scale = statScale;
-				lHealth.X = Spacing;
-				lHealth.Y = yPos;
-				AddChild(lHealth);
+                UILabel lHealth = new UILabel("Health")
+                {
+                    Scale = statScale,
+                    X = Spacing,
+                    Y = yPos
+                };
+                AddChild(lHealth);
 
-				UILabel lValue = new UILabel(npc.Health.ToString());
-				lValue.Scale = statScale;
-				lValue.Anchor = AnchorPosition.TopRight;
-				lValue.X = Width - Spacing;
-				lValue.Y = yPos;
-				AddChild(lValue);
+                UILabel lValue = new UILabel(npc.Health.ToString())
+                {
+                    Scale = statScale,
+                    Anchor = AnchorPosition.TopRight,
+                    X = Width - Spacing,
+                    Y = yPos
+                };
+                AddChild(lValue);
 
 				yPos += lHealth.Height;
 			}
 
 			if (npc.Damage > 0)
 			{
-				UILabel lDamage = new UILabel("Damage");
-				lDamage.Scale = statScale;
-				lDamage.X = Spacing;
-				lDamage.Y = yPos;
-				AddChild(lDamage);
+                UILabel lDamage = new UILabel("Damage")
+                {
+                    Scale = statScale,
+                    X = Spacing,
+                    Y = yPos
+                };
+                AddChild(lDamage);
 
-				UILabel lValue = new UILabel(npc.Damage.ToString());
-				lValue.Scale = statScale;
-				lValue.Anchor = AnchorPosition.TopRight;
-				lValue.X = Width - Spacing;
-				lValue.Y = yPos;
-				AddChild(lValue);
+                UILabel lValue = new UILabel(npc.Damage.ToString())
+                {
+                    Scale = statScale,
+                    Anchor = AnchorPosition.TopRight,
+                    X = Width - Spacing,
+                    Y = yPos
+                };
+                AddChild(lValue);
 
 				yPos += lDamage.Height;
 			}
 
 			if (npc.Defense > 0)
 			{
-				UILabel lDefense = new UILabel("Defense");
-				lDefense.Scale = statScale;
-				lDefense.X = Spacing;
-				lDefense.Y = yPos;
-				AddChild(lDefense);
+                UILabel lDefense = new UILabel("Defense")
+                {
+                    Scale = statScale,
+                    X = Spacing,
+                    Y = yPos
+                };
+                AddChild(lDefense);
 
-				UILabel lValue = new UILabel(npc.Defense.ToString());
-				lValue.Scale = statScale;
-				lValue.Anchor = AnchorPosition.TopRight;
-				lValue.X = Width - Spacing;
-				lValue.Y = yPos;
-				AddChild(lValue);
+                UILabel lValue = new UILabel(npc.Defense.ToString())
+                {
+                    Scale = statScale,
+                    Anchor = AnchorPosition.TopRight,
+                    X = Width - Spacing,
+                    Y = yPos
+                };
+                AddChild(lValue);
 
 				yPos += lDefense.Height;
 			}
 
 			if (npc.KncokbackResist > 0)
 			{
-				UILabel lKncokbackResist = new UILabel("Knockback Resistance");
-				lKncokbackResist.Scale = statScale;
-				lKncokbackResist.X = Spacing;
-				lKncokbackResist.Y = yPos;
-				AddChild(lKncokbackResist);
+                UILabel lKncokbackResist = new UILabel("Knockback Resistance")
+                {
+                    Scale = statScale,
+                    X = Spacing,
+                    Y = yPos
+                };
+                AddChild(lKncokbackResist);
 
-				UILabel lValue = new UILabel(npc.KncokbackResist.ToString());
-				lValue.Scale = statScale;
-				lValue.Anchor = AnchorPosition.TopRight;
-				lValue.X = Width - Spacing;
-				lValue.Y = yPos;
-				AddChild(lValue);
+                UILabel lValue = new UILabel(npc.KncokbackResist.ToString())
+                {
+                    Scale = statScale,
+                    Anchor = AnchorPosition.TopRight,
+                    X = Width - Spacing,
+                    Y = yPos
+                };
+                AddChild(lValue);
 
 				yPos += lKncokbackResist.Height;
 			}

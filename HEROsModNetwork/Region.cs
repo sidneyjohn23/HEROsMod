@@ -167,10 +167,11 @@ namespace HEROsMod.HEROsModNetwork
 			int id = reader.ReadInt32();
 			Vector2 position = reader.ReadVector2();
 			Vector2 size = reader.ReadVector2();
-			Region region = new Region(name, position, size);
-			region.ID = id;
-
-			int numberOfAllowPlayers = reader.ReadInt32();
+            Region region = new Region(name, position, size)
+            {
+                ID = id
+            };
+            int numberOfAllowPlayers = reader.ReadInt32();
 			for (int j = 0; j < numberOfAllowPlayers; j++)
 			{
 				region.AllowedPlayersIDs.Add(reader.ReadInt32());

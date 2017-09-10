@@ -98,15 +98,18 @@ namespace HEROsMod.HEROsModServices
 			lUsername = new UILabel("Username");
 			tbUsername = new UITextbox();
 			lPassword = new UILabel("Password");
-			tbPassword = new UITextbox();
-			tbPassword.PasswordBox = true;
-			UIButton bLogin = new UIButton("Login");
+            tbPassword = new UITextbox()
+            {
+                PasswordBox = true
+            };
+            UIButton bLogin = new UIButton("Login");
 			UIButton bCancel = new UIButton("Cancel");
-			UIButton bRegister = new UIButton("Register");
-			bRegister.AutoSize = false;
-			bRegister.Width = 100;
-
-			lUsername.Scale = .5f;
+            UIButton bRegister = new UIButton("Register")
+            {
+                AutoSize = false,
+                Width = 100
+            };
+            lUsername.Scale = .5f;
 			lPassword.Scale = .5f;
 
 			bLogin.Anchor = AnchorPosition.TopRight;

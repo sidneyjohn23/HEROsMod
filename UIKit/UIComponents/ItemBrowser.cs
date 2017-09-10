@@ -95,71 +95,85 @@ namespace HEROsMod.UIKit.UIComponents
 			_itemView.Y = Height - LargeSpacing - _itemView.Height;
 			AddChild(_itemView);
 
-			_categoryView = new UIScrollView();
-			_categoryView.X = _itemView.X + _itemView.Width + LargeSpacing;
-			_categoryView.Y = _itemView.Y;
-			_categoryView.Width = 45 + numberCategoryColumns * 100;
-			_categoryView.Height = _itemView.Height;
-			AddChild(_categoryView);
+            _categoryView = new UIScrollView()
+            {
+                X = _itemView.X + _itemView.Width + LargeSpacing,
+                Y = _itemView.Y,
+                Width = 45 + numberCategoryColumns * 100,
+                Height = _itemView.Height
+            };
+            AddChild(_categoryView);
 
 			Width = _categoryView.X + _categoryView.Width + LargeSpacing;
 
-			_bClose = new UIImage(HEROsMod.instance.GetTexture("Images/closeButton"));
-			_bClose.Anchor = AnchorPosition.TopRight;
-			_bClose.Position = new Vector2(Width - LargeSpacing, LargeSpacing);
-			_bClose.onLeftClick += bClose_onLeftClick;
+            _bClose = new UIImage(HEROsMod.instance.GetTexture("Images/closeButton"))
+            {
+                Anchor = AnchorPosition.TopRight,
+                Position = new Vector2(Width - LargeSpacing, LargeSpacing)
+            };
+            _bClose.onLeftClick += bClose_onLeftClick;
 			AddChild(_bClose);
 
-			SearchBox = new UITextbox();
-			SearchBox.Width = 125;
-			SearchBox.X = _itemView.X + _itemView.Width - SearchBox.Width;
+            SearchBox = new UITextbox()
+            {
+                Width = 125
+            };
+            SearchBox.X = _itemView.X + _itemView.Width - SearchBox.Width;
 			SearchBox.Y = _itemView.Y - SearchBox.Height - Spacing - 4;
 			SearchBox.KeyPressed += textbox_KeyPressed;
 			AddChild(SearchBox);
 
-			_filterView = new UIView();
-			_filterView.Position = new Vector2(LargeSpacing, Spacing);
-			//_filterView.onLeftClick += _bViewAllItems_onLeftClick;
-			//{
-			//	UIImage test = new UIImage(HEROsMod.instance.GetTexture("Images/closeButton"));
-			//	test.onLeftClick += bClose_onLeftClick;
-			//	_filterView.AddChild(test);
-			//	UIImage test2 = new UIImage(HEROsMod.instance.GetTexture("Images/closeButton"));
-			//	test2.onLeftClick += bClose_onLeftClick;
-			//	test2.Position = test.Position;
-			//	test2.X += test.Width;
-			//	test2.ForegroundColor = Color.Azure;
-			//	_filterView.AddChild(test2);
-			//}
-			//	_filterView.ForegroundColor = Color.Red;
-			//	_filterView.BackgroundColor = Color.Pink;
-			//	_filterView.Width = 100;
-			_filterView.Height = 40;
-			AddChild(_filterView);
+            _filterView = new UIView()
+            {
+                Position = new Vector2(LargeSpacing, Spacing),
+                //_filterView.onLeftClick += _bViewAllItems_onLeftClick;
+                //{
+                //	UIImage test = new UIImage(HEROsMod.instance.GetTexture("Images/closeButton"));
+                //	test.onLeftClick += bClose_onLeftClick;
+                //	_filterView.AddChild(test);
+                //	UIImage test2 = new UIImage(HEROsMod.instance.GetTexture("Images/closeButton"));
+                //	test2.onLeftClick += bClose_onLeftClick;
+                //	test2.Position = test.Position;
+                //	test2.X += test.Width;
+                //	test2.ForegroundColor = Color.Azure;
+                //	_filterView.AddChild(test2);
+                //}
+                //	_filterView.ForegroundColor = Color.Red;
+                //	_filterView.BackgroundColor = Color.Pink;
+                //	_filterView.Width = 100;
+                Height = 40
+            };
+            AddChild(_filterView);
 
-			_spacer = new UIImage(_spacerTexture);
-			_spacer.Position = new Vector2(Spacing, LargeSpacing);
-			_spacer.Height = 40;
-			AddChild(_spacer);
+            _spacer = new UIImage(_spacerTexture)
+            {
+                Position = new Vector2(Spacing, LargeSpacing),
+                Height = 40
+            };
+            AddChild(_spacer);
 
-			_sortView = new UIView();
-			_sortView.Position = new Vector2(Spacing, Spacing);
-			//_sortView.onLeftClick += _bViewAllItems_onLeftClick;
-			//	_sortView.ForegroundColor = Color.Red;
-			//	_sortView.BackgroundColor = Color.Red;
-			//	_sortView.Width = 30;
-			_sortView.Height = 40;
-			AddChild(_sortView);
+            _sortView = new UIView()
+            {
+                Position = new Vector2(Spacing, Spacing),
+                //_sortView.onLeftClick += _bViewAllItems_onLeftClick;
+                //	_sortView.ForegroundColor = Color.Red;
+                //	_sortView.BackgroundColor = Color.Red;
+                //	_sortView.Width = 30;
+                Height = 40
+            };
+            AddChild(_sortView);
 
-			//_trashCan = new Slot(0);
-			//_trashCan.IsTrachCan = true;
-			//_trashCan.X = _itemView.X;
-			//_trashCan.Y = _itemView.Y - _trashCan.Height - SmallSpacing/2;
-			//AddChild(_trashCan);
+            //_trashCan = new Slot(0);
+            //_trashCan.IsTrachCan = true;
+            //_trashCan.X = _itemView.X;
+            //_trashCan.Y = _itemView.Y - _trashCan.Height - SmallSpacing/2;
+            //AddChild(_trashCan);
 
-			_bBack = new UIButton("Back");
-			_bBack.X = _categoryView.X;
-			_bBack.Y = _categoryView.Y - _bBack.Height - Spacing;
+            _bBack = new UIButton("Back")
+            {
+                X = _categoryView.X
+            };
+            _bBack.Y = _categoryView.Y - _bBack.Height - Spacing;
 			_bBack.onLeftClick += _bViewAllItems_onLeftClick;
 			AddChild(_bBack);
 
@@ -224,11 +238,13 @@ namespace HEROsMod.UIKit.UIComponents
 			float yPos = 0;
 			for (int i = 0; i < categories.Length; i++)
 			{
-				UIButton button = new UIButton(categories[i].Name);
-				button.Tag = categories[i];
-				button.AutoSize = false;
-				button.Width = 100;
-				int x = i % numberCategoryColumns;
+                UIButton button = new UIButton(categories[i].Name)
+                {
+                    Tag = categories[i],
+                    AutoSize = false,
+                    Width = 100
+                };
+                int x = i % numberCategoryColumns;
 				int y = i / numberCategoryColumns;
 				button.X = Spacing + x * (button.Width + Spacing);
 				button.Y = Spacing + y * (button.Height + Spacing);
@@ -543,9 +559,11 @@ namespace HEROsMod.UIKit.UIComponents
 
 		public static void ParseList2()
 		{
-			Category modCategory = new Category("Mod");
-			modCategory.SubCategories = new List<Category>();
-			foreach (Mod loadedMod in ModLoader.LoadedMods)
+            Category modCategory = new Category("Mod")
+            {
+                SubCategories = new List<Category>()
+            };
+            foreach (Mod loadedMod in ModLoader.LoadedMods)
 			{
 				if (loadedMod.Name != "ModLoader")
 					modCategory.SubCategories.Add(new Category(loadedMod.Name, x => x.modItem != null && x.modItem.mod.Name == loadedMod.Name));

@@ -61,13 +61,13 @@ namespace HEROsMod.HEROsModNetwork
 
 	internal class TileChange
 	{
-		public DateTime time { get; set; }
+		public DateTime Time { get; set; }
 
 		public Tile TilePreviousToChange { get; set; }
 
 		public TileChange(Tile tile)
 		{
-			time = DateTime.Now;
+			Time = DateTime.Now;
 			TilePreviousToChange = new Tile();
 			TilePreviousToChange.CopyFrom(tile);
 		}

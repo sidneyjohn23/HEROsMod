@@ -137,9 +137,8 @@ namespace HEROsMod.UIKit
 			if (tag != selectedItem)
 			{
 				selectedItem = tag;
-				if (selectedChanged != null)
-					selectedChanged(this, new EventArgs());
-			}
+                selectedChanged?.Invoke(this, new EventArgs());
+            }
 			HideItems();
 			UIView.MouseLeftButton = false;
 		}

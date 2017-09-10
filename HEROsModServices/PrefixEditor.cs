@@ -19,10 +19,12 @@ namespace HEROsMod.HEROsModServices
 			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
 			this.HotbarIcon.Tooltip = "Prefix Editor";
 
-			_prefixWindow = new PrefixWindow();
-			_prefixWindow.Y = 270;
-			_prefixWindow.X = 130;
-			this.AddUIView(_prefixWindow);
+            _prefixWindow = new PrefixWindow()
+            {
+                Y = 270,
+                X = 130
+            };
+            this.AddUIView(_prefixWindow);
 			_prefixWindow.Visible = false;
 		}
 
@@ -71,19 +73,22 @@ namespace HEROsMod.HEROsModServices
 		{
 			this.CanMove = true;
 
-			itemSlot = new Slot(0);
-			itemSlot.functionalSlot = true;
-			itemSlot.X = LargeSpacing;
-			itemSlot.Y = LargeSpacing;
-			itemSlot.ItemChanged += itemSlot_ItemChanged;
+            itemSlot = new Slot(0)
+            {
+                functionalSlot = true,
+                X = LargeSpacing,
+                Y = LargeSpacing
+            };
+            itemSlot.ItemChanged += itemSlot_ItemChanged;
 
-			prefixList = new UIScrollView();
-			prefixList.X = itemSlot.X;
-			prefixList.Y = itemSlot.Y + itemSlot.Height + Spacing;
-			prefixList.Width = 250;
-			prefixList.Height = 200;
-
-			this.Width = prefixList.Width + LargeSpacing * 2;
+            prefixList = new UIScrollView()
+            {
+                X = itemSlot.X,
+                Y = itemSlot.Y + itemSlot.Height + Spacing,
+                Width = 250,
+                Height = 200
+            };
+            this.Width = prefixList.Width + LargeSpacing * 2;
 			this.Height = prefixList.Y + prefixList.Height + LargeSpacing;
 
 			UIImage bClsoe = new UIImage(closeTexture);
@@ -170,12 +175,14 @@ namespace HEROsMod.HEROsModServices
 			float yPos = Spacing;
 			foreach (Item item in validPrefixes)
 			{
-				UILabel label = new UILabel(Lang.prefix[item.prefix].Value);
-				label.Scale = .4f;
-				label.X = Spacing;
-				label.Y = yPos;
-				label.Tag = item;
-				label.onLeftClick += label_onLeftClick;
+                UILabel label = new UILabel(Lang.prefix[item.prefix].Value)
+                {
+                    Scale = .4f,
+                    X = Spacing,
+                    Y = yPos,
+                    Tag = item
+                };
+                label.onLeftClick += label_onLeftClick;
 				label.onHover += label_onHover;
 				yPos += label.Height;
 				if (rarityColors.ContainsKey(item.rare))

@@ -37,9 +37,11 @@ namespace HEROsMod.HEROsModServices
 			_name = "Undefined";
 			IsInHotbar = true;
 			HotbarParent = hotbar;
-			_hotbarIcon = new UIImage(this.texture);
-			_hotbarIcon.Tooltip = "Set Spawn Point";
-			HotbarIcon.onLeftClick += new EventHandler(button_onLeftClick);
+            _hotbarIcon = new UIImage(this.texture)
+            {
+                Tooltip = "Set Spawn Point"
+            };
+            HotbarIcon.onLeftClick += new EventHandler(button_onLeftClick);
 			HotbarIcon.onHover += new EventHandler(button_onHover);
 		}
 

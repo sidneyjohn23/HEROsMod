@@ -49,10 +49,12 @@ namespace HEROsMod.UIKit
 					Vector2 wordSize = font.MeasureString(words[i] + " ") * Scale;
 					if (currentLabel == null || currentLabel.Width + wordSize.X > Width)
 					{
-						currentLabel = new UILabel();
-						currentLabel.Scale = Scale;
-						currentLabel.font = font;
-						currentLabel.Position = new Vector2(0, labels.Count * currentLabel.Height);
+                        currentLabel = new UILabel()
+                        {
+                            Scale = Scale,
+                            font = font
+                        };
+                        currentLabel.Position = new Vector2(0, labels.Count * currentLabel.Height);
 						labels.Add(currentLabel);
 						AddChild(currentLabel);
 					}

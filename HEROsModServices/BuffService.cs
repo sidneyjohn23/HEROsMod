@@ -113,32 +113,36 @@ namespace HEROsMod.HEROsModServices
 				//if (i >= BuffID.Count) ;
 				int buffType = i;/*BuffService.Buffs[i];*/
 
-				UIRect bg = new UIRect();
-				bg.ForegroundColor = i % 2 == 0 ? Color.Transparent : Color.Blue * .1f;
-				bg.X = Spacing;
-				bg.Y = yPos;
-				bg.Width = scrollView.Width - 20 - Spacing * 2;
-				bg.Tag = buffType;
-				string buffDescription = Lang.GetBuffDescription(buffType);
-				bg.Tooltip = (buffDescription == null ? "" : buffDescription);
+                UIRect bg = new UIRect()
+                {
+                    ForegroundColor = i % 2 == 0 ? Color.Transparent : Color.Blue * .1f,
+                    X = Spacing,
+                    Y = yPos,
+                    Width = scrollView.Width - 20 - Spacing * 2,
+                    Tag = buffType
+                };
+                string buffDescription = Lang.GetBuffDescription(buffType);
+				bg.Tooltip = (buffDescription ?? "");
 				bg.onLeftClick += bg_onLeftClick;
 
-				UIImage buffImage = new UIImage(Main.buffTexture[buffType]);
-				buffImage.X = Spacing;
-				buffImage.Y = SmallSpacing / 2;
-				buffImage.OverridesMouse = false;
-
-				bg.Height = buffImage.Height + SmallSpacing;
+                UIImage buffImage = new UIImage(Main.buffTexture[buffType])
+                {
+                    X = Spacing,
+                    Y = SmallSpacing / 2,
+                    OverridesMouse = false
+                };
+                bg.Height = buffImage.Height + SmallSpacing;
 				yPos += bg.Height;
 
-				UILabel label = new UILabel(Lang.GetBuffName(buffType));
-				label.Scale = .4f;
-				label.Anchor = AnchorPosition.Left;
-				label.X = buffImage.X + buffImage.Width + Spacing;
-				label.Y = buffImage.Y + buffImage.Height / 2;
-				label.OverridesMouse = false;
-
-				bg.AddChild(buffImage);
+                UILabel label = new UILabel(Lang.GetBuffName(buffType))
+                {
+                    Scale = .4f,
+                    Anchor = AnchorPosition.Left,
+                    X = buffImage.X + buffImage.Width + Spacing,
+                    Y = buffImage.Y + buffImage.Height / 2,
+                    OverridesMouse = false
+                };
+                bg.AddChild(buffImage);
 				bg.AddChild(label);
 				scrollView.AddChild(bg);
 			}

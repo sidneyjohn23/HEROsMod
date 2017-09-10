@@ -281,9 +281,8 @@ namespace HEROsMod.HEROsModNetwork
 				Group newGroup = new Group(newGroupName);
 				DatabaseController.AddGroup(ref newGroup);
 				Network.Groups.Add(newGroup);
-				if (GroupChanged != null)
-					GroupChanged(null, EventArgs.Empty);
-			}
+                GroupChanged?.Invoke(null, EventArgs.Empty);
+            }
 		}
 
 		public static void RequestDeleteGroup(int groupID)
@@ -313,9 +312,8 @@ namespace HEROsMod.HEROsModNetwork
 						}
 						DatabaseController.DeleteGroup(groupToDelete);
 						Network.Groups.Remove(groupToDelete);
-						if (GroupChanged != null)
-							GroupChanged(null, EventArgs.Empty);
-					}
+                        GroupChanged?.Invoke(null, EventArgs.Empty);
+                    }
 					else
 					{
 						Network.SendTextToPlayer("You can not delete the default group.", playerNumber);
@@ -362,15 +360,16 @@ namespace HEROsMod.HEROsModNetwork
 				for (int i = 0; i < numOfGroups; i++)
 				{
 					string groupName = reader.ReadString();
-					Group group = new Group(groupName);
-					group.ID = reader.ReadInt32();
-					int permissionsLength = reader.ReadInt32();
+                    Group group = new Group(groupName)
+                    {
+                        ID = reader.ReadInt32()
+                    };
+                    int permissionsLength = reader.ReadInt32();
 					group.ImportPermissions(reader.ReadBytes(permissionsLength));
 					Network.Groups.Add(group);
 				}
-				if (GroupChanged != null)
-					GroupChanged(null, EventArgs.Empty);
-			}
+                GroupChanged?.Invoke(null, EventArgs.Empty);
+            }
 		}
 
 		public static void SendAllPlayersPermissions()
@@ -411,9 +410,11 @@ namespace HEROsMod.HEROsModNetwork
 		private static void ProcessGroupPermissions(ref BinaryReader reader)
 		{
 			string groupName = reader.ReadString();
-			Group group = new Group(groupName);
-			group.ID = reader.ReadInt32();
-			bool isAdmin = reader.ReadBoolean();
+            Group group = new Group(groupName)
+            {
+                ID = reader.ReadInt32()
+            };
+            bool isAdmin = reader.ReadBoolean();
 			if (isAdmin)
 			{
 				group.ID = -1;
@@ -424,9 +425,8 @@ namespace HEROsMod.HEROsModNetwork
 			group.ImportPermissions(reader.ReadBytes(permissionsLength));
 
 			MyGroup = group;
-			if (MyGroupChanged != null)
-				MyGroupChanged(null, EventArgs.Empty);
-		}
+            MyGroupChanged?.Invoke(null, EventArgs.Empty);
+        }
 
 		public static void RequestSetGroupPermissions(Group group)
 		{

@@ -281,11 +281,13 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ResetDatabase()
 		{
-			database = new HEROsModDatabase();
-			database.players = new List<DatabasePlayer>();
-			database.groups = new List<DatabaseGroup>();
-			database.worlds = new List<DatabaseWorld>();
-			currentDatabaseWorld = null;
+            database = new HEROsModDatabase()
+            {
+                players = new List<DatabasePlayer>(),
+                groups = new List<DatabaseGroup>(),
+                worlds = new List<DatabaseWorld>()
+            };
+            currentDatabaseWorld = null;
 			//database.regions = new List<DatabaseRegion>();
 		}
 
@@ -494,9 +496,11 @@ namespace HEROsMod.HEROsModNetwork
 			List<Group> result = new List<Group>();
 			foreach (DatabaseGroup dbGroup in database.groups)
 			{
-				Group group = new Group(dbGroup.name);
-				group.ID = dbGroup.ID;
-				group.ImportPermissions(dbGroup.permissions);
+                Group group = new Group(dbGroup.name)
+                {
+                    ID = dbGroup.ID
+                };
+                group.ImportPermissions(dbGroup.permissions);
 				result.Add(group);
 			}
 			return result;
@@ -522,22 +526,24 @@ namespace HEROsMod.HEROsModNetwork
 		{
 			int newid = GetAvailableRegionID();
 
-			DatabaseRegion dbRegion = new DatabaseRegion();
-			dbRegion.ID = newid;
-			region.ID = dbRegion.ID;
-			dbRegion.name = region.Name;
-			dbRegion.x = region.X;
-			dbRegion.y = region.Y;
-			dbRegion.width = region.Width;
-			dbRegion.height = region.Height;
-			//byte[] colorData = new byte[] { region.Color.R, region.Color.G, region.Color.B, region.Color.A };
-			//int colorNum = BitConverter.ToInt32(colorData, 0);
-			//dbRegion.color = colorNum;
-			dbRegion.color = region.Color;
-			//dbRegion.permissions = region.ExportPermissions();
-			dbRegion.permissionsPlayers = region.AllowedPlayersIDs.ToArray();
-			dbRegion.permissionsGroups = region.AllowedGroupsIDs.ToArray();
-			//dbRegion.world = Main.worldID;
+            DatabaseRegion dbRegion = new DatabaseRegion()
+            {
+                ID = newid,
+                name = region.Name,
+                x = region.X,
+                y = region.Y,
+                width = region.Width,
+                height = region.Height,
+                //byte[] colorData = new byte[] { region.Color.R, region.Color.G, region.Color.B, region.Color.A };
+                //int colorNum = BitConverter.ToInt32(colorData, 0);
+                //dbRegion.color = colorNum;
+                color = region.Color,
+                //dbRegion.permissions = region.ExportPermissions();
+                permissionsPlayers = region.AllowedPlayersIDs.ToArray(),
+                permissionsGroups = region.AllowedGroupsIDs.ToArray()
+            };
+            //dbRegion.world = Main.worldID;
+            region.ID = dbRegion.ID;
 			currentDatabaseWorld.regions.Add(dbRegion);
 			SaveSetting(jsonDatabaseFilename);
 		}

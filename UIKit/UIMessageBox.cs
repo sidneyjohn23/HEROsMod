@@ -64,9 +64,11 @@ namespace HEROsMod.UIKit
 			AddChild(label);
 			if (MessageType == UIMessageBoxType.Ok)
 			{
-				okButton = new UIButton("Ok");
-				okButton.Anchor = AnchorPosition.BottomRight;
-				AddChild(okButton);
+                okButton = new UIButton("Ok")
+                {
+                    Anchor = AnchorPosition.BottomRight
+                };
+                AddChild(okButton);
 				okButton.onLeftClick += new EventHandler(okButton_onLeftClick);
 			}
 			else if (MessageType == UIMessageBoxType.YesNo)

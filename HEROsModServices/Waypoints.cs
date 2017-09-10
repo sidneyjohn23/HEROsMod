@@ -59,9 +59,11 @@ namespace HEROsMod.HEROsModServices
 			this.HotbarIcon.Tooltip = "View Waypoints";
 			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 
-			waypointWindow = new WaypointWindow();
-			waypointWindow.Visible = false;
-			this.AddUIView(waypointWindow);
+            waypointWindow = new WaypointWindow()
+            {
+                Visible = false
+            };
+            this.AddUIView(waypointWindow);
 		}
 
 		private void HotbarIcon_onLeftClick(object sender, EventArgs e)
@@ -199,13 +201,14 @@ namespace HEROsMod.HEROsModServices
 			Y = 100;
 			this.CanMove = true;
 
-			UILabel title = new UILabel("Waypoints");
-			title.Scale = .6f;
-			title.X = spacing;
-			title.Y = spacing;
-			title.OverridesMouse = false;
-
-			Height = 300 + title.Height + spacing * 2;
+            UILabel title = new UILabel("Waypoints")
+            {
+                Scale = .6f,
+                X = spacing,
+                Y = spacing,
+                OverridesMouse = false
+            };
+            Height = 300 + title.Height + spacing * 2;
 
 			UIButton bAddWaypoint = new UIButton("Add Waypoint");
 			UIButton bClose = new UIButton("Close");
@@ -217,12 +220,14 @@ namespace HEROsMod.HEROsModServices
 			bClose.Position = new Vector2(Width - spacing, Height - spacing);
 			bAddWaypoint.Position = new Vector2(bClose.Position.X - bClose.Width - spacing, bClose.Position.Y);
 
-			scrollView = new UIScrollView();
-			scrollView.Position = new Vector2(spacing, spacing);
-			scrollView.Y = title.Y + title.Height + spacing;
-			scrollView.X = title.X;
-			scrollView.Width = Width - spacing * 2;
-			scrollView.Height = Height - scrollView.Y - spacing * 2 - bClose.Height;
+            scrollView = new UIScrollView()
+            {
+                Position = new Vector2(spacing, spacing),
+                Y = title.Y + title.Height + spacing,
+                X = title.X,
+                Width = Width - spacing * 2
+            };
+            scrollView.Height = Height - scrollView.Y - spacing * 2 - bClose.Height;
 
 			AddChild(title);
 			AddChild(bClose);
@@ -257,21 +262,25 @@ namespace HEROsMod.HEROsModServices
 			float yPos = spacing;
 			for (int i = 0; i < Waypoints.points.Count; i++)
 			{
-				UILabel label = new UILabel(Waypoints.points[i].name);
-				label.Scale = .5f;
-				label.X = spacing;
-				label.Y = yPos;
-				label.Tag = i;
-				label.onLeftClick += label_onLeftClick;
+                UILabel label = new UILabel(Waypoints.points[i].name)
+                {
+                    Scale = .5f,
+                    X = spacing,
+                    Y = yPos,
+                    Tag = i
+                };
+                label.onLeftClick += label_onLeftClick;
 				yPos += label.Height;
 				scrollView.AddChild(label);
 
-				UIImage image = new UIImage(closeTexture);
-				image.ForegroundColor = Color.Red;
-				image.Anchor = AnchorPosition.Right;
-				image.Position = new Vector2(scrollView.Width - 10 - spacing, label.Position.Y + label.Height / 2);
-				image.Tag = i;
-				image.onLeftClick += image_onLeftClick;
+                UIImage image = new UIImage(closeTexture)
+                {
+                    ForegroundColor = Color.Red,
+                    Anchor = AnchorPosition.Right,
+                    Position = new Vector2(scrollView.Width - 10 - spacing, label.Position.Y + label.Height / 2),
+                    Tag = i
+                };
+                image.onLeftClick += image_onLeftClick;
 
 				scrollView.AddChild(image);
 			}

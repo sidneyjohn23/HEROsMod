@@ -46,9 +46,11 @@ namespace HEROsMod.UIKit
 
 		public void AddItem(string text)
 		{
-			UILabel label = new UILabel(text);
-			label.Tag = labels.Count;
-			label.onLeftClick += label_onLeftClick;
+            UILabel label = new UILabel(text)
+            {
+                Tag = labels.Count
+            };
+            label.onLeftClick += label_onLeftClick;
 			label.Scale = .5f;
 			label.Position = new Vector2(0, Height);
 			items.Add(text);

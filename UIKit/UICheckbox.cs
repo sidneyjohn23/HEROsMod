@@ -19,9 +19,8 @@ namespace HEROsMod.UIKit
 				if (value != selected)
 				{
 					selected = value;
-					if (SelectedChanged != null)
-						SelectedChanged(this, EventArgs.Empty);
-				}
+                    SelectedChanged?.Invoke(this, EventArgs.Empty);
+                }
 			}
 		}
 
@@ -39,10 +38,12 @@ namespace HEROsMod.UIKit
 
 		public UICheckbox(string text)
 		{
-			label = new UILabel(text);
-			label.Scale = .5f;
-			label.Position = new Vector2(checkboxTexture.Width + spacing, 0);
-			this.AddChild(label);
+            label = new UILabel(text)
+            {
+                Scale = .5f,
+                Position = new Vector2(checkboxTexture.Width + spacing, 0)
+            };
+            this.AddChild(label);
 			this.onLeftClick += new EventHandler(UICheckbox_onLeftClick);
 		}
 

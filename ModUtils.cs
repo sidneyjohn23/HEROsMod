@@ -207,11 +207,8 @@ namespace HEROsMod
 			{
 				if (ItemChanged())
 				{
-					if (InventoryChanged != null)
-					{
-						InventoryChanged(null, EventArgs.Empty);
-					}
-					SetPreviousInventory();
+                    InventoryChanged?.Invoke(null, EventArgs.Empty);
+                    SetPreviousInventory();
 				}
 			}
 		}

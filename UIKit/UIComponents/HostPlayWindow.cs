@@ -9,10 +9,12 @@ namespace HEROsMod.UIKit.UIComponents
 		public HostPlayWindow()
 		{
 			this.Anchor = AnchorPosition.Center;
-			UIWrappingLabel label = new UIWrappingLabel("Host & Play is not supported in Gamiki Mod.  Read our post about it by clicking the button below.", this.Width - 32f);
-			label.X = 16f;
-			label.Y = 16f;
-			UIButton bOk = new UIButton("Ok");
+            UIWrappingLabel label = new UIWrappingLabel("Host & Play is not supported in Gamiki Mod.  Read our post about it by clicking the button below.", this.Width - 32f)
+            {
+                X = 16f,
+                Y = 16f
+            };
+            UIButton bOk = new UIButton("Ok");
 			UIButton bPost = new UIButton("View Post");
 
 			bOk.Y = label.Y + label.Height + 16f;

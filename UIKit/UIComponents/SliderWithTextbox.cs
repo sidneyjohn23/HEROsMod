@@ -32,9 +32,11 @@ namespace HEROsMod.UIKit.UIComponents
 
 		public SliderWithTextbox(float startValue, float minValue, float maxValue)
 		{
-			textbox = new UITextbox();
-			textbox.Width = 125;
-			textbox.KeyPressed += textbox_KeyPressed;
+            textbox = new UITextbox()
+            {
+                Width = 125
+            };
+            textbox.KeyPressed += textbox_KeyPressed;
 			textbox.OnLostFocus += textbox_OnLostFocus;
 			textbox.Numeric = true;
 			textbox.HasDecimal = true;
@@ -68,11 +70,8 @@ namespace HEROsMod.UIKit.UIComponents
 				return;
 			}
 			slider.Value = float.Parse(textbox.Text);
-			if (ValueChanged != null)
-			{
-				ValueChanged(this, EventArgs.Empty);
-			}
-		}
+            ValueChanged?.Invoke(this, EventArgs.Empty);
+        }
 
 		private void slider_valueChanged(object sender, float value)
 		{
@@ -80,10 +79,7 @@ namespace HEROsMod.UIKit.UIComponents
 			{
 				textbox.Text = slider.Value.ToString();
 			}
-			if (ValueChanged != null)
-			{
-				ValueChanged(this, EventArgs.Empty);
-			}
-		}
+            ValueChanged?.Invoke(this, EventArgs.Empty);
+        }
 	}
 }

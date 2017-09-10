@@ -166,9 +166,11 @@ namespace HEROsMod.HEROsModServices
 
 		private void bApply_onLeftClick(object sender, EventArgs e)
 		{
-			HEROsModNetwork.Group group = new HEROsModNetwork.Group(dropdown.GetItem(dropdown.SelectedItem));
-			group.ID = HEROsModNetwork.Network.Groups[dropdown.SelectedItem].ID;
-			group.ImportPermissions(ExportPermissions());
+            HEROsModNetwork.Group group = new HEROsModNetwork.Group(dropdown.GetItem(dropdown.SelectedItem))
+            {
+                ID = HEROsModNetwork.Network.Groups[dropdown.SelectedItem].ID
+            };
+            group.ImportPermissions(ExportPermissions());
 			HEROsModNetwork.LoginService.RequestSetGroupPermissions(group);
 		}
 
@@ -193,9 +195,11 @@ namespace HEROsMod.HEROsModServices
 			checkboxContainer.ClearContent();
 			for (int i = 0; i < HEROsModNetwork.Group.PermissionList.Count; i++)
 			{
-				UICheckbox cb = new UICheckbox(HEROsModNetwork.Group.PermissionList[i].Description);
-				cb.Selected = HEROsModNetwork.Network.Groups[dropdown.SelectedItem].HasPermission(HEROsModNetwork.Group.PermissionList[i].Key);
-				checkboxContainer.AddChild(cb);
+                UICheckbox cb = new UICheckbox(HEROsModNetwork.Group.PermissionList[i].Description)
+                {
+                    Selected = HEROsModNetwork.Network.Groups[dropdown.SelectedItem].HasPermission(HEROsModNetwork.Group.PermissionList[i].Key)
+                };
+                checkboxContainer.AddChild(cb);
 				int index = i;
 				cb.X = spacing + index % 2 * (Width / 2);
 				cb.Y = index / 2 * (cb.Height) + spacing;
@@ -248,11 +252,8 @@ namespace HEROsMod.HEROsModServices
 		{
 			if (this.Parent != null)
 				this.Parent.RemoveChild(this);
-			if (Closed != null)
-			{
-				Closed(this, EventArgs.Empty);
-			}
-		}
+            Closed?.Invoke(this, EventArgs.Empty);
+        }
 	}
 
 	internal class NewGroupWindow : UIWindow

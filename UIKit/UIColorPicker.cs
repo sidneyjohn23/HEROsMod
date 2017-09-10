@@ -79,11 +79,8 @@ namespace HEROsMod.UIKit
 
 		private void TriggerColorChangedEvent()
 		{
-			if (ColorChanged != null)
-			{
-				ColorChanged(this, EventArgs.Empty);
-			}
-		}
+            ColorChanged?.Invoke(this, EventArgs.Empty);
+        }
 
 		private void luminositySlider_valueChanged(object sender, float value)
 		{

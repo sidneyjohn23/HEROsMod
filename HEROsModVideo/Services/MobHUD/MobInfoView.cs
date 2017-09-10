@@ -71,11 +71,13 @@ namespace HEROsMod.HEROsModVideo.Services.MobHUD
 
 		private void AddLabel(string text, Color? color = null, float scale = .4f)
 		{
-			UILabel label = new UILabel(text);
-			label.Scale = scale;
-			label.X = Spacing;
-			label.Y = yPos;
-			yPos += label.Height;
+            UILabel label = new UILabel(text)
+            {
+                Scale = scale,
+                X = Spacing,
+                Y = yPos
+            };
+            yPos += label.Height;
 			if (label.Width > maxWidth)
 			{
 				maxWidth = label.Width;
@@ -107,19 +109,23 @@ namespace HEROsMod.HEROsModVideo.Services.MobHUD
 
 		private void AddStat(string text, string stat, Color? color = null, float scale = .4f)
 		{
-			UILabel label = new UILabel(text);
-			label.Scale = scale;
-			label.X = Spacing;
-			label.Y = yPos;
-			label.ForegroundColor = Color.White;
-			AddChild(label);
+            UILabel label = new UILabel(text)
+            {
+                Scale = scale,
+                X = Spacing,
+                Y = yPos,
+                ForegroundColor = Color.White
+            };
+            AddChild(label);
 
-			UILabel lStat = new UILabel(stat);
-			lStat.Scale = scale;
-			lStat.X = Width;
-			lStat.Y = yPos;
-			lStat.ForegroundColor = Color.White;
-			if (color != null)
+            UILabel lStat = new UILabel(stat)
+            {
+                Scale = scale,
+                X = Width,
+                Y = yPos,
+                ForegroundColor = Color.White
+            };
+            if (color != null)
 			{
 				Color c = (Color)color;
 				label.ForegroundColor = c;

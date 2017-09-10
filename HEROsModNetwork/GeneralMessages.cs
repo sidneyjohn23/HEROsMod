@@ -396,9 +396,8 @@ namespace HEROsMod.HEROsModNetwork
 		private static void ProcessTimePausedOrChanged(ref BinaryReader reader)
 		{
 			bool timePaused = reader.ReadBoolean();
-			if (TimePausedOrResumedByServer != null)
-				TimePausedOrResumedByServer(timePaused);
-		}
+            TimePausedOrResumedByServer?.Invoke(timePaused);
+        }
 
 		public static void RequestClearGroundItems()
 		{
@@ -633,15 +632,12 @@ namespace HEROsMod.HEROsModNetwork
 		{
 			if (Network.NetworkMode == NetworkMode.Server) return;
 			int playerIndex = reader.ReadInt32();
-			//if (CTF.CaptureTheFlag.GameInProgress)
-			//{
-			//	Main.player[playerIndex].active = false;
-			//}
-			if (PlayerJoined != null)
-			{
-				PlayerJoined(Network.Players[playerIndex]);
-			}
-		}
+            //if (CTF.CaptureTheFlag.GameInProgress)
+            //{
+            //	Main.player[playerIndex].active = false;
+            //}
+            PlayerJoined?.Invoke(Network.Players[playerIndex]);
+        }
 
 		public static void TellClientsPlayerLeft(int playerIndex)
 		{
@@ -655,11 +651,8 @@ namespace HEROsMod.HEROsModNetwork
 			if (Network.NetworkMode == NetworkMode.Server) return;
 			int playerIndex = reader.ReadInt32();
 			Network.Players[playerIndex].Reset();
-			if (PlayerLeft != null)
-			{
-				PlayerLeft(Network.Players[playerIndex]);
-			}
-		}
+            PlayerLeft?.Invoke(Network.Players[playerIndex]);
+        }
 
 		public static void SendCurrentTogglesToPlayer(int playerNumber)
 		{
@@ -724,11 +717,8 @@ namespace HEROsMod.HEROsModNetwork
 			{
 				Network.Regions.Add(Region.GetRegionFromBinaryReader(ref reader));
 			}
-			if (RegionsUpdated != null)
-			{
-				RegionsUpdated(null, EventArgs.Empty);
-			}
-		}
+            RegionsUpdated?.Invoke(null, EventArgs.Empty);
+        }
 
 		public static void RequestCreateRegion(Region region)
 		{
@@ -813,11 +803,13 @@ namespace HEROsMod.HEROsModNetwork
 
 			for (int i = 0; i < numberOfUsers; i++)
 			{
-				UserWithID user = new UserWithID();
-				user.Username = reader.ReadString();
-				user.ID = reader.ReadInt32();
-				user.groupID = reader.ReadInt32();
-				Network.RegisteredUsers.Add(user);
+                UserWithID user = new UserWithID()
+                {
+                    Username = reader.ReadString(),
+                    ID = reader.ReadInt32(),
+                    groupID = reader.ReadInt32()
+                };
+                Network.RegisteredUsers.Add(user);
 			}
 		}
 

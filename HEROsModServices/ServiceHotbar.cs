@@ -132,16 +132,22 @@ namespace HEROsMod.HEROsModServices
 			this.Anchor = AnchorPosition.Top;
 			this.UpdateWhenOutOfBounds = true;
 			MasterView.gameScreen.AddChild(this);
-			_iconView = new UIView();
-			_iconView.Width = this.Width;
-			_iconView.Height = this.Height;
-			this.AddChild(_iconView);
+            _iconView = new UIView()
+            {
+                Width = this.Width,
+                Height = this.Height
+            };
+            this.AddChild(_iconView);
 
-			collapseButton = new UIImage(HEROsMod.instance.GetTexture("Images/CollapseBar/CollapseButtonHorizontal"));
-			collapseButton.UpdateWhenOutOfBounds = true;
-			collapseArrow = new UIImage(HEROsMod.instance.GetTexture("Images/CollapseBar/CollapseArrowHorizontal"));
-			collapseArrow.UpdateWhenOutOfBounds = true;
-			collapseButton.Anchor = AnchorPosition.Top;
+            collapseButton = new UIImage(HEROsMod.instance.GetTexture("Images/CollapseBar/CollapseButtonHorizontal"))
+            {
+                UpdateWhenOutOfBounds = true
+            };
+            collapseArrow = new UIImage(HEROsMod.instance.GetTexture("Images/CollapseBar/CollapseArrowHorizontal"))
+            {
+                UpdateWhenOutOfBounds = true
+            };
+            collapseButton.Anchor = AnchorPosition.Top;
 			collapseArrow.Anchor = AnchorPosition.Top;
 			collapseArrow.SpriteEffect = SpriteEffects.FlipVertically;
 			AddChild(collapseButton);

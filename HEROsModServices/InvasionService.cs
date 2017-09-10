@@ -16,13 +16,17 @@ namespace HEROsMod.HEROsModServices
 
 		public InvasionService()
 		{
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/event")/*Main.itemTexture[14]*/);
-			this._hotbarIcon.Tooltip = "Open Event Starter";
-			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+            this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/event")/*Main.itemTexture[14]*/)
+            {
+                Tooltip = "Open Event Starter"
+            };
+            this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
 
-			_eventWindow = new EventWindow();
-			_eventWindow.Visible = false;
-			this.AddUIView(_eventWindow);
+            _eventWindow = new EventWindow()
+            {
+                Visible = false
+            };
+            this.AddUIView(_eventWindow);
 		}
 
 		private void _hotbarIcon_onLeftClick(object sender, EventArgs e)
@@ -198,12 +202,14 @@ namespace HEROsMod.HEROsModServices
 			this.CanMove = true;
 			int buttonWidth = 175;
 
-			UILabel lTitle = new UILabel("Events");
-			lTitle.Scale = .6f;
-			lTitle.X = LargeSpacing;
-			lTitle.Y = LargeSpacing;
-			lTitle.OverridesMouse = false;
-			AddChild(lTitle);
+            UILabel lTitle = new UILabel("Events")
+            {
+                Scale = .6f,
+                X = LargeSpacing,
+                Y = LargeSpacing,
+                OverridesMouse = false
+            };
+            AddChild(lTitle);
 
 			UIImage bClose = new UIImage(closeTexture);
 			bClose.X = buttonWidth + LargeSpacing - bClose.Width;
@@ -215,23 +221,27 @@ namespace HEROsMod.HEROsModServices
 			float yPos = lTitle.Y + lTitle.Height + SmallSpacing;
 			for (int i = 0; i < buttonText.Length; i++)
 			{
-				buttons[i] = new UIButton(buttonText[i]);
-				buttons[i].AutoSize = false;
-				buttons[i].Width = buttonWidth;
-				buttons[i].X = LargeSpacing;
-				buttons[i].Y = yPos;
-				buttons[i].Tag = i;
-				buttons[i].onLeftClick += EventWindow_onLeftClick;
+                buttons[i] = new UIButton(buttonText[i])
+                {
+                    AutoSize = false,
+                    Width = buttonWidth,
+                    X = LargeSpacing,
+                    Y = yPos,
+                    Tag = i
+                };
+                buttons[i].onLeftClick += EventWindow_onLeftClick;
 				yPos += buttons[i].Height + Spacing;
 				AddChild(buttons[i]);
 			}
 
-			UIButton bStopEvents = new UIButton("Stop Events");
-			bStopEvents.AutoSize = false;
-			bStopEvents.Width = buttonWidth;
-			bStopEvents.X = LargeSpacing;
-			bStopEvents.Y = yPos + Spacing;
-			bStopEvents.onLeftClick += bStopEvents_onLeftClick;
+            UIButton bStopEvents = new UIButton("Stop Events")
+            {
+                AutoSize = false,
+                Width = buttonWidth,
+                X = LargeSpacing,
+                Y = yPos + Spacing
+            };
+            bStopEvents.onLeftClick += bStopEvents_onLeftClick;
 			AddChild(bStopEvents);
 
 			this.Height = bStopEvents.Y + bStopEvents.Height + LargeSpacing;
