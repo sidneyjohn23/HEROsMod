@@ -11,15 +11,15 @@ namespace HEROsMod.HEROsModServices
 
 		public ItemBrowser()
 		{
-			this._name = "Item Browser";
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/items")/*Main.itemTexture[10]*/);
-			this.HotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-			this.HotbarIcon.Tooltip = "Item Browser";
+            _name = "Item Browser";
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/items")/*Main.itemTexture[10]*/);
+            HotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+            HotbarIcon.Tooltip = "Item Browser";
 
 			_itemBrowserWindow = new UIKit.UIComponents.ItemBrowser();
 			_itemBrowserWindow.CenterToParent();
 			_itemBrowserWindow.Position -= new Vector2(_itemBrowserWindow.Width / 2, (_itemBrowserWindow.Height / 2) + 30);
-			this.AddUIView(_itemBrowserWindow);
+            AddUIView(_itemBrowserWindow);
 		}
 
 		private void _hotbarIcon_onLeftClick(object sender, EventArgs e)
@@ -44,7 +44,7 @@ namespace HEROsMod.HEROsModServices
 
 		public override void MyGroupUpdated()
 		{
-			this.HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ItemBrowser");
+            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ItemBrowser");
 			if (!HasPermissionToUse)
 			{
 				_itemBrowserWindow.Visible = false;

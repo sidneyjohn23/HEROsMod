@@ -55,7 +55,7 @@ namespace HEROsMod.UIKit
 			label.Position = new Vector2(0, Height);
 			items.Add(text);
 			labels.Add(label);
-			this.AddChild(label);
+            AddChild(label);
 		}
 
 		public void ClearItems()
@@ -79,7 +79,7 @@ namespace HEROsMod.UIKit
 				{
 					UILabel label = labels[selectedIndex];
 					Vector2 pos = label.DrawPosition;
-					spriteBatch.Draw(ModUtils.DummyTexture, new Rectangle((int)pos.X, (int)pos.Y, (int)this.Width, (int)label.Height), Color.Pink);
+					spriteBatch.Draw(ModUtils.DummyTexture, new Rectangle((int)pos.X, (int)pos.Y, (int)Width, (int)label.Height), Color.Pink);
 				}
 			}
 			base.Draw(spriteBatch);

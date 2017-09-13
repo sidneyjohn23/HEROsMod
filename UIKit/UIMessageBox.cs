@@ -28,7 +28,7 @@ namespace HEROsMod.UIKit
 			set
 			{
 				label.Text = value;
-				this.Height = label.Height + 70;
+                Height = label.Height + 70;
 				PositionButtons();
 			}
 		}
@@ -36,28 +36,28 @@ namespace HEROsMod.UIKit
 		public UIMessageBox()
 		{
 			AddButtons();
-			this.Text = "";
+            Text = "";
 		}
 
 		public UIMessageBox(string text, bool exclusiveControl = false)
 		{
 			AddButtons();
-			this.Text = text;
+            Text = text;
 			if (exclusiveControl) UIView.exclusiveControl = this;
 		}
 
 		public UIMessageBox(string text, UIMessageBoxType messageBoxType, bool exclusiveControl = false)
 		{
-			this.MessageType = messageBoxType;
+            MessageType = messageBoxType;
 			AddButtons();
-			this.Text = text;
+            Text = text;
 
 			if (exclusiveControl) UIView.exclusiveControl = this;
 		}
 
 		private void AddButtons()
 		{
-			this.Anchor = AnchorPosition.Center;
+            Anchor = AnchorPosition.Center;
 			label.Anchor = AnchorPosition.Top;
 			label.Width = Width - 30;
 			label.Position = new Vector2(Width / 2, 10);
@@ -86,32 +86,32 @@ namespace HEROsMod.UIKit
 
 		private void yesButton_onLeftClick(object sender, EventArgs e)
 		{
-			if (this.yesClicked != null)
+			if (yesClicked != null)
 				yesClicked(this, EventArgs.Empty);
-			if (this.Parent != null)
+			if (Parent != null)
 			{
 				if (UIView.exclusiveControl == this) UIView.exclusiveControl = null;
-				this.Parent.RemoveChild(this);
+                Parent.RemoveChild(this);
 			}
 		}
 
 		private void noButton_onLeftClick(object sender, EventArgs e)
 		{
-			if (this.noClicked != null)
+			if (noClicked != null)
 				noClicked(this, EventArgs.Empty);
-			if (this.Parent != null)
+			if (Parent != null)
 			{
 				if (UIView.exclusiveControl == this) UIView.exclusiveControl = null;
-				this.Parent.RemoveChild(this);
+                Parent.RemoveChild(this);
 			}
 		}
 
 		private void okButton_onLeftClick(object sender, EventArgs e)
 		{
-			if (this.Parent != null)
+			if (Parent != null)
 			{
 				if (UIView.exclusiveControl == this) UIView.exclusiveControl = null;
-				this.Parent.RemoveChild(this);
+                Parent.RemoveChild(this);
 			}
 		}
 

@@ -25,11 +25,11 @@ namespace HEROsMod.HEROsModVideo.Services.MobHUD
 		public MobInfoView(NPC npc)
 		{
 			stats = new List<UIView>();
-			this.OverridesMouse = false;
+            OverridesMouse = false;
 			NPCTarget = npc;
-			this.Anchor = AnchorPosition.Top;
+            Anchor = AnchorPosition.Top;
 
-			this._worldPos = npc.position;
+            _worldPos = npc.position;
 
 			AddLabel(Lang.GetNPCNameValue(npc.netID));
 			AddStat("ID", npc.netID.ToString());
@@ -38,13 +38,13 @@ namespace HEROsMod.HEROsModVideo.Services.MobHUD
 			AddStat("Defense", npc.defense.ToString());
 			AddStat("Knockback Resist", npc.knockBackResist.ToString());
 
-			this.Width = maxWidth + Spacing * 2;
-			this.Height = yPos;
-			this._worldPos.Y -= this.Height;
+            Width = maxWidth + Spacing * 2;
+            Height = yPos;
+            _worldPos.Y -= Height;
 
 			for (int i = 0; i < stats.Count; i++)
 			{
-				stats[i].X = this.Width - stats[i].Width - Spacing;
+				stats[i].X = Width - stats[i].Width - Spacing;
 			}
 		}
 
@@ -55,7 +55,7 @@ namespace HEROsMod.HEROsModVideo.Services.MobHUD
 
 			Vector2 targetPos = NPCTarget.position + _targetPosition;
 			targetPos.X += NPCTarget.width / 2;
-			targetPos.Y -= this.Height + 15 + _radius;
+			targetPos.Y -= Height + 15 + _radius;
 			_time += _timeAdvanceSpeed * ModUtils.DeltaTime * 60;
 			if (_time > MathHelper.TwoPi)
 			{
@@ -65,7 +65,7 @@ namespace HEROsMod.HEROsModVideo.Services.MobHUD
 			_targetPosition.Y = (float)Math.Sin(_time) * _radius;
 
 			SetPos(ModUtils.DeltaTime, targetPos);
-			this.Position = _worldPos - Main.screenPosition;
+            Position = _worldPos - Main.screenPosition;
 			base.Update();
 		}
 
@@ -100,11 +100,11 @@ namespace HEROsMod.HEROsModVideo.Services.MobHUD
 			Damping = 3.9f;
 			SpringStiffness = 30;
 			Mass = 0.5f;
-			var delta = this._worldPos - desiredPosition;
+			var delta = _worldPos - desiredPosition;
 			var force = -SpringStiffness * delta - Damping * _velocity;
 			var acceleration = force / Mass;
 			_velocity += acceleration * elapsedSeconds;
-			this._worldPos += _velocity * elapsedSeconds;
+            _worldPos += _velocity * elapsedSeconds;
 		}
 
 		private void AddStat(string text, string stat, Color? color = null, float scale = .4f)

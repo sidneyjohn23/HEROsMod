@@ -50,7 +50,7 @@ namespace HEROsMod.UIKit.UIComponents
 				{
 					slot.Visible = true;
 					slot.item = Items[i];
-					this.ContentHeight = slot.Y + slot.Height + Spacing;
+                    ContentHeight = slot.Y + slot.Height + Spacing;
 					AddChild(slot);
 				}
 				else

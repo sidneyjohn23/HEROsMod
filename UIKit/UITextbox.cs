@@ -90,14 +90,14 @@ namespace HEROsMod.UIKit
 
 		public UITextbox()
 		{
-			this.onLeftClick += new EventHandler(UITextbox_onLeftClick);
+            onLeftClick += new EventHandler(UITextbox_onLeftClick);
 			label.ForegroundColor = Color.Black;
 			label.Scale = Height / label.Height;
 			label.TextOutline = false;
 			Numeric = false;
 			HasDecimal = false;
 			label.Position = new Vector2(4, 4);
-			this.AddChild(label);
+            AddChild(label);
 		}
 
 		private void UITextbox_onLeftClick(object sender, EventArgs e)

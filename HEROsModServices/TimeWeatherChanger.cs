@@ -26,10 +26,10 @@ namespace HEROsMod.HEROsModServices
 			IsHotbar = true;
 
 			TimePaused = false;
-			this._name = "Time Weather Control";
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/timeRain"));
-			this.HotbarIcon.Tooltip = "Change Time/Rain";
-			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
+            _name = "Time Weather Control";
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/timeRain"));
+            HotbarIcon.Tooltip = "Change Time/Rain";
+            HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 
             //timeWeatherHotbar = new TimeWeatherControlHotbar();
             //HEROsMod.ServiceHotbar.AddChild(timeWeatherHotbar);
@@ -39,7 +39,7 @@ namespace HEROsMod.HEROsModServices
                 HotBarParent = HEROsMod.ServiceHotbar
             };
             timeWeatherHotbar.Hide();
-			this.AddUIView(timeWeatherHotbar);
+            AddUIView(timeWeatherHotbar);
 
 			Hotbar = timeWeatherHotbar;
 
@@ -75,7 +75,7 @@ namespace HEROsMod.HEROsModServices
 
 		public override void MyGroupUpdated()
 		{
-			this.HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ChangeTimeWeather");
+            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ChangeTimeWeather");
 			if (!HasPermissionToUse)
 			{
 				timeWeatherHotbar.Hide();
@@ -150,14 +150,14 @@ namespace HEROsMod.HEROsModServices
 
 		public TimeWeatherControlHotbar()
 		{
-			this.buttonView = new UIView();
+            buttonView = new UIView();
 			Height = 54;
 			UpdateWhenOutOfBounds = true;
-			//this.Visible = false;
+            //this.Visible = false;
 
-			this.buttonView.Height = base.Height;
+            buttonView.Height = base.Height;
 			base.Anchor = AnchorPosition.Top;
-			this.AddChild(this.buttonView);
+            AddChild(buttonView);
 
 			//UIImage bStopRain = new UIImage(HEROsMod.instance.GetTexture("Images/sunIcon"));
 			//UIImage bStartRain = new UIImage(rainTexture);
@@ -260,19 +260,19 @@ namespace HEROsMod.HEROsModServices
 			//Width = xPos;
 
 			base.CenterXAxisToParentCenter();
-			float num = this.spacing;
-			for (int i = 0; i < this.buttonView.children.Count; i++)
+			float num = spacing;
+			for (int i = 0; i < buttonView.children.Count; i++)
 			{
-				this.buttonView.children[i].Anchor = AnchorPosition.Left;
-				this.buttonView.children[i].Position = new Vector2(num, 0f);
-				this.buttonView.children[i].CenterYAxisToParentCenter();
-				this.buttonView.children[i].Visible = true;
+                buttonView.children[i].Anchor = AnchorPosition.Left;
+                buttonView.children[i].Position = new Vector2(num, 0f);
+                buttonView.children[i].CenterYAxisToParentCenter();
+                buttonView.children[i].Visible = true;
 				//this.buttonView.children[i].ForegroundColor = buttonUnselectedColor;
-				num += this.buttonView.children[i].Width + this.spacing;
+				num += buttonView.children[i].Width + spacing;
 			}
 			//this.Resize();
 			base.Width = num;
-			this.buttonView.Width = base.Width;
+            buttonView.Width = base.Width;
 		}
 
 		public override void Update()

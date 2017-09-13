@@ -36,12 +36,12 @@ namespace HEROsMod.HEROsModServices
 			{
 				_logoutTexture = HEROsMod.instance.GetTexture("Images/logout");
 			}
-			this._name = "Login";
-			this._hotbarIcon = new UIImage(_loginTexture);
-			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+            _name = "Login";
+            _hotbarIcon = new UIImage(_loginTexture);
+            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
 			LoginStatusChanged += Login_LoginStatusChanged;
-			this.HotbarIcon.Tooltip = "Login";
-			this.HasPermissionToUse = true;
+            HotbarIcon.Tooltip = "Login";
+            HasPermissionToUse = true;
 		}
 
 		private void Login_LoginStatusChanged(object sender, EventArgs e)
@@ -49,13 +49,13 @@ namespace HEROsMod.HEROsModServices
 			//ErrorLogger.Log("Login_LoginStatusChanged to "+ LoggedIn);
 			if (LoggedIn)
 			{
-				this._hotbarIcon.Texture = _logoutTexture;
-				this.HotbarIcon.Tooltip = "Logout";
+                _hotbarIcon.Texture = _logoutTexture;
+                HotbarIcon.Tooltip = "Logout";
 			}
 			else
 			{
-				this._hotbarIcon.Texture = _loginTexture;
-				this.HotbarIcon.Tooltip = "Login";
+                _hotbarIcon.Texture = _loginTexture;
+                HotbarIcon.Tooltip = "Login";
 			}
 		}
 
@@ -93,7 +93,7 @@ namespace HEROsMod.HEROsModServices
 			UIView.exclusiveControl = this;
 
 			Width = 600;
-			this.Anchor = AnchorPosition.Center;
+            Anchor = AnchorPosition.Center;
 
 			lUsername = new UILabel("Username");
 			tbUsername = new UITextbox();
@@ -124,11 +124,11 @@ namespace HEROsMod.HEROsModServices
 			tbPassword.X = tbUsername.X;
 			tbPassword.Y = lPassword.Y;
 
-			bCancel.Position = new Vector2(this.Width - spacing, tbPassword.Y + tbPassword.Height + spacing);
+			bCancel.Position = new Vector2(Width - spacing, tbPassword.Y + tbPassword.Height + spacing);
 			bLogin.Position = new Vector2(bCancel.Position.X - bCancel.Width - spacing, bCancel.Position.Y);
 			bRegister.X = spacing;
 			bRegister.Y = bCancel.Y;
-			this.Height = bCancel.Y + bCancel.Height + spacing;
+            Height = bCancel.Y + bCancel.Height + spacing;
 
 			bCancel.onLeftClick += bCancel_onLeftClick;
 			bLogin.onLeftClick += bLogin_onLeftClick;
@@ -193,7 +193,7 @@ namespace HEROsMod.HEROsModServices
 
 		private void bCancel_onLeftClick(object sender, EventArgs e)
 		{
-			this.Close();
+            Close();
 		}
 
 		protected override float GetWidth()
@@ -204,14 +204,14 @@ namespace HEROsMod.HEROsModServices
 		private void Close()
 		{
 			UIView.exclusiveControl = null;
-			this.Parent.RemoveChild(this);
+            Parent.RemoveChild(this);
 		}
 
 		public override void Update()
 		{
-			if (Main.gameMenu) this.Close();
+			if (Main.gameMenu) Close();
 			if (Parent != null)
-				this.Position = new Vector2(Parent.Width / 2, Parent.Height / 2);
+                Position = new Vector2(Parent.Width / 2, Parent.Height / 2);
 			base.Update();
 		}
 	}

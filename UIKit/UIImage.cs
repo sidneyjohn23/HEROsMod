@@ -10,7 +10,7 @@ namespace HEROsMod.UIKit
 		public Texture2D Texture
 		{
 			get { return texture; }
-			set { this.texture = value; }
+			set { texture = value; }
 		}
 
 		private float width
@@ -63,7 +63,7 @@ namespace HEROsMod.UIKit
 
 		public UIImage(Texture2D texture)
 		{
-			this.Texture = texture;
+            Texture = texture;
 		}
 
 		public UIImage()

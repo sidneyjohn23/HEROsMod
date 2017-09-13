@@ -75,7 +75,7 @@ namespace HEROsMod.UIKit.UIComponents
 
 		public ItemBrowser()
 		{
-			this.CanMove = true;
+            CanMove = true;
 			//Height = 420;
 
 			_expandTexture = HEROsMod.instance.GetTexture("Images/ExpandIcon");
@@ -178,7 +178,7 @@ namespace HEROsMod.UIKit.UIComponents
 			AddChild(_bBack);
 
 			_bCollapseCategories = new UIImage(_collapseTexture);
-			_bCollapseCategories.X = this.Width - _bCollapseCategories.Width - LargeSpacing;
+			_bCollapseCategories.X = Width - _bCollapseCategories.Width - LargeSpacing;
 			_bCollapseCategories.Y = _categoryView.Y - _bCollapseCategories.Height - Spacing;
 			_bCollapseCategories.onLeftClick += _bCollapseCategories_onLeftClick;
 			AddChild(_bCollapseCategories);
@@ -363,7 +363,7 @@ namespace HEROsMod.UIKit.UIComponents
 
 		public override void Update()
 		{
-			if (!Main.playerInventory) this.Visible = false;
+			if (!Main.playerInventory) Visible = false;
 
 			float moveSpeed = 5f;
 			_categoryView.Visible = true;
@@ -383,13 +383,13 @@ namespace HEROsMod.UIKit.UIComponents
 				_collapsePosition += ModUtils.DeltaTime * moveSpeed;
 				if (_collapsePosition > 1f) _collapsePosition = 1f;
 			}
-			this.Width = MathHelper.SmoothStep(hiddenWidth, shownWidth, _collapsePosition);
+            Width = MathHelper.SmoothStep(hiddenWidth, shownWidth, _collapsePosition);
 			_categoryView.Opacity = MathHelper.SmoothStep(0, 1f, _collapsePosition);
 			_bBack.X = _categoryView.X;
 			_bBack.Opacity = _categoryView.Opacity;
-			_bCollapseCategories.X = this.Width - _bCollapseCategories.Width - LargeSpacing - 30;
-			_categoryView.X = this.Width - _categoryView.Width - LargeSpacing;
-			_bClose.X = this.Width - LargeSpacing;
+			_bCollapseCategories.X = Width - _bCollapseCategories.Width - LargeSpacing - 30;
+			_categoryView.X = Width - _categoryView.Width - LargeSpacing;
+			_bClose.X = Width - LargeSpacing;
 			SearchBox.X = _itemView.X + _itemView.Width - SearchBox.Width;
 			if (_bCollapseCategories.X - Spacing < SearchBox.X + SearchBox.Width)
 			{
@@ -400,7 +400,7 @@ namespace HEROsMod.UIKit.UIComponents
 
 		private void bClose_onLeftClick(object sender, EventArgs e)
 		{
-			this.Visible = false;
+            Visible = false;
 		}
 
 		private void textbox_KeyPressed(object sender, char key)
@@ -827,16 +827,16 @@ namespace HEROsMod.UIKit.UIComponents
 
 		public Category(string name)
 		{
-			this.Name = name;
+            Name = name;
 			Items = new List<Item>();
 			SubCategories = new List<Category>();
 			Sorts = new Sort[0];
-			this.belongs = x => false;
+            belongs = x => false;
 		}
 
 		public Category(string name, Predicate<Item> belongs)
 		{
-			this.Name = name;
+            Name = name;
 			Items = new List<Item>();
 			SubCategories = new List<Category>();
 			Sorts = new Sort[0];
@@ -870,7 +870,7 @@ namespace HEROsMod.UIKit.UIComponents
 
 		public override string ToString()
 		{
-			return this.Name + " - Item Count: " + Items.Count;
+			return Name + " - Item Count: " + Items.Count;
 		}
 	}
 }

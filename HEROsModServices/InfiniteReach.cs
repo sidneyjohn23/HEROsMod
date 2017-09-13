@@ -27,25 +27,25 @@ namespace HEROsMod.HEROsModServices
 		public InfiniteReach()
 		{
 			Enabled = false;
-			this._name = "Infinite Reach";
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/infiniteReach")/*Main.itemTexture[407]*/);
-			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-			this.HotbarIcon.Tooltip = "Enable Infinite Reach";
+            _name = "Infinite Reach";
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/infiniteReach")/*Main.itemTexture[407]*/);
+            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+            HotbarIcon.Tooltip = "Enable Infinite Reach";
 			Disable();
 		}
 
 		private void Enable()
 		{
-			this._hotbarIcon.Opacity = 1f;
+            _hotbarIcon.Opacity = 1f;
 			Enabled = true;
-			this.HotbarIcon.Tooltip = "Disable Infinite Reach";
+            HotbarIcon.Tooltip = "Disable Infinite Reach";
 		}
 
 		private void Disable()
 		{
-			this._hotbarIcon.Opacity = .5f;
+            _hotbarIcon.Opacity = .5f;
 			Enabled = false;
-			this.HotbarIcon.Tooltip = "Enable Infinite Reach";
+            HotbarIcon.Tooltip = "Enable Infinite Reach";
 		}
 
 		private void _hotbarIcon_onLeftClick(object sender, EventArgs e)
@@ -77,7 +77,7 @@ namespace HEROsMod.HEROsModServices
 
 		public override void MyGroupUpdated()
 		{
-			this.HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("InfiniteReach");
+            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("InfiniteReach");
 			if (!HasPermissionToUse)
 			{
 				Disable();

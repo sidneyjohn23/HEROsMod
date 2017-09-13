@@ -56,14 +56,14 @@ namespace HEROsMod.HEROsModNetwork
 		public HEROsModPlayer(int playerIndex)
 		{
 			Reset();
-			this._playerIndex = playerIndex;
+            _playerIndex = playerIndex;
 		}
 
 		public void Reset()
 		{
-			this.Username = String.Empty;
-			this.ID = -1;
-			this.UsingHEROsMod = false;
+            Username = String.Empty;
+            ID = -1;
+            UsingHEROsMod = false;
 			//        this.CTFTeam = CTF.TeamColor.None;
 			Group = Network.DefaultGroup;
 		}

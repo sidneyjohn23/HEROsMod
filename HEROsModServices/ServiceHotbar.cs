@@ -30,7 +30,7 @@ namespace HEROsMod.HEROsModServices
 		{
 			get
 			{
-				return Main.screenHeight - this.Height - 12;
+				return Main.screenHeight - Height - 12;
 			}
 		}
 
@@ -58,7 +58,7 @@ namespace HEROsMod.HEROsModServices
 			get
 			{
 				if (Visible)
-					return new Vector2(0, this.Position.Y - Main.screenHeight - collapseArrow.Height);
+					return new Vector2(0, Position.Y - Main.screenHeight - collapseArrow.Height);
 				else return Vector2.Zero;
 			}
 		}
@@ -118,8 +118,8 @@ namespace HEROsMod.HEROsModServices
 			}
 			if (_iconView.ChildCount > 0)
 			{
-				this.Width = _iconView.GetLastChild().X + _iconView.GetLastChild().Width + Spacing;
-				_iconView.Width = this.Width;
+                Width = _iconView.GetLastChild().X + _iconView.GetLastChild().Width + Spacing;
+				_iconView.Width = Width;
 			}
 			collapseButton.CenterXAxisToParentCenter();
 			collapseArrow.Position = collapseButton.Position;
@@ -127,17 +127,17 @@ namespace HEROsMod.HEROsModServices
 
 		private void InitUI()
 		{
-			this.Height = 54;///55; // 38 + 8 + 8 = 54
-			this.Width = 0;
-			this.Anchor = AnchorPosition.Top;
-			this.UpdateWhenOutOfBounds = true;
+            Height = 54;///55; // 38 + 8 + 8 = 54
+			Width = 0;
+            Anchor = AnchorPosition.Top;
+            UpdateWhenOutOfBounds = true;
 			MasterView.gameScreen.AddChild(this);
             _iconView = new UIView()
             {
-                Width = this.Width,
-                Height = this.Height
+                Width = Width,
+                Height = Height
             };
-            this.AddChild(_iconView);
+            AddChild(_iconView);
 
             collapseButton = new UIImage(HEROsMod.instance.GetTexture("Images/CollapseBar/CollapseButtonHorizontal"))
             {
@@ -203,8 +203,8 @@ namespace HEROsMod.HEROsModServices
 				if (_lerpAmount > 1f) _lerpAmount = 1f;
 			}
 			float yPos = MathHelper.SmoothStep(_hiddenYPosition, _shownYPosition, _lerpAmount);
-			this.Position = new Vector2(this.X, yPos);
-			this.CenterXAxisToParentCenter();
+            Position = new Vector2(X, yPos);
+            CenterXAxisToParentCenter();
 
 			base.Update();
 		}

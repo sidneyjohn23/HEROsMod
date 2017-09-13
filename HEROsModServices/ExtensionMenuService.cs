@@ -19,16 +19,16 @@ namespace HEROsMod.HEROsModServices
 
 			IsHotbar = true;
 
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/extensions"));
-			this.HotbarIcon.Tooltip = "Extension Tools";
-			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/extensions"));
+            HotbarIcon.Tooltip = "Extension Tools";
+            HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 
             _extensionMenuHotbar = new ExtensionMenuWindow()
             {
                 HotBarParent = HEROsMod.ServiceHotbar
             };
             _extensionMenuHotbar.Hide();
-			this.AddUIView(_extensionMenuHotbar);
+            AddUIView(_extensionMenuHotbar);
 
 			Hotbar = _extensionMenuHotbar;
 		}
@@ -84,40 +84,40 @@ namespace HEROsMod.HEROsModServices
 	{
 		public ExtensionMenuWindow()
 		{
-			this.buttonView = new UIView();
+            buttonView = new UIView();
 			base.Visible = false;
 
 			base.Height = 55f;
-			this.buttonView.Height = base.Height;
+            buttonView.Height = base.Height;
 			base.Anchor = AnchorPosition.Top;
-			this.AddChild(this.buttonView);
-			base.Position = new Vector2(Position.X, this.hiddenPosition);
+            AddChild(buttonView);
+			base.Position = new Vector2(Position.X, hiddenPosition);
 			base.CenterXAxisToParentCenter();
-			float num = this.spacing;
-			for (int i = 0; i < this.buttonView.children.Count; i++)
+			float num = spacing;
+			for (int i = 0; i < buttonView.children.Count; i++)
 			{
-				this.buttonView.children[i].Anchor = AnchorPosition.Left;
-				this.buttonView.children[i].Position = new Vector2(num, 0f);
-				this.buttonView.children[i].CenterYAxisToParentCenter();
-				this.buttonView.children[i].Visible = true;
-				num += this.buttonView.children[i].Width + this.spacing;
+                buttonView.children[i].Anchor = AnchorPosition.Left;
+                buttonView.children[i].Position = new Vector2(num, 0f);
+                buttonView.children[i].CenterYAxisToParentCenter();
+                buttonView.children[i].Visible = true;
+				num += buttonView.children[i].Width + spacing;
 			}
-			this.Resize();
+            Resize();
 		}
 
 		public override void test()
 		{
 			base.CenterXAxisToParentCenter();
-			float num = this.spacing;
-			for (int i = 0; i < this.buttonView.children.Count; i++)
+			float num = spacing;
+			for (int i = 0; i < buttonView.children.Count; i++)
 			{
-				this.buttonView.children[i].Anchor = AnchorPosition.Left;
-				this.buttonView.children[i].Position = new Vector2(num, 0f);
-				this.buttonView.children[i].CenterYAxisToParentCenter();
-				this.buttonView.children[i].Visible = true;
-				num += this.buttonView.children[i].Width + this.spacing;
+                buttonView.children[i].Anchor = AnchorPosition.Left;
+                buttonView.children[i].Position = new Vector2(num, 0f);
+                buttonView.children[i].CenterYAxisToParentCenter();
+                buttonView.children[i].Visible = true;
+				num += buttonView.children[i].Width + spacing;
 			}
-			this.Resize();
+            Resize();
 		}
 
 		public override void Update()
@@ -128,17 +128,17 @@ namespace HEROsMod.HEROsModServices
 
 		public void Resize()
 		{
-			float num = this.spacing;
-			for (int i = 0; i < this.buttonView.children.Count; i++)
+			float num = spacing;
+			for (int i = 0; i < buttonView.children.Count; i++)
 			{
-				if (this.buttonView.children[i].Visible)
+				if (buttonView.children[i].Visible)
 				{
-					this.buttonView.children[i].X = num;
-					num += this.buttonView.children[i].Width + this.spacing;
+                    buttonView.children[i].X = num;
+					num += buttonView.children[i].Width + spacing;
 				}
 			}
 			base.Width = num;
-			this.buttonView.Width = base.Width;
+            buttonView.Width = base.Width;
 		}
 	}
 }

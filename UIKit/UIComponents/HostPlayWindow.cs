@@ -8,8 +8,8 @@ namespace HEROsMod.UIKit.UIComponents
 	{
 		public HostPlayWindow()
 		{
-			this.Anchor = AnchorPosition.Center;
-            UIWrappingLabel label = new UIWrappingLabel("Host & Play is not supported in Gamiki Mod.  Read our post about it by clicking the button below.", this.Width - 32f)
+            Anchor = AnchorPosition.Center;
+            UIWrappingLabel label = new UIWrappingLabel("Host & Play is not supported in Gamiki Mod.  Read our post about it by clicking the button below.", Width - 32f)
             {
                 X = 16f,
                 Y = 16f
@@ -26,10 +26,10 @@ namespace HEROsMod.UIKit.UIComponents
 			bOk.onLeftClick += bOk_onLeftClick;
 			bPost.onLeftClick += bPost_onLeftClick;
 
-			this.AddChild(label);
-			this.AddChild(bOk);
-			this.AddChild(bPost);
-			this.CenterToParent();
+            AddChild(label);
+            AddChild(bOk);
+            AddChild(bPost);
+            CenterToParent();
 		}
 
 		private void bPost_onLeftClick(object sender, EventArgs e)
@@ -40,7 +40,7 @@ namespace HEROsMod.UIKit.UIComponents
 		private void bOk_onLeftClick(object sender, EventArgs e)
 		{
 			Main.menuMode = 12;
-			this.Parent.RemoveChild(this);
+            Parent.RemoveChild(this);
 		}
 	}
 }

@@ -15,16 +15,16 @@ namespace HEROsMod.HEROsModServices
 
 		public PrefixEditor()
 		{
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/reforge")/*Main.itemTexture[24]*/);
-			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-			this.HotbarIcon.Tooltip = "Prefix Editor";
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/reforge")/*Main.itemTexture[24]*/);
+            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+            HotbarIcon.Tooltip = "Prefix Editor";
 
             _prefixWindow = new PrefixWindow()
             {
                 Y = 270,
                 X = 130
             };
-            this.AddUIView(_prefixWindow);
+            AddUIView(_prefixWindow);
 			_prefixWindow.Visible = false;
 		}
 
@@ -39,7 +39,7 @@ namespace HEROsMod.HEROsModServices
 
 		public override void MyGroupUpdated()
 		{
-			this.HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("PrefixEditor");
+            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("PrefixEditor");
 			//base.MyGroupUpdated();
 		}
 	}
@@ -71,7 +71,7 @@ namespace HEROsMod.HEROsModServices
 
 		public PrefixWindow()
 		{
-			this.CanMove = true;
+            CanMove = true;
 
             itemSlot = new Slot(0)
             {
@@ -88,8 +88,8 @@ namespace HEROsMod.HEROsModServices
                 Width = 250,
                 Height = 200
             };
-            this.Width = prefixList.Width + LargeSpacing * 2;
-			this.Height = prefixList.Y + prefixList.Height + LargeSpacing;
+            Width = prefixList.Width + LargeSpacing * 2;
+            Height = prefixList.Y + prefixList.Height + LargeSpacing;
 
 			UIImage bClsoe = new UIImage(closeTexture);
 			bClsoe.X = Width - bClsoe.Width - LargeSpacing;
@@ -127,13 +127,13 @@ namespace HEROsMod.HEROsModServices
 			base.Draw(spriteBatch);
 			foreach (Particle particle in particles)
 			{
-				particle.Draw(spriteBatch, this.DrawPosition);
+				particle.Draw(spriteBatch, DrawPosition);
 			}
 		}
 
 		private void bClsoe_onLeftClick(object sender, EventArgs e)
 		{
-			this.Visible = false;
+            Visible = false;
 		}
 
 		private void itemSlot_ItemChanged(object sender, EventArgs e)
@@ -255,13 +255,13 @@ namespace HEROsMod.HEROsModServices
 
 		public Particle(Texture2D texture, Vector2 position, Vector2 initialVelocity = new Vector2(), float scale = 1f, Rectangle? source = null, float lifeTimer = .2f)
 		{
-			this.Texture = texture;
-			this.Position = position;
-			this.Velocity = initialVelocity;
-			this.Scale = scale;
-			this.Source = source;
-			this.LifeTimer = .35f;
-			this.FallSpeed = .1f;
+            Texture = texture;
+            Position = position;
+            Velocity = initialVelocity;
+            Scale = scale;
+            Source = source;
+            LifeTimer = .35f;
+            FallSpeed = .1f;
 			Dead = false;
 		}
 
@@ -270,7 +270,7 @@ namespace HEROsMod.HEROsModServices
 			LifeTimer -= ModUtils.DeltaTime;
 			if (LifeTimer <= 0)
 			{
-				this.Dead = true;
+                Dead = true;
 			}
 			float xDecay = 1f;
 			float xVel = Velocity.X;

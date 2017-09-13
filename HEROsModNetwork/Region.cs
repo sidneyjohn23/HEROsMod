@@ -42,26 +42,26 @@ namespace HEROsMod.HEROsModNetwork
 
 		public Region(string name, int x, int y, int width, int height)
 		{
-			this.Name = name;
-			this.X = x;
-			this.Y = y;
-			this.Width = width;
-			this.Height = height;
-			this.ID = -1;
+            Name = name;
+            X = x;
+            Y = y;
+            Width = width;
+            Height = height;
+            ID = -1;
 			AllowedPlayersIDs = new List<int>();
 			AllowedGroupsIDs = new List<int>();
-			this.Color = GetRandomColor();
+            Color = GetRandomColor();
 		}
 
 		public Region(string name, Vector2 position, Vector2 size)
 		{
-			this.Name = name;
-			this.Position = position;
-			this.Size = size;
-			this.ID = -1;
+            Name = name;
+            Position = position;
+            Size = size;
+            ID = -1;
 			AllowedPlayersIDs = new List<int>();
 			AllowedGroupsIDs = new List<int>();
-			this.Color = GetRandomColor();
+            Color = GetRandomColor();
 		}
 
 		private Color GetRandomColor()
@@ -73,7 +73,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		public bool ContainsTile(int x, int y)
 		{
-			return x >= this.X && x < this.X + this.Width && y >= this.Y && y < this.Y + this.Height;
+			return x >= X && x < X + Width && y >= Y && y < Y + Height;
 		}
 
 		public bool AddPlayer(int playerIndex)
@@ -234,11 +234,11 @@ namespace HEROsMod.HEROsModNetwork
 		{
 			for (int j = 0; j < permissionsPlayers.Length; j++)
 			{
-				this.AllowedPlayersIDs.Add(permissionsPlayers[j]);
+                AllowedPlayersIDs.Add(permissionsPlayers[j]);
 			}
 			for (int j = 0; j < permissionsGroups.Length; j++)
 			{
-				this.AllowedGroupsIDs.Add(permissionsGroups[j]);
+                AllowedGroupsIDs.Add(permissionsGroups[j]);
 			}
 		}
 	}

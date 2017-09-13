@@ -28,9 +28,9 @@ namespace HEROsMod.UIKit
 
 		public UIWrappingLabel(string text, float width)
 		{
-			this.Width = width;
+            Width = width;
 			Scale = .5f;
-			this.Text = text;
+            Text = text;
 		}
 
 		private void SetLabels()

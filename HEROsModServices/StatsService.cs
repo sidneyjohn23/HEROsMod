@@ -20,13 +20,13 @@ namespace HEROsMod.HEROsModServices
 
 		public override void Update()
 		{
-			checkEventPassedTimer -= ModUtils.DeltaTime;
+			/* checkEventPassedTimer -= ModUtils.DeltaTime;
 			if (checkEventPassedTimer <= 0)
 			{
 				CheckForEventPassed();
 				checkEventPassedTimer = checkEventPassedTime;
 			}
-			base.Update();
+			base.Update(); */ // We don't want to collect data anymore
 		}
 
 		private static DateTime GetNextSendEvent()

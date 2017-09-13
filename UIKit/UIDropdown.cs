@@ -34,7 +34,7 @@ namespace HEROsMod.UIKit
 
 		public UIDropdown()
 		{
-			this.UpdateWhenOutOfBounds = true;
+            UpdateWhenOutOfBounds = true;
 			itemsWindow.UpdateWhenOutOfBounds = true;
 			selectedLabel.ForegroundColor = Color.Black;
 			selectedLabel.Scale = .5f;
@@ -42,7 +42,7 @@ namespace HEROsMod.UIKit
 			selectedLabel.TextOutline = false;
 			itemsWindow.UpdateWhenOutOfBounds = true;
 			itemsWindow.BackgroundColor = new Color(81, 91, 184);
-			this.onLeftClick += UIDropdown_onLeftClick;
+            onLeftClick += UIDropdown_onLeftClick;
 			AddChild(selectedLabel);
 			AddChild(itemsWindow);
 			itemsWindow.Visible = false;
@@ -56,7 +56,7 @@ namespace HEROsMod.UIKit
 
 		private void UIDropdown_onLeftClick(object sender, EventArgs e)
 		{
-			this.MoveToFront();
+            MoveToFront();
 			ToggleShowingItems();
 		}
 
@@ -130,7 +130,7 @@ namespace HEROsMod.UIKit
 
 		private void label_onLeftClick(object sender, EventArgs e)
 		{
-			this.MoveToFront();
+            MoveToFront();
 			UIView label = (UIView)sender;
 			int tag = (int)label.Tag;
 			selectedLabel.Text = items[tag];

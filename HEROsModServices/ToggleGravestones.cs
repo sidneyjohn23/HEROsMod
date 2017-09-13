@@ -27,13 +27,13 @@ namespace HEROsMod.HEROsModServices
 		{
 			IsInHotbar = true;
 			HotbarParent = hotbar;
-			//MultiplayerOnly = true;
-			this._name = "Gravestones Toggler";
+            //MultiplayerOnly = true;
+            _name = "Gravestones Toggler";
 			ModUtils.LoadProjectile(43);
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/gravestone")/*Main.projectileTexture[43]*/);
-			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-			this.HotbarIcon.Tooltip = "Disable Gravestones";
-			this._hotbarIcon.Opacity = 1f;
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/gravestone")/*Main.projectileTexture[43]*/);
+            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+            HotbarIcon.Tooltip = "Disable Gravestones";
+            _hotbarIcon.Opacity = 1f;
 			HEROsModNetwork.GeneralMessages.GravestonesToggleByServer += GeneralMessages_GravestonesToggleByServer;
 		}
 
@@ -41,13 +41,13 @@ namespace HEROsMod.HEROsModServices
 		{
 			if (gravestonesCanSpawn)
 			{
-				this._hotbarIcon.Opacity = 1f;
-				this.HotbarIcon.Tooltip = "Disable Gravestones";
+                _hotbarIcon.Opacity = 1f;
+                HotbarIcon.Tooltip = "Disable Gravestones";
 			}
 			else
 			{
-				this._hotbarIcon.Opacity = .5f;
-				this.HotbarIcon.Tooltip = "Enable Gravestones";
+                _hotbarIcon.Opacity = .5f;
+                HotbarIcon.Tooltip = "Enable Gravestones";
 			}
 			Network.GravestonesAllowed = gravestonesCanSpawn;
 		}
@@ -67,7 +67,7 @@ namespace HEROsMod.HEROsModServices
 
 		public override void MyGroupUpdated()
 		{
-			this.HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ToggleGravestones");
+            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ToggleGravestones");
 			//base.MyGroupUpdated();
 		}
 	}

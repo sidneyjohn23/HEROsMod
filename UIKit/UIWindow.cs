@@ -20,8 +20,8 @@ namespace HEROsMod.UIKit
 		public UIWindow()
 		{
 			BackgroundColor = new Color(53, 35, 111, 255) * 0.685f;
-			this.onMouseDown += new ClickEventHandler(UIWindow_onMouseDown);
-			this.onMouseUp += new ClickEventHandler(UIWindow_onMouseUp);
+            onMouseDown += new ClickEventHandler(UIWindow_onMouseDown);
+            onMouseUp += new ClickEventHandler(UIWindow_onMouseUp);
 		}
 
 		private void UIWindow_onMouseUp(object sender, byte button)
@@ -31,7 +31,7 @@ namespace HEROsMod.UIKit
 
 		private void UIWindow_onMouseDown(object sender, byte button)
 		{
-			this.MoveToFront();
+            MoveToFront();
 			if (CanMove)
 			{
 				if (button == 0)

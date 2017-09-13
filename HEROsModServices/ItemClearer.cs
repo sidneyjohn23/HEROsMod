@@ -11,10 +11,10 @@ namespace HEROsMod.HEROsModServices
 	{
 		public ItemClearer()
 		{
-			this._name = "Item Clearer";
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/canIcon"));
-			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-			this.HotbarIcon.Tooltip = "Clear Items on Ground";
+            _name = "Item Clearer";
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/canIcon"));
+            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+            HotbarIcon.Tooltip = "Clear Items on Ground";
 		}
 
 		private void _hotbarIcon_onLeftClick(object sender, EventArgs e)
@@ -36,7 +36,7 @@ namespace HEROsMod.HEROsModServices
 
 		public override void MyGroupUpdated()
 		{
-			this.HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ClearItems");
+            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ClearItems");
 			//base.MyGroupUpdated();
 		}
 	}

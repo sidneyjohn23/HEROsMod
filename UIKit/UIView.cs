@@ -310,7 +310,7 @@ namespace HEROsMod.UIKit
 				}
 			}
 
-			if (this.OverridesMouse && MouseInside)
+			if (OverridesMouse && MouseInside)
 			{
 				if (onMouseLeave != null)
 				{
@@ -318,7 +318,7 @@ namespace HEROsMod.UIKit
 				if (Parent != null)
 				{
 					Parent.mouseForChildrenHandled = true;
-					if (this.OverridesMouse) OverWriteGameMouseInput();
+					if (OverridesMouse) OverWriteGameMouseInput();
 				}
 				onHover?.Invoke(this, new EventArgs());
 				if (!mousePreviouslyIn)
@@ -534,8 +534,8 @@ namespace HEROsMod.UIKit
 
 		public void MoveToFront()
 		{
-			this.Parent.children.Remove(this);
-			this.Parent.children.Add(this);
+            Parent.children.Remove(this);
+            Parent.children.Add(this);
 		}
 	}
 }

@@ -43,13 +43,13 @@ namespace HEROsMod.UIKit
                 Scale = .5f,
                 Position = new Vector2(checkboxTexture.Width + spacing, 0)
             };
-            this.AddChild(label);
-			this.onLeftClick += new EventHandler(UICheckbox_onLeftClick);
+            AddChild(label);
+            onLeftClick += new EventHandler(UICheckbox_onLeftClick);
 		}
 
 		private void UICheckbox_onLeftClick(object sender, EventArgs e)
 		{
-			this.Selected = !Selected;
+            Selected = !Selected;
 		}
 
 		protected override float GetHeight()

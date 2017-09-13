@@ -24,9 +24,9 @@ namespace HEROsMod.HEROsModServices
 
 		public BuffService()
 		{
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/buffs")/*Main.buffTexture[2]*/);
-			this.HotbarIcon.Tooltip = "Open Buff Window";
-			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/buffs")/*Main.buffTexture[2]*/);
+            HotbarIcon.Tooltip = "Open Buff Window";
+            HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 
 			//_buffWindow = new BuffWindow();
 			//this.AddUIView(_buffWindow);
@@ -48,7 +48,7 @@ namespace HEROsMod.HEROsModServices
 
 		public override void MyGroupUpdated()
 		{
-			this.HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("CanUseBuffs");
+            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("CanUseBuffs");
 			if (!HasPermissionToUse && _buffWindow != null)
 			{
 				_buffWindow.Visible = false;
@@ -63,7 +63,7 @@ namespace HEROsMod.HEROsModServices
 				if (!Main.dedServ)
 				{
 					_buffWindow = new BuffWindow();
-					this.AddUIView(_buffWindow);
+                    AddUIView(_buffWindow);
 					_buffWindow.Visible = false;
 
 					_buffWindow.Y = 270;
@@ -80,7 +80,7 @@ namespace HEROsMod.HEROsModServices
 
 		public BuffWindow()
 		{
-			this.CanMove = true;
+            CanMove = true;
 			UILabel lTitle = new UILabel("Buffs");
 			UILabel lSeconds = new UILabel("Seconds");
 			tbSeconds = new UITextbox();
@@ -149,8 +149,8 @@ namespace HEROsMod.HEROsModServices
 
 			scrollView.ContentHeight = yPos;
 
-			this.Width = scrollView.X + scrollView.Width + Spacing;
-			this.Height = scrollView.Y + scrollView.Height + Spacing;
+            Width = scrollView.X + scrollView.Width + Spacing;
+            Height = scrollView.Y + scrollView.Height + Spacing;
 
 			tbSeconds.X = Width - tbSeconds.Width - Spacing;
 			bClose.X = Width - bClose.Width - Spacing;
@@ -169,7 +169,7 @@ namespace HEROsMod.HEROsModServices
 
 		private void bClose_onLeftClick(object sender, EventArgs e)
 		{
-			this.Visible = false;
+            Visible = false;
 		}
 
 		private void bg_onLeftClick(object sender, EventArgs e)

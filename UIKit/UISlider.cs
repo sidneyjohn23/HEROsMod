@@ -41,7 +41,7 @@ namespace HEROsMod.UIKit
 
 		public float Value
 		{
-			get { return this.value; }
+			get { return value; }
 			set
 			{
 				if (value < MinValue)
@@ -78,7 +78,7 @@ namespace HEROsMod.UIKit
 
 		protected override float GetWidth()
 		{
-			return this.width;
+			return width;
 		}
 
 		protected override float GetHeight()
@@ -100,7 +100,7 @@ namespace HEROsMod.UIKit
 				else if (sliderPos > Width - padding) sliderPos = Width - padding;
 				sliderPos -= padding;
 				sliderPos /= Width - padding * 2;
-				this.Value = (MaxValue - minValue) * sliderPos + minValue;
+                Value = (MaxValue - minValue) * sliderPos + minValue;
                 valueChanged?.Invoke(this, Value);
             }
 		}

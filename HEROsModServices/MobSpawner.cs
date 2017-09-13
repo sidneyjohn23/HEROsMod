@@ -20,15 +20,15 @@ namespace HEROsMod.HEROsModServices
 
 		public MobSpawner()
 		{
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/npcs")/*Main.itemTexture[666]*/);
-			this.HotbarIcon.Tooltip = "Open Mob Spawn Window";
-			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/npcs")/*Main.itemTexture[666]*/);
+            HotbarIcon.Tooltip = "Open Mob Spawn Window";
+            HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 
 			_spawnWindow = new MobSpawnWindow();
 			_spawnWindow.CenterToParent();
 			_spawnWindow.Position -= new Vector2(_spawnWindow.Width / 2, _spawnWindow.Height / 2);
 			_spawnWindow.Visible = false;
-			this.AddUIView(_spawnWindow);
+            AddUIView(_spawnWindow);
 		}
 
 		private void HotbarIcon_onLeftClick(object sender, EventArgs e)
@@ -44,7 +44,7 @@ namespace HEROsMod.HEROsModServices
 
 		public override void MyGroupUpdated()
 		{
-			this.HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("SpawnNPCs");
+            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("SpawnNPCs");
 			if (!HasPermissionToUse)
 			{
 				_spawnWindow.Visible = false;
@@ -88,9 +88,9 @@ namespace HEROsMod.HEROsModServices
 
 		public MobSpawnWindow()
 		{
-			//GetNPCList();
+            //GetNPCList();
 
-			this.CanMove = true;
+            CanMove = true;
             UILabel lTiltle = new UILabel("NPC Spawner")
             {
                 OverridesMouse = false
@@ -182,10 +182,10 @@ namespace HEROsMod.HEROsModServices
 			AddChild(bFriendly);
 			AddChild(bBoss);
 			AddChild(bMod);
-			//AddChild(itemSlot);
+            //AddChild(itemSlot);
 
-			this.Width = bTownNPCs.X + bTownNPCs.Width + Spacing;
-			this.Height = scrollView.Y + scrollView.Height + Spacing;
+            Width = bTownNPCs.X + bTownNPCs.Width + Spacing;
+            Height = scrollView.Y + scrollView.Height + Spacing;
 			searchBox.Width = Width - Spacing * 2;
 			searchBox.X = Spacing;
 
@@ -348,7 +348,7 @@ namespace HEROsMod.HEROsModServices
 
 		private void bClose_onLeftClick(object sender, EventArgs e)
 		{
-			this.Visible = false;
+            Visible = false;
 		}
 
 		internal void BuildList()
@@ -589,8 +589,8 @@ namespace HEROsMod.HEROsModServices
 		public MobInfoPanel()
 		{
 			CurrentNPC = null;
-			this.OverridesMouse = false;
-			this.UpdateWhenOutOfBounds = true;
+            OverridesMouse = false;
+            UpdateWhenOutOfBounds = true;
             mobImage = new UIImage()
             {
                 X = Spacing,
@@ -601,10 +601,10 @@ namespace HEROsMod.HEROsModServices
 
 		public void SetMobType(NPCStats npc)
 		{
-			this.RemoveAllChildren();
+            RemoveAllChildren();
 			float yPos = Spacing;
 
-			this.Width = 350;
+            Width = 350;
 
 			//if (npc.NetID < 0) return;
 			CurrentNPC = npc;
@@ -623,9 +623,9 @@ namespace HEROsMod.HEROsModServices
             AddChild(mobImage2);
 			//AddChild(mobImage2);
 
-			if (mobImage.Width > this.Width - Spacing * 2)
+			if (mobImage.Width > Width - Spacing * 2)
 			{
-				this.Width = mobImage.Width + Spacing * 2;
+                Width = mobImage.Width + Spacing * 2;
 				mobImage.X = Spacing;
 			}
 			else
@@ -747,22 +747,22 @@ namespace HEROsMod.HEROsModServices
 				yPos += lKncokbackResist.Height;
 			}
 
-			//DropTableView tableView = new DropTableView(DropTableBuilder.DropTable.NPCDropTables[npc.Type], this.Width - Spacing * 2);
-			//tableView.Y = yPos;
-			//tableView.X = Spacing;
-			//AddChild(tableView);
-			//yPos += tableView.Height;
+            //DropTableView tableView = new DropTableView(DropTableBuilder.DropTable.NPCDropTables[npc.Type], this.Width - Spacing * 2);
+            //tableView.Y = yPos;
+            //tableView.X = Spacing;
+            //AddChild(tableView);
+            //yPos += tableView.Height;
 
-			//this.Width = mobImage.Width + Spacing * 2;
-			this.Height = yPos + Spacing;
+            //this.Width = mobImage.Width + Spacing * 2;
+            Height = yPos + Spacing;
 		}
 
 		public override void Update()
 		{
-			//ErrorLogger.Log(Position.X+ " " + Position.Y);
-			//ErrorLogger.Log(ModUtils.CursorPosition.X+ " " + ModUtils.CursorPosition.Y);
-			//this.Position = ModUtils.CursorPosition + new Vector2(20, 0);
-			this.Position = new Vector2(Parent.Width, 0);
+            //ErrorLogger.Log(Position.X+ " " + Position.Y);
+            //ErrorLogger.Log(ModUtils.CursorPosition.X+ " " + ModUtils.CursorPosition.Y);
+            //this.Position = ModUtils.CursorPosition + new Vector2(20, 0);
+            Position = new Vector2(Parent.Width, 0);
 			if (Y + Height > Main.screenHeight)
 			{
 				Y = Main.screenHeight - Height;
@@ -794,24 +794,24 @@ namespace HEROsMod.HEROsModServices
 
 		public NPCStats(NPC npc)
 		{
-			this.Name = Lang.GetNPCNameValue(npc.type);// npc.name;
-			this.NetID = npc.netID;
-			this.IsTownNPC = npc.townNPC;
-			this.Friendly = npc.friendly;
-			this.Boss = npc.boss;
-			this.Damage = npc.damage;
-			this.Health = npc.lifeMax;
-			this.Defense = npc.defense;
-			this.KncokbackResist = (int)(npc.knockBackResist * 100);
-			this.Color = npc.color;
-			this.AlphaColor = npc.GetAlpha(Color.White);
-			this.Type = npc.type;
-			this.Mod = npc.modNPC?.mod;
+            Name = Lang.GetNPCNameValue(npc.type);// npc.name;
+            NetID = npc.netID;
+            IsTownNPC = npc.townNPC;
+            Friendly = npc.friendly;
+            Boss = npc.boss;
+            Damage = npc.damage;
+            Health = npc.lifeMax;
+            Defense = npc.defense;
+            KncokbackResist = (int)(npc.knockBackResist * 100);
+            Color = npc.color;
+            AlphaColor = npc.GetAlpha(Color.White);
+            Type = npc.type;
+            Mod = npc.modNPC?.mod;
 		}
 
 		public override string ToString()
 		{
-			return this.Name + " : " + this.NetID;
+			return Name + " : " + NetID;
 		}
 
 		static public int[] boundNPC = new int[] { NPCID.BoundGoblin, NPCID.BoundMechanic, NPCID.BoundWizard };

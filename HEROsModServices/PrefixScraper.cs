@@ -755,7 +755,7 @@ namespace HEROsMod.HEROsModServices
 
 		public bool ItemInGroup(Item item)
 		{
-			if (this.Accesories && item.accessory)
+			if (Accesories && item.accessory)
 			{
 				return true;
 			}

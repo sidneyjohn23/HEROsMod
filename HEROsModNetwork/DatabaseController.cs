@@ -92,7 +92,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static HEROsModDatabase database;
 		private static DatabaseWorld currentDatabaseWorld;
-        private static SHA512 md5hash = System.Security.Cryptography.SHA512.Create();
+        private static SHA512 md5hash = SHA512.Create();
 
         public static void LoadSetting(string settingName)
 		{
@@ -205,7 +205,7 @@ namespace HEROsMod.HEROsModNetwork
 			//XmlWriter writer = XmlWriter.Create(path);
 			//serializer.WriteObject(writer, database);
 			//writer.Close();
-			string json = JsonConvert.SerializeObject(database, Newtonsoft.Json.Formatting.Indented);
+			string json = JsonConvert.SerializeObject(database, Formatting.Indented);
 			File.WriteAllText(path, json);
 		}
 

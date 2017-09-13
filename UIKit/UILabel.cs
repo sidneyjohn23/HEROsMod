@@ -35,13 +35,13 @@ namespace HEROsMod.UIKit
 		public UILabel(string text)
 		{
 			font = defaultFont;
-			this.Text = text;
+            Text = text;
 		}
 
 		public UILabel()
 		{
 			font = defaultFont;
-			this.Text = "";
+            Text = "";
 		}
 
 		protected override Vector2 GetOrigin()

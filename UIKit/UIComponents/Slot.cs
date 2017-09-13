@@ -21,7 +21,7 @@ namespace HEROsMod.UIKit.UIComponents
 
 		public Slot(Vector2 position, int itemNum, bool noclick = false)
 		{
-			this.Position = position;
+            Position = position;
 			Init(itemNum, noclick);
 		}
 
@@ -32,15 +32,15 @@ namespace HEROsMod.UIKit.UIComponents
 
 		private void Init(int netID, bool noclick)
 		{
-			this.Scale = .85f;
+            Scale = .85f;
 			item.netDefaults(netID);
 			if (!noclick)
 			{
-				this.onLeftClick += Slot2_onLeftClick;
-				this.onRightClick += Slot2_onRightClick;
-				this.onMouseDown += Slot2_onMouseDown;
+                onLeftClick += Slot2_onLeftClick;
+                onRightClick += Slot2_onRightClick;
+                onMouseDown += Slot2_onMouseDown;
 			}
-			this.onHover += Slot2_onHover;
+            onHover += Slot2_onHover;
 		}
 
 		protected override float GetWidth()
@@ -114,7 +114,7 @@ namespace HEROsMod.UIKit.UIComponents
 			{
 				if (Main.keyState.IsKeyDown(Keys.LeftShift))
 				{
-					Main.player[Main.myPlayer].QuickSpawnItem(this.item.type, this.item.maxStack);
+					Main.player[Main.myPlayer].QuickSpawnItem(item.type, item.maxStack);
 					return;
 				}
 				Main.mouseItem = item.Clone();
@@ -180,7 +180,7 @@ namespace HEROsMod.UIKit.UIComponents
 		{
 			if (!UIView.MouseRightButton)
 			{
-				this.rightClicking = false;
+                rightClicking = false;
 			}
 			if (rightClicking)
 			{
@@ -223,14 +223,14 @@ namespace HEROsMod.UIKit.UIComponents
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			spriteBatch.Draw(IsTrachCan ? Main.inventoryBack7Texture : backgroundTexture, this.DrawPosition, null, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
+			spriteBatch.Draw(IsTrachCan ? Main.inventoryBack7Texture : backgroundTexture, DrawPosition, null, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
 
-			if (this.IsTrachCan)
+			if (IsTrachCan)
 			{
-				this.item = Main.player[Main.myPlayer].trashItem;
+                item = Main.player[Main.myPlayer].trashItem;
 			}
 			Texture2D texture = Main.itemTexture[item.type];
-			if (this.IsTrachCan && item.type == 0)
+			if (IsTrachCan && item.type == 0)
 			{
 				texture = Main.trashTexture;
 			}
@@ -262,7 +262,7 @@ namespace HEROsMod.UIKit.UIComponents
 			pos.X += backgroundTexture.Width * Scale / 2 - (rectangle2.Width * itemScale / 2);
 			pos.Y += backgroundTexture.Height * Scale / 2 - (rectangle2.Height * itemScale / 2);
 
-			if (this.IsTrachCan && item.type == 0)
+			if (IsTrachCan && item.type == 0)
 			{
 				spriteBatch.Draw(texture, pos, null, new Color(100, 100, 100, 100), 0f, Vector2.Zero, itemScale, SpriteEffects.None, 0f);
 			}

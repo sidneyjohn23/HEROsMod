@@ -52,24 +52,24 @@ namespace HEROsMod.UIKit
 		public UIButton(string text)
 		{
 			AutoSize = true;
-			this.AddChild(label);
-			this.Text = text;
-			this.BackgroundColor = new Color(28, 32, 119);
+            AddChild(label);
+            Text = text;
+            BackgroundColor = new Color(28, 32, 119);
 			drawColor = BackgroundColor;
-			this.onMouseEnter += new EventHandler(UIButton_onMouseEnter);
-			this.onMouseLeave += new EventHandler(UIButton_onMouseLeave);
+            onMouseEnter += new EventHandler(UIButton_onMouseEnter);
+            onMouseLeave += new EventHandler(UIButton_onMouseLeave);
 		}
 
 		public UIButton(string text, Color backgroundColor, Color hoverColor)
 		{
 			AutoSize = true;
-			this.AddChild(label);
-			this.Text = text;
-			this.BackgroundColor = backgroundColor;
+            AddChild(label);
+            Text = text;
+            BackgroundColor = backgroundColor;
 			drawColor = BackgroundColor;
 			this.hoverColor = hoverColor;
-			this.onMouseEnter += new EventHandler(UIButton_onMouseEnter);
-			this.onMouseLeave += new EventHandler(UIButton_onMouseLeave);
+            onMouseEnter += new EventHandler(UIButton_onMouseEnter);
+            onMouseLeave += new EventHandler(UIButton_onMouseLeave);
 		}
 
 		public void SetTextColor(Color color)
@@ -123,11 +123,11 @@ namespace HEROsMod.UIKit
 				if (size.X > width - (buttonBackground.Width * 2 + 10))
 				{
 					label.Scale = (width - (buttonBackground.Width * 2 + 10)) / size.X;
-					if (size.Y * label.Scale > this.Height) label.Scale = this.Height / size.Y;
+					if (size.Y * label.Scale > Height) label.Scale = Height / size.Y;
 				}
-				else label.Scale = this.Height / size.Y;
+				else label.Scale = Height / size.Y;
 			}
-			else label.Scale = this.Height / label.font.MeasureString(label.Text).Y;
+			else label.Scale = Height / label.font.MeasureString(label.Text).Y;
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)

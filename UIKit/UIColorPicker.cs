@@ -63,14 +63,14 @@ namespace HEROsMod.UIKit
 
 			saturationSlider.Y = hueSlider.Height;
 			luminositySlider.Y = saturationSlider.Y + saturationSlider.Height;
-			this.Width = hueSlider.Width;
-			this.Height = luminositySlider.Y + luminositySlider.Height;
+            Width = hueSlider.Width;
+            Height = luminositySlider.Y + luminositySlider.Height;
 
 			hueSlider.valueChanged += hueSlider_valueChanged;
 			saturationSlider.valueChanged += saturationSlider_valueChanged;
 			luminositySlider.valueChanged += luminositySlider_valueChanged;
 
-			this.Color = Color.White;
+            Color = Color.White;
 
 			AddChild(hueSlider);
 			AddChild(saturationSlider);

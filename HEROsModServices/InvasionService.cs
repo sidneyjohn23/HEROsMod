@@ -16,17 +16,17 @@ namespace HEROsMod.HEROsModServices
 
 		public InvasionService()
 		{
-            this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/event")/*Main.itemTexture[14]*/)
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/event")/*Main.itemTexture[14]*/)
             {
                 Tooltip = "Open Event Starter"
             };
-            this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
 
             _eventWindow = new EventWindow()
             {
                 Visible = false
             };
-            this.AddUIView(_eventWindow);
+            AddUIView(_eventWindow);
 		}
 
 		private void _hotbarIcon_onLeftClick(object sender, EventArgs e)
@@ -36,7 +36,7 @@ namespace HEROsMod.HEROsModServices
 
 		public override void MyGroupUpdated()
 		{
-			this.HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("StartEvents");
+            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("StartEvents");
 			//base.MyGroupUpdated();
 		}
 
@@ -199,7 +199,7 @@ namespace HEROsMod.HEROsModServices
 				"Frost Moon"
 			};
 
-			this.CanMove = true;
+            CanMove = true;
 			int buttonWidth = 175;
 
             UILabel lTitle = new UILabel("Events")
@@ -244,13 +244,13 @@ namespace HEROsMod.HEROsModServices
             bStopEvents.onLeftClick += bStopEvents_onLeftClick;
 			AddChild(bStopEvents);
 
-			this.Height = bStopEvents.Y + bStopEvents.Height + LargeSpacing;
-			this.Width = buttonWidth + LargeSpacing * 2;
+            Height = bStopEvents.Y + bStopEvents.Height + LargeSpacing;
+            Width = buttonWidth + LargeSpacing * 2;
 		}
 
 		private void bClose_onLeftClick(object sender, EventArgs e)
 		{
-			this.Visible = false;
+            Visible = false;
 		}
 
 		private void bStopEvents_onLeftClick(object sender, EventArgs e)

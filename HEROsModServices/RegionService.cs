@@ -45,17 +45,17 @@ namespace HEROsMod.HEROsModServices
 			RegionsVisible = false;
 			canEdit = false;
 			canView = false;
-			this._name = "Region Service";
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/region")/*Main.itemTexture[1337]*/);
-			this.HotbarIcon.Tooltip = "Open regions window";
-			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
-			this.HasPermissionToUse = true;
+            _name = "Region Service";
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/region")/*Main.itemTexture[1337]*/);
+            HotbarIcon.Tooltip = "Open regions window";
+            HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
+            HasPermissionToUse = true;
 
 			_regionWindow = new RegionWindow();
-			this.AddUIView(_regionWindow);
+            AddUIView(_regionWindow);
 			_regionWindow.Visible = false;
 			_confirmationWindow = new SelectionConformationWindow();
-			this.AddUIView(_confirmationWindow);
+            AddUIView(_confirmationWindow);
 			_confirmationWindow.Visible = false;
 
 			_regionWindow.bCreateRegion.onLeftClick += bCreateRegion_onLeftClick;
@@ -69,12 +69,12 @@ namespace HEROsMod.HEROsModServices
 
 		private void bAddGroup_onLeftClick(object sender, EventArgs e)
 		{
-			this.AddUIView(new PlayerGroupSelectionWindow(_regionWindow.SelectedRegion, "Select Group", false));
+            AddUIView(new PlayerGroupSelectionWindow(_regionWindow.SelectedRegion, "Select Group", false));
 		}
 
 		private void bAddPlayer_onLeftClick(object sender, EventArgs e)
 		{
-			this.AddUIView(new PlayerGroupSelectionWindow(_regionWindow.SelectedRegion, "Select Player", true));
+            AddUIView(new PlayerGroupSelectionWindow(_regionWindow.SelectedRegion, "Select Player", true));
 		}
 
 		private void GeneralMessages_RegionsUpdated(object sender, EventArgs e)
@@ -102,12 +102,12 @@ namespace HEROsMod.HEROsModServices
 		{
 			canView = HEROsModNetwork.LoginService.MyGroup.HasPermission("ViewRegions");
 			canEdit = HEROsModNetwork.LoginService.MyGroup.HasPermission("EditRegions");
-			this.HasPermissionToUse = canView || canEdit;
+            HasPermissionToUse = canView || canEdit;
 			// this._canAccessSettings = HEROsModNetwork.LoginService.MyGroup.IsAdmin;
 
 			if (canEdit)
 			{
-				this.HotbarIcon.Tooltip = "Open regions window";
+                HotbarIcon.Tooltip = "Open regions window";
 			}
 			else if (canView)
 			{
@@ -138,7 +138,7 @@ namespace HEROsMod.HEROsModServices
 				SelectionTool.ListeningForInput = false;
 				_confirmationWindow.Close();
 				NameRegionWindow nameWindow = new NameRegionWindow();
-				this.AddUIView(nameWindow);
+                AddUIView(nameWindow);
 			}
 			else
 			{
@@ -206,9 +206,9 @@ namespace HEROsMod.HEROsModServices
 		public RegionWindow()
 		{
 			SelectedRegion = null;
-			this.CanMove = true;
-			this.Width = 600;
-			this.Anchor = AnchorPosition.Center;
+            CanMove = true;
+            Width = 600;
+            Anchor = AnchorPosition.Center;
 			bCreateRegion = new UIButton("Create Region");
 			lTitle = new UILabel("Regions");
 			scrollView = new UIScrollView();
@@ -282,7 +282,7 @@ namespace HEROsMod.HEROsModServices
 			colorSlider.Visible = false;
 			bSaveColor.Visible = false;
 
-			this.Height = bToggleRegions.Y + bToggleRegions.Height + Spacing;
+            Height = bToggleRegions.Y + bToggleRegions.Height + Spacing;
 
 			AddChild(lTitle);
 			AddChild(bClose);
@@ -296,14 +296,14 @@ namespace HEROsMod.HEROsModServices
 			AddChild(colorSlider);
 			AddChild(bSaveColor);
 
-			this.CenterToParent();
+            CenterToParent();
 
 			PopulateRegionsList();
 		}
 
 		private void bClose_onLeftClick(object sender, EventArgs e)
 		{
-			this.Visible = false;
+            Visible = false;
 		}
 
 		private void bSaveColor_onLeftClick(object sender, EventArgs e)
@@ -580,7 +580,7 @@ namespace HEROsMod.HEROsModServices
 
 		public void Close()
 		{
-			this.Visible = false;
+            Visible = false;
 			colorSlider.Visible = false;
 		}
 	}
@@ -592,29 +592,29 @@ namespace HEROsMod.HEROsModServices
 
 		public SelectionConformationWindow()
 		{
-			this.Anchor = AnchorPosition.BottomRight;
+            Anchor = AnchorPosition.BottomRight;
 			bConfirm = new UIButton("Confirm");
 			bCancel = new UIButton("Cancel");
 			bConfirm.X = Spacing;
 			bConfirm.Y = Spacing;
 			bCancel.X = bConfirm.X + bConfirm.Width + Spacing;
 			bCancel.Y = bConfirm.Y;
-			this.Width = bCancel.X + bCancel.Width + Spacing;
-			this.Height = bConfirm.Y + bConfirm.Height + Spacing;
+            Width = bCancel.X + bCancel.Width + Spacing;
+            Height = bConfirm.Y + bConfirm.Height + Spacing;
 			AddChild(bConfirm);
 			AddChild(bCancel);
 		}
 
 		public override void Update()
 		{
-			this.X = Main.screenWidth - 100;
-			this.Y = Main.screenHeight - 100;
+            X = Main.screenWidth - 100;
+            Y = Main.screenHeight - 100;
 			base.Update();
 		}
 
 		public void Close()
 		{
-			this.Visible = false;
+            Visible = false;
 		}
 	}
 
@@ -631,7 +631,7 @@ namespace HEROsMod.HEROsModServices
 
 			Width = 600;
 			Height = 100;
-			this.Anchor = AnchorPosition.Center;
+            Anchor = AnchorPosition.Center;
 
 			label = new UILabel("Region Name");
 			textbox = new UITextbox();
@@ -648,7 +648,7 @@ namespace HEROsMod.HEROsModServices
 			float tby = textbox.Height / 2 + spacing;
 			label.Position = new Vector2(spacing, tby);
 			textbox.Position = new Vector2(label.Position.X + label.Width + spacing, tby);
-			bCancel.Position = new Vector2(this.Width - spacing, this.Height - spacing);
+			bCancel.Position = new Vector2(Width - spacing, Height - spacing);
 			bSave.Position = new Vector2(bCancel.Position.X - bCancel.Width - spacing, bCancel.Position.Y);
 
 			bCancel.onLeftClick += bCancel_onLeftClick;
@@ -677,13 +677,13 @@ namespace HEROsMod.HEROsModServices
 				SelectionTool.Reset();
 				Main.NewText("Region name must be at least 3 characters long");
 			}
-			this.Close();
+            Close();
 		}
 
 		private void bCancel_onLeftClick(object sender, EventArgs e)
 		{
 			SelectionTool.Reset();
-			this.Close();
+            Close();
 		}
 
 		protected override float GetWidth()
@@ -694,14 +694,14 @@ namespace HEROsMod.HEROsModServices
 		private void Close()
 		{
 			UIView.exclusiveControl = null;
-			this.Parent.RemoveChild(this);
+            Parent.RemoveChild(this);
 		}
 
 		public override void Update()
 		{
 			if (Main.gameMenu) Close();
 			if (Parent != null)
-				this.Position = new Vector2(Parent.Width / 2, Parent.Height / 2);
+                Position = new Vector2(Parent.Width / 2, Parent.Height / 2);
 			base.Update();
 		}
 	}
@@ -713,8 +713,8 @@ namespace HEROsMod.HEROsModServices
 		public PlayerGroupSelectionWindow(Region region, string title, bool addingPlayer)
 		{
 			CenterToParent();
-			this.CanMove = true;
-			this._region = region;
+            CanMove = true;
+            _region = region;
 			UIView.exclusiveControl = this;
 			UILabel lTitle = new UILabel(title);
 			UIScrollView scrollView = new UIScrollView();
@@ -734,11 +734,11 @@ namespace HEROsMod.HEROsModServices
 			bCancel.Y = scrollView.Y + scrollView.Height + Spacing;
 			bCancel.onLeftClick += bCancel_onLeftClick;
 
-			this.Anchor = AnchorPosition.Center;
-			this.Width = scrollView.Width + Spacing * 2;
-			this.Height = bCancel.Y + bCancel.Height + Spacing;
-			this.X = Main.screenWidth / 2;
-			this.Y = Main.screenHeight / 2;
+            Anchor = AnchorPosition.Center;
+            Width = scrollView.Width + Spacing * 2;
+            Height = bCancel.Y + bCancel.Height + Spacing;
+            X = Main.screenWidth / 2;
+            Y = Main.screenHeight / 2;
 
 			AddChild(lTitle);
 			AddChild(scrollView);
@@ -842,8 +842,8 @@ namespace HEROsMod.HEROsModServices
 			luminosity.X = hue.X;
 			luminosity.Y = saturation.Y + saturation.Height + Spacing;
 
-			this.Width = hue.Width + Spacing * 2;
-			this.Height = luminosity.Y + luminosity.Height + Spacing;
+            Width = hue.Width + Spacing * 2;
+            Height = luminosity.Y + luminosity.Height + Spacing;
 
 			AddChild(colorRect);
 			AddChild(hue);

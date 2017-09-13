@@ -13,10 +13,10 @@ namespace HEROsMod.HEROsModServices
 		public PlayerList()
 		{
 			MultiplayerOnly = true;
-			this._name = "Player List";
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/connectedPlayers"));
-			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-			this.HotbarIcon.Tooltip = "View Connected Players";
+            _name = "Player List";
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/connectedPlayers"));
+            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+            HotbarIcon.Tooltip = "View Connected Players";
 		}
 
 		private void _hotbarIcon_onLeftClick(object sender, EventArgs e)
@@ -25,7 +25,7 @@ namespace HEROsMod.HEROsModServices
 			{
 				playersWindow = new CurrentPlayersWindow();
 				playersWindow.Closed += PlayerWindowClosed;
-				this.AddUIView(playersWindow);
+                AddUIView(playersWindow);
 			}
 			else
 			{
@@ -40,7 +40,7 @@ namespace HEROsMod.HEROsModServices
 
 		public override void MyGroupUpdated()
 		{
-			this.HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.IsAdmin;
+            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.IsAdmin;
 			if (!HasPermissionToUse)
 			{
 				if (playersWindow != null)
@@ -105,7 +105,7 @@ namespace HEROsMod.HEROsModServices
 
 		public override void Update()
 		{
-			if (Main.gameMenu) this.Visible = false;
+			if (Main.gameMenu) Visible = false;
 			base.Update();
 		}
 
@@ -224,8 +224,8 @@ namespace HEROsMod.HEROsModServices
 		public void Close()
 		{
 			ClosePlayerInfo();
-			if (this.Parent != null)
-				this.Parent.RemoveChild(this);
+			if (Parent != null)
+                Parent.RemoveChild(this);
             Closed?.Invoke(this, EventArgs.Empty);
         }
 	}
@@ -244,9 +244,9 @@ namespace HEROsMod.HEROsModServices
 		public PlayerInfo(int playerIndex, bool offlineUser)
 		{
 			if (!offlineUser)
-				this.player = HEROsModNetwork.Network.Players[playerIndex];
+                player = HEROsModNetwork.Network.Players[playerIndex];
 			this.playerIndex = playerIndex;
-			this.UpdateWhenOutOfBounds = true;
+            UpdateWhenOutOfBounds = true;
 			Width = 350;
 			UIImage bClose = new UIImage(closeTexture);
 			UILabel lGroup = new UILabel("Group:");
@@ -409,7 +409,7 @@ namespace HEROsMod.HEROsModServices
 
 		private void bClose_onLeftClick(object sender, EventArgs e)
 		{
-			this.Parent.RemoveChild(this);
+            Parent.RemoveChild(this);
 		}
 
 		private void dropdown_selectedChanged(object sender, EventArgs e)
@@ -439,7 +439,7 @@ namespace HEROsMod.HEROsModServices
 
 		public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
 		{
-			this.X = Parent.Width;
+            X = Parent.Width;
 			base.Draw(spriteBatch);
 		}
 	}

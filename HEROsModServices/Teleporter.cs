@@ -54,7 +54,7 @@ namespace HEROsMod.HEROsModServices
 
 		public override void MyGroupUpdated()
 		{
-			this.HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("Teleport");
+            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("Teleport");
 			//base.MyGroupUpdated();
 		}
 

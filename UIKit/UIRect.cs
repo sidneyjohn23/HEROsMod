@@ -7,15 +7,15 @@ namespace HEROsMod.UIKit
 	{
 		public UIRect()
 		{
-			this.Width = 10;
-			this.Height = 10;
+            Width = 10;
+            Height = 10;
 		}
 
 		public UIRect(Vector2 position, float width, float height)
 		{
-			this.Position = position;
-			this.Width = width;
-			this.Height = height;
+            Position = position;
+            Width = width;
+            Height = height;
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)

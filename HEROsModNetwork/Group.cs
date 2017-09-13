@@ -65,7 +65,7 @@ namespace HEROsMod.HEROsModNetwork
 		public Group(string name)
 		{
 			ID = -1;
-			this._name = name;
+            _name = name;
 			Permissions = new Dictionary<string, bool>();
 			foreach (var p in PermissionList)
 			{
@@ -158,8 +158,8 @@ namespace HEROsMod.HEROsModNetwork
 
 		public void MakeAdmin()
 		{
-			this.ID = -1;
-			this._isAdmin = true;
+            ID = -1;
+            _isAdmin = true;
 			for (int i = 0; i < Permissions.Count; i++)
 			{
 				var entry = Permissions.ElementAt(i);
@@ -175,8 +175,8 @@ namespace HEROsMod.HEROsModNetwork
 
 		public PermissionInfo(string key, string description)
 		{
-			this.Key = key;
-			this.Description = description;
+            Key = key;
+            Description = description;
 		}
 	}
 }

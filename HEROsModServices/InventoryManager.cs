@@ -30,7 +30,7 @@ namespace HEROsMod.HEROsModServices
 
 		public InventoryManager()
 		{
-			this._name = "Inventory Manager";
+            _name = "Inventory Manager";
 			// _itemSortArray = UIKit.UIComponents.ItemBrowser.CategoriesToSortingArray();
 			//ParseList();
 		}

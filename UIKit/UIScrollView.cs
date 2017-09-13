@@ -78,7 +78,7 @@ namespace HEROsMod.UIKit
 		public UIScrollView()
 		{
 			scrollBar.onMouseDown += new ClickEventHandler(scrollBar_onMouseDown);
-			this.AddChild(scrollBar);
+            AddChild(scrollBar);
 		}
 
 		private void scrollBar_onMouseDown(object sender, byte button)
@@ -172,8 +172,8 @@ namespace HEROsMod.UIKit
 				}
 			}
 			float y = ScrollPosition / ContentHeight * scrollSpace;
-			this.scrollBar.Height = sbHeight;
-			this.scrollBar.Position = new Vector2(this.Width - scrollBar.Width, y);
+            scrollBar.Height = sbHeight;
+            scrollBar.Position = new Vector2(Width - scrollBar.Width, y);
 		}
 
 		public void UpdateChildOffset()

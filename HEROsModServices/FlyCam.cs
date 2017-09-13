@@ -28,26 +28,26 @@ namespace HEROsMod.HEROsModServices
 		public FlyCam()
 		{
 			Enabled = false;
-			this._name = "Fly Camera";
-			this._hotbarIcon = new UIKit.UIImage(Main.itemTexture[493]);
-			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-			this.HotbarIcon.Tooltip = "Enable Fly Camera";
+            _name = "Fly Camera";
+            _hotbarIcon = new UIKit.UIImage(Main.itemTexture[493]);
+            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+            HotbarIcon.Tooltip = "Enable Fly Camera";
 			//Make sure FreeCamera is off by default
 			Disable();
 		}
 
 		private void Enable()
 		{
-			this._hotbarIcon.Opacity = 1f;
+            _hotbarIcon.Opacity = 1f;
 			Enabled = true;
-			this.HotbarIcon.Tooltip = "Disable Fly Camera";
+            HotbarIcon.Tooltip = "Disable Fly Camera";
 		}
 
 		private void Disable()
 		{
-			this._hotbarIcon.Opacity = .5f;
+            _hotbarIcon.Opacity = .5f;
 			Enabled = false;
-			this.HotbarIcon.Tooltip = "Enable Fly Camera";
+            HotbarIcon.Tooltip = "Enable Fly Camera";
 		}
 
 		private void _hotbarIcon_onLeftClick(object sender, EventArgs e)
@@ -65,7 +65,7 @@ namespace HEROsMod.HEROsModServices
 
 		public override void MyGroupUpdated()
 		{
-			this.HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("Flycam");
+            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("Flycam");
 			if (!HasPermissionToUse)
 			{
 				Enabled = false;

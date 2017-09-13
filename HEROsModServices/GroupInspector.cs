@@ -17,10 +17,10 @@ namespace HEROsMod.HEROsModServices
 			IsInHotbar = true;
 			HotbarParent = hotbar;
 			MultiplayerOnly = true;
-			this._name = "Group Inspector";
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/manageGroups"));
-			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
-			this.HotbarIcon.Tooltip = "Open Group Management";
+            _name = "Group Inspector";
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/manageGroups"));
+            HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
+            HotbarIcon.Tooltip = "Open Group Management";
 			HEROsModNetwork.LoginService.GroupChanged += LoginService_GroupChanged;
 		}
 
@@ -38,7 +38,7 @@ namespace HEROsMod.HEROsModServices
 			{
 				groupWindow = new GroupManagementWindow();
 				groupWindow.Closed += groupWindow_Closed;
-				this.AddUIView(groupWindow);
+                AddUIView(groupWindow);
 			}
 			else
 			{
@@ -53,7 +53,7 @@ namespace HEROsMod.HEROsModServices
 
 		public override void MyGroupUpdated()
 		{
-			this.HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.IsAdmin;
+            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.IsAdmin;
 			if (!HasPermissionToUse)
 			{
 				if (groupWindow != null)
@@ -89,10 +89,10 @@ namespace HEROsMod.HEROsModServices
 			UILabel label = new UILabel("Groups:");
 			UIImage bClose = new UIImage(closeTexture);
 			dropdown.selectedChanged += dropdown_selectedChanged;
-			this.Anchor = AnchorPosition.Center;
-			this.CanMove = true;
+            Anchor = AnchorPosition.Center;
+            CanMove = true;
 
-			this.Width = 700;
+            Width = 700;
 			title.Scale = .6f;
 			title.X = spacing;
 			title.Y = spacing;
@@ -107,7 +107,7 @@ namespace HEROsMod.HEROsModServices
 			dropdown.Width = 200;
 			checkboxContainer.X = spacing;
 			checkboxContainer.Y = dropdown.Y + dropdown.Height + spacing;
-			checkboxContainer.Width = this.Width - spacing * 2;
+			checkboxContainer.Width = Width - spacing * 2;
 			checkboxContainer.Height = 150;
 			AddChild(checkboxContainer);
 			AddChild(label);
@@ -138,15 +138,15 @@ namespace HEROsMod.HEROsModServices
 			AddChild(bDelete);
 			AddChild(dropdown);
 
-			this.Height = bApply.Position.Y + bApply.Height + spacing;
-			this.CenterToParent();
+            Height = bApply.Position.Y + bApply.Height + spacing;
+            CenterToParent();
 		}
 
 		private void bDelete_onLeftClick(object sender, EventArgs e)
 		{
 			UIMessageBox mb = new UIMessageBox("Are you sure you want to delete the " + dropdown.Text + " group?", UIMessageBoxType.YesNo, true);
 			mb.yesClicked += mb_yesClicked;
-			this.Parent.AddChild(mb);
+            Parent.AddChild(mb);
 		}
 
 		private void mb_yesClicked(object sender, EventArgs e)
@@ -250,8 +250,8 @@ namespace HEROsMod.HEROsModServices
 
 		public void Close()
 		{
-			if (this.Parent != null)
-				this.Parent.RemoveChild(this);
+			if (Parent != null)
+                Parent.RemoveChild(this);
             Closed?.Invoke(this, EventArgs.Empty);
         }
 	}
@@ -268,7 +268,7 @@ namespace HEROsMod.HEROsModServices
 
 			Width = 600;
 			Height = 100;
-			this.Anchor = AnchorPosition.Center;
+            Anchor = AnchorPosition.Center;
 
 			label = new UILabel("Group Name:");
 			textbox = new UITextbox();
@@ -285,7 +285,7 @@ namespace HEROsMod.HEROsModServices
 			float tby = textbox.Height / 2 + spacing;
 			label.Position = new Vector2(spacing, tby);
 			textbox.Position = new Vector2(label.Position.X + label.Width + spacing, tby);
-			bCancel.Position = new Vector2(this.Width - spacing, this.Height - spacing);
+			bCancel.Position = new Vector2(Width - spacing, Height - spacing);
 			bSave.Position = new Vector2(bCancel.Position.X - bCancel.Width - spacing, bCancel.Position.Y);
 
 			bCancel.onLeftClick += bCancel_onLeftClick;
@@ -312,7 +312,7 @@ namespace HEROsMod.HEROsModServices
 
 		private void bCancel_onLeftClick(object sender, EventArgs e)
 		{
-			this.Close();
+            Close();
 		}
 
 		protected override float GetWidth()
@@ -323,13 +323,13 @@ namespace HEROsMod.HEROsModServices
 		private void Close()
 		{
 			UIView.exclusiveControl = null;
-			this.Parent.RemoveChild(this);
+            Parent.RemoveChild(this);
 		}
 
 		public override void Update()
 		{
 			if (Parent != null)
-				this.Position = new Vector2(Parent.Width / 2, Parent.Height / 2);
+                Position = new Vector2(Parent.Width / 2, Parent.Height / 2);
 			base.Update();
 		}
 	}

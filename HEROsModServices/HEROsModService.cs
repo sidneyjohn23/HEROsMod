@@ -93,9 +93,9 @@ namespace HEROsMod.HEROsModServices
 		/// </summary>
 		public virtual void RemoveAllUIViews()
 		{
-			while (this._UIViews.Count > 0)
+			while (_UIViews.Count > 0)
 			{
-				RemoveUIView(this._UIViews[0]);
+				RemoveUIView(_UIViews[0]);
 			}
 		}
 

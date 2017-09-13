@@ -114,25 +114,25 @@ namespace HEROsMod.UIKit
 		{
 			public GameScreen()
 			{
-				this.OverridesMouse = false;
+                OverridesMouse = false;
 			}
 
 			public override void Update()
 			{
 				if (!Main.gameMenu && !Main.mapFullscreen)
-					this.Visible = true;
-				else this.Visible = false;
+                    Visible = true;
+				else Visible = false;
 				base.Update();
 			}
 
 			protected override float GetWidth()
 			{
-				return this.Parent.Width;
+				return Parent.Width;
 			}
 
 			protected override float GetHeight()
 			{
-				return this.Parent.Height;
+				return Parent.Height;
 			}
 		}
 
@@ -140,23 +140,23 @@ namespace HEROsMod.UIKit
 		{
 			public MenuScreen()
 			{
-				this.OverridesMouse = false;
+                OverridesMouse = false;
 			}
 
 			public override void Update()
 			{
-				this.Visible = Main.gameMenu;
+                Visible = Main.gameMenu;
 				base.Update();
 			}
 
 			protected override float GetWidth()
 			{
-				return this.Parent.Width;
+				return Parent.Width;
 			}
 
 			protected override float GetHeight()
 			{
-				return this.Parent.Height;
+				return Parent.Height;
 			}
 		}
 
@@ -164,23 +164,23 @@ namespace HEROsMod.UIKit
 		{
 			public MapScreen()
 			{
-				this.OverridesMouse = false;
+                OverridesMouse = false;
 			}
 
 			public override void Update()
 			{
-				this.Visible = !Main.gameMenu && Main.mapFullscreen;
+                Visible = !Main.gameMenu && Main.mapFullscreen;
 				base.Update();
 			}
 
 			protected override float GetWidth()
 			{
-				return this.Parent.Width;
+				return Parent.Width;
 			}
 
 			protected override float GetHeight()
 			{
-				return this.Parent.Height;
+				return Parent.Height;
 			}
 		}
 	}

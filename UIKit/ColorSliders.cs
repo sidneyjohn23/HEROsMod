@@ -9,7 +9,7 @@ namespace HEROsMod.UIKit
 	{
 		public HueSlider()
 		{
-			this.Width = ModUtils.HueTexture.Width;
+            Width = ModUtils.HueTexture.Width;
 		}
 
 		public override void DrawBackground(SpriteBatch spriteBatch)
@@ -27,7 +27,7 @@ namespace HEROsMod.UIKit
 
 		public SaturationSlider()
 		{
-			this.Width = ModUtils.HueTexture.Width;
+            Width = ModUtils.HueTexture.Width;
 		}
 
 		public override void DrawBackground(SpriteBatch spriteBatch)
@@ -52,7 +52,7 @@ namespace HEROsMod.UIKit
 
 		public LuminositySlider()
 		{
-			this.Width = ModUtils.HueTexture.Width;
+            Width = ModUtils.HueTexture.Width;
 		}
 
 		public override void DrawBackground(SpriteBatch spriteBatch)

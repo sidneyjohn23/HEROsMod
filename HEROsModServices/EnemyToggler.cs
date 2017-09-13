@@ -14,11 +14,11 @@ namespace HEROsMod.HEROsModServices
 
 		public EnemyToggler()
 		{
-			this._name = "Enemy Toggler";
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/npcIcon"));
-			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-			this.HotbarIcon.Tooltip = "Disable Enemy Spawns";
-			this._hotbarIcon.Opacity = 1f;
+            _name = "Enemy Toggler";
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/npcIcon"));
+            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+            HotbarIcon.Tooltip = "Disable Enemy Spawns";
+            _hotbarIcon.Opacity = 1f;
 			HEROsModNetwork.GeneralMessages.EnemiesToggledByServer += GeneralMessages_EnemiesToggledByServer;
 		}
 
@@ -26,13 +26,13 @@ namespace HEROsMod.HEROsModServices
 		{
 			if (enemiesCanSpawn)
 			{
-				this._hotbarIcon.Opacity = 1f;
-				this.HotbarIcon.Tooltip = "Disable Enemy Spawns";
+                _hotbarIcon.Opacity = 1f;
+                HotbarIcon.Tooltip = "Disable Enemy Spawns";
 			}
 			else
 			{
-				this._hotbarIcon.Opacity = .5f;
-				this.HotbarIcon.Tooltip = "Enable Enemy Spawns";
+                _hotbarIcon.Opacity = .5f;
+                HotbarIcon.Tooltip = "Enable Enemy Spawns";
 			}
 		}
 
@@ -68,13 +68,13 @@ namespace HEROsMod.HEROsModServices
 				ToggleNPCs();
 				if (EnemiesAllowed)
 				{
-					this._hotbarIcon.Opacity = 1f;
-					this.HotbarIcon.Tooltip = "Disable Enemy Spawns";
+                    _hotbarIcon.Opacity = 1f;
+                    HotbarIcon.Tooltip = "Disable Enemy Spawns";
 				}
 				else
 				{
-					this._hotbarIcon.Opacity = .5f;
-					this.HotbarIcon.Tooltip = "Enable Enemy Spawns";
+                    _hotbarIcon.Opacity = .5f;
+                    HotbarIcon.Tooltip = "Enable Enemy Spawns";
 				}
 				Main.NewText("Enemy spawns " + (EnemiesAllowed ? "enabled" : "disabled"));
 			}
@@ -82,7 +82,7 @@ namespace HEROsMod.HEROsModServices
 
 		public override void MyGroupUpdated()
 		{
-			this.HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ToggleEnemies");
+            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ToggleEnemies");
 			//base.MyGroupUpdated();
 		}
 

@@ -6,7 +6,7 @@ namespace HEROsMod.UIKit
 	{
 		public UIScreen()
 		{
-			this.OverridesMouse = false;
+            OverridesMouse = false;
 		}
 
 		protected override float GetWidth()

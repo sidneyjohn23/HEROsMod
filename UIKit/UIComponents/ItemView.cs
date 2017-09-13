@@ -27,9 +27,9 @@ namespace HEROsMod.UIKit.UIComponents
 
 		public ItemView(Item item)
 		{
-			this.Scale = .85f;
+            Scale = .85f;
 			this.item = item.Clone();
-			this.onHover += Slot2_onHover;
+            onHover += Slot2_onHover;
 		}
 
 		private void Slot2_onHover(object sender, EventArgs e)
@@ -70,7 +70,7 @@ namespace HEROsMod.UIKit.UIComponents
 
 			//spriteBatch.Draw(ModUtils.DummyTexture, new Rectangle((int)pos.X, (int)pos.Y, (int)Width, (int)Height), Color.Red);
 
-			Vector2 texturePos = new Vector2(this.Width / 2, this.Height / 2);
+			Vector2 texturePos = new Vector2(Width / 2, Height / 2);
 			Vector2 itemOrigin = new Vector2(texture.Width / 2, texture.Height / 2);
 
 			pos += texturePos;

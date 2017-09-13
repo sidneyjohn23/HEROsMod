@@ -54,16 +54,16 @@ namespace HEROsMod.HEROsModServices
 
 		public Waypoints()
 		{
-			this._name = "Waypoints";
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/waypointIcon"));
-			this.HotbarIcon.Tooltip = "View Waypoints";
-			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
+            _name = "Waypoints";
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/waypointIcon"));
+            HotbarIcon.Tooltip = "View Waypoints";
+            HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 
             waypointWindow = new WaypointWindow()
             {
                 Visible = false
             };
-            this.AddUIView(waypointWindow);
+            AddUIView(waypointWindow);
 		}
 
 		private void HotbarIcon_onLeftClick(object sender, EventArgs e)
@@ -73,7 +73,7 @@ namespace HEROsMod.HEROsModServices
 
 		public override void MyGroupUpdated()
 		{
-			this.HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("AccessWaypoints");
+            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("AccessWaypoints");
 			if (!HasPermissionToUse)
 			{
 				waypointWindow.Visible = false;
@@ -199,7 +199,7 @@ namespace HEROsMod.HEROsModServices
 		{
 			X = 50;
 			Y = 100;
-			this.CanMove = true;
+            CanMove = true;
 
             UILabel title = new UILabel("Waypoints")
             {
@@ -242,7 +242,7 @@ namespace HEROsMod.HEROsModServices
 
 		private void bClose_onLeftClick(object sender, EventArgs e)
 		{
-			this.Visible = false;
+            Visible = false;
 		}
 
 		public override void Update()
@@ -324,7 +324,7 @@ namespace HEROsMod.HEROsModServices
 
 			Width = 600;
 			Height = 100;
-			this.Anchor = AnchorPosition.Center;
+            Anchor = AnchorPosition.Center;
 
 			label = new UILabel("Waypoint Name");
 			textbox = new UITextbox();
@@ -341,7 +341,7 @@ namespace HEROsMod.HEROsModServices
 			float tby = textbox.Height / 2 + spacing;
 			label.Position = new Vector2(spacing, tby);
 			textbox.Position = new Vector2(label.Position.X + label.Width + spacing, tby);
-			bCancel.Position = new Vector2(this.Width - spacing, this.Height - spacing);
+			bCancel.Position = new Vector2(Width - spacing, Height - spacing);
 			bSave.Position = new Vector2(bCancel.Position.X - bCancel.Width - spacing, bCancel.Position.Y);
 
 			bCancel.onLeftClick += bCancel_onLeftClick;
@@ -367,7 +367,7 @@ namespace HEROsMod.HEROsModServices
 					if (!Waypoints.AddWaypoint(textbox.Text, waypointPos))
 					{
 						UIMessageBox mb = new UIMessageBox("A waypoint with this name already exists, please enter another name.", UIMessageBoxType.Ok, true);
-						this.AddChild(mb);
+                        AddChild(mb);
 					}
 					else
 					{
@@ -384,7 +384,7 @@ namespace HEROsMod.HEROsModServices
 
 		private void bCancel_onLeftClick(object sender, EventArgs e)
 		{
-			this.Close();
+            Close();
 		}
 
 		protected override float GetWidth()
@@ -395,14 +395,14 @@ namespace HEROsMod.HEROsModServices
 		private void Close()
 		{
 			UIView.exclusiveControl = null;
-			this.Parent.RemoveChild(this);
+            Parent.RemoveChild(this);
 		}
 
 		public override void Update()
 		{
 			if (Main.gameMenu) Close();
 			if (Parent != null)
-				this.Position = new Vector2(Parent.Width / 2, Parent.Height / 2);
+                Position = new Vector2(Parent.Width / 2, Parent.Height / 2);
 			base.Update();
 		}
 	}

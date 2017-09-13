@@ -104,29 +104,29 @@ namespace HEROsMod.UIKit.UIComponents
 			{
 				//Main.NewText("Not Arrived");
 
-				if (this.hidden)
+				if (hidden)
 				{
-					this.lerpAmount -= .01f * slideMoveSpeed;
-					if (this.lerpAmount < 0f)
+                    lerpAmount -= .01f * slideMoveSpeed;
+					if (lerpAmount < 0f)
 					{
-						this.lerpAmount = 0f;
+                        lerpAmount = 0f;
 						arrived = true;
-						//	Main.NewText("Arrived, Not Visible");
-						this.Visible = false;
+                        //	Main.NewText("Arrived, Not Visible");
+                        Visible = false;
 					}
-					float y = MathHelper.SmoothStep(this.hiddenPosition, this.shownPosition, this.lerpAmount);
+					float y = MathHelper.SmoothStep(hiddenPosition, shownPosition, lerpAmount);
 					base.Position = new Vector2(base.Position.X, y);
 				}
 				else
 				{
-					this.lerpAmount += .01f * slideMoveSpeed;
-					if (this.lerpAmount > 1f)
+                    lerpAmount += .01f * slideMoveSpeed;
+					if (lerpAmount > 1f)
 					{
-						this.lerpAmount = 1f;
+                        lerpAmount = 1f;
 						arrived = true;
 						//	Main.NewText("Arrived, Visible");
 					}
-					float y2 = MathHelper.SmoothStep(this.hiddenPosition, this.shownPosition, this.lerpAmount);
+					float y2 = MathHelper.SmoothStep(hiddenPosition, shownPosition, lerpAmount);
 					base.Position = new Vector2(base.Position.X, y2);
 				}
 			}
@@ -138,7 +138,7 @@ namespace HEROsMod.UIKit.UIComponents
 			{
 				spriteBatch.End();
 				//spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, this._rasterizerState);
-				spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, null, null, this._rasterizerState, null, Main.UIScaleMatrix);
+				spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, null, null, _rasterizerState, null, Main.UIScaleMatrix);
 				//	Rectangle scissorRectangle = new Rectangle((int)base.X- (int)base.Width, (int)base.Y, (int)base.Width, (int)base.Height);
 				//Parent.Position.Y
 				//		Main.NewText((int)Parent.Position.Y + " " + (int)shownPosition);

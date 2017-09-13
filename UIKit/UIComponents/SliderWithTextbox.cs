@@ -53,8 +53,8 @@ namespace HEROsMod.UIKit.UIComponents
 
 			textbox.Text = slider.Value.ToString();
 
-			this.Height = textbox.Height;
-			this.Width = slider.X + slider.Width;
+            Height = textbox.Height;
+            Width = slider.X + slider.Width;
 		}
 
 		private void textbox_OnLostFocus(object sender, EventArgs e)
