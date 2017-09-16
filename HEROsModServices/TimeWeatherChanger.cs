@@ -11,8 +11,9 @@ namespace HEROsMod.HEROsModServices
 	{
 		public static bool TimePaused { get; set; }
 		private static double _pausedTime = 0;
+        public TimeSetWindow timeSetWindow;
 
-		public static double PausedTime
+        public static double PausedTime
 		{
 			get { return _pausedTime; }
 			set { _pausedTime = value; }
@@ -21,7 +22,7 @@ namespace HEROsMod.HEROsModServices
 		//	public static bool PausedTimeDayTime = false;
 		private TimeWeatherControlHotbar timeWeatherHotbar;
 
-		public TimeWeatherChanger()
+        public TimeWeatherChanger()
 		{
 			IsHotbar = true;
 
@@ -31,12 +32,18 @@ namespace HEROsMod.HEROsModServices
             HotbarIcon.Tooltip = "Change Time/Rain";
             HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 
+            timeSetWindow = new TimeSetWindow();
+            AddUIView(timeSetWindow);
+            timeSetWindow.Visible = false;
+
             //timeWeatherHotbar = new TimeWeatherControlHotbar();
             //HEROsMod.ServiceHotbar.AddChild(timeWeatherHotbar);
 
             timeWeatherHotbar = new TimeWeatherControlHotbar()
             {
-                HotBarParent = HEROsMod.ServiceHotbar
+                HotBarParent = HEROsMod.ServiceHotbar,
+                timeSetWindow = timeSetWindow
+
             };
             timeWeatherHotbar.Hide();
             AddUIView(timeWeatherHotbar);
@@ -120,17 +127,17 @@ namespace HEROsMod.HEROsModServices
 		public UIImage bPause;
 		private static Texture2D _playTexture;
 		private static Texture2D _pauseTexture;
-
-		//static Texture2D _rainTexture;
-		//public static Texture2D rainTexture
-		//{
-		//	get
-		//	{
-		//		if (_rainTexture == null) _rainTexture = HEROsMod.instance.GetTexture("Images/rainIcon");
-		//		return _rainTexture;
-		//	}
-		//}
-		public static Texture2D playTexture
+        public TimeSetWindow timeSetWindow;
+        //static Texture2D _rainTexture;
+        //public static Texture2D rainTexture
+        //{
+        //	get
+        //	{
+        //		if (_rainTexture == null) _rainTexture = HEROsMod.instance.GetTexture("Images/rainIcon");
+        //		return _rainTexture;
+        //	}
+        //}
+        public static Texture2D playTexture
 		{
 			get
 			{
@@ -159,38 +166,38 @@ namespace HEROsMod.HEROsModServices
 			base.Anchor = AnchorPosition.Top;
             AddChild(buttonView);
 
-			//UIImage bStopRain = new UIImage(HEROsMod.instance.GetTexture("Images/sunIcon"));
-			//UIImage bStartRain = new UIImage(rainTexture);
-			//bStartRain.Tooltip = "Start Rain";
-			//bStopRain.Tooltip = "Stop Rain";
-			//bStartRain.onLeftClick += bStartRain_onLeftClick;
-			//bStopRain.onLeftClick += bStopRain_onLeftClick;
-			//AddChild(bStopRain);
-			//AddChild(bStartRain);
+            //UIImage bStopRain = new UIImage(HEROsMod.instance.GetTexture("Images/sunIcon"));
+            //UIImage bStartRain = new UIImage(rainTexture);
+            //bStartRain.Tooltip = "Start Rain";
+            //bStopRain.Tooltip = "Stop Rain";
+            //bStartRain.onLeftClick += bStartRain_onLeftClick;
+            //bStopRain.onLeftClick += bStopRain_onLeftClick;
+            //AddChild(bStopRain);
+            //AddChild(bStartRain);
 
-			//UIImage nightButton = new UIImage(HEROsMod.instance.GetTexture("Images/moonIcon"));
-			//nightButton.Tooltip = "Night";
-			//nightButton.onLeftClick += nightButton_onLeftClick;
-			//UIImage noonButton = new UIImage(HEROsMod.instance.GetTexture("Images/sunIcon"));
-			//noonButton.Tooltip = "Noon";
-			//noonButton.onLeftClick += noonButton_onLeftClick;
-			//bPause = new UIImage(pauseTexture);
-			//bPause.onLeftClick += bPause_onLeftClick;
-			//AddChild(nightButton);
-			//AddChild(noonButton);
-			//AddChild(bPause);
+            //UIImage nightButton = new UIImage(HEROsMod.instance.GetTexture("Images/moonIcon"));
+            //nightButton.Tooltip = "Night";
+            //nightButton.onLeftClick += nightButton_onLeftClick;
+            //UIImage noonButton = new UIImage(HEROsMod.instance.GetTexture("Images/sunIcon"));
+            //noonButton.Tooltip = "Noon";
+            //noonButton.onLeftClick += noonButton_onLeftClick;
+            //bPause = new UIImage(pauseTexture);
+            //bPause.onLeftClick += bPause_onLeftClick;
+            //AddChild(nightButton);
+            //AddChild(noonButton);
+            //AddChild(bPause);
 
-			//float xPos = spacing;
-			//for (int i = 0; i < children.Count; i++)
-			//{
-			//	if (children[i].Visible)
-			//	{
-			//		children[i].X = xPos;
-			//		xPos += children[i].Width + spacing;
-			//		children[i].Y = Height / 2 - children[i].Height / 2;
-			//	}
-			//}
-			//Width = xPos;
+            //float xPos = spacing;
+            //for (int i = 0; i < children.Count; i++)
+            //{
+            //	if (children[i].Visible)
+            //	{
+            //		children[i].X = xPos;
+            //		xPos += children[i].Width + spacing;
+            //		children[i].Y = Height / 2 - children[i].Height / 2;
+            //	}
+            //}
+            //Width = xPos;
 		}
 
 		public override void test()
@@ -247,19 +254,26 @@ namespace HEROsMod.HEROsModServices
             sundialButton.onLeftClick += sundialButton_onLeftClick;
 			buttonView.AddChild(sundialButton);
 
-			//float xPos = spacing;
-			//for (int i = 0; i < children.Count; i++)
-			//{
-			//	if (children[i].Visible)
-			//	{
-			//		children[i].X = xPos;
-			//		xPos += children[i].Width + spacing;
-			//		children[i].Y = Height / 2 - children[i].Height / 2;
-			//	}
-			//}
-			//Width = xPos;
+            UIImage changeTimeButton = new UIImage(HEROsMod.instance.GetTexture("Images/clockIcon"))
+            {
+                Tooltip = "Change Time...",
+            };
+            changeTimeButton.onLeftClick += ChangeTimeButton_onLeftClick;
+            buttonView.AddChild(changeTimeButton);
 
-			base.CenterXAxisToParentCenter();
+            //float xPos = spacing;
+            //for (int i = 0; i < children.Count; i++)
+            //{
+            //	if (children[i].Visible)
+            //	{
+            //		children[i].X = xPos;
+            //		xPos += children[i].Width + spacing;
+            //		children[i].Y = Height / 2 - children[i].Height / 2;
+            //	}
+            //}
+            //Width = xPos;
+
+            base.CenterXAxisToParentCenter();
 			float num = spacing;
 			for (int i = 0; i < buttonView.children.Count; i++)
 			{
@@ -405,7 +419,7 @@ namespace HEROsMod.HEROsModServices
 			if (Main.netMode != 1)
 			{
 				Main.dayTime = false;
-				Main.time = 0;// 27000.0;
+				Main.time = 0;// 19:30
 			}
 			else
 			{
@@ -418,7 +432,7 @@ namespace HEROsMod.HEROsModServices
 			if (Main.netMode != 1)
 			{
 				Main.dayTime = true;
-				Main.time = 27000.0;
+				Main.time = 27000.0; 
 			}
 			else
 			{
@@ -441,6 +455,17 @@ namespace HEROsMod.HEROsModServices
 				//previousTime = Main.time;
 			}
 		}
+
+        private void ChangeTimeButton_onLeftClick(object sender, EventArgs e)
+        {
+            if (Main.netMode != 1)
+            {
+                timeSetWindow.Visible = !timeSetWindow.Visible;
+            } else
+            {
+
+            }
+        }
 
 		internal static void Unload()
 		{
@@ -471,4 +496,123 @@ namespace HEROsMod.HEROsModServices
 		//	base.Update();
 		//}
 	}
+
+    internal class TimeSetWindow : UIWindow
+    {
+        private static float spacing = 8;
+        private UITextbox timeBox;
+        private UIButton SetButton;
+        private UIButton CancelButton;
+
+        public TimeSetWindow()
+        {
+            X = 200;
+            Y = 250;
+            CanMove = true;
+            
+            Width = 100;
+            SetButton = new UIButton("Set Time");
+            SetButton.onLeftClick += SetButton_onLeftClick;
+            
+            CancelButton = new UIButton("Cancel");
+            CancelButton.onLeftClick += CancelButton_onLeftClick;
+            CancelButton.Position = new Vector2(spacing * 2 + SetButton.Width, this.Height - 40);
+            UILabel SetTimeLabel = new UILabel("Set Time")
+            {
+                X = spacing,
+                Y = spacing,
+                OverridesMouse = false,
+                Scale = .6f
+            };
+            
+            timeBox = new UITextbox()
+            {
+                Width = 55,
+                Position = new Vector2(spacing, SetTimeLabel.Height + spacing)
+            };
+            UILabel HoursLabel = new UILabel("(24 hours 0:00-23:59)")
+            {
+                Position = new Vector2(timeBox.Width + 2 * spacing, SetTimeLabel.Height + 12),
+                Scale = .3f
+            };
+            SetButton.Position = new Vector2(spacing, spacing + timeBox.Y + timeBox.Height);
+            CancelButton.Position = new Vector2(spacing * 2 + SetButton.Width, spacing + timeBox.Y + timeBox.Height);
+            Height = SetButton.Y + SetButton.Height + spacing;
+            Width = spacing * 3 + SetButton.Width + CancelButton.Width;
+            AddChild(SetTimeLabel);
+            AddChild(timeBox);
+            AddChild(CancelButton);
+            AddChild(SetButton);
+            AddChild(HoursLabel);
+
+        }
+
+        private void CancelButton_onLeftClick(object sender, EventArgs e)
+        {
+            Visible = false;
+        }
+
+        private void SetButton_onLeftClick(object sender, EventArgs e)
+        {
+            ParseTime(timeBox.Text);
+            timeBox.Text = "";
+            Visible = false;
+        }
+
+        private void ParseTime(string time)
+        {
+            string pattern = "[^0-9:]";
+            float gametime = 0; bool daytime = true;
+            if (!System.Text.RegularExpressions.Regex.IsMatch(time, pattern) && System.Text.RegularExpressions.Regex.IsMatch(time, "^[0-9]{1,2}:[0-9]{1,2}$"))
+            {
+                int hour = int.Parse(time.Split(':')[0]);
+                int minute = int.Parse(time.Split(':')[1]);
+                if (hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59)
+                {
+                    if (hour >= 0 && hour <= 4)
+                    {
+                        if (hour == 4 && minute < 30)
+                        {
+                            gametime = 16200 + hour * 3600 + minute * 60;
+                            daytime = false;
+                        } else if (hour == 4 && minute >= 30)
+                        {
+                            gametime = hour * 3600 + minute * 60 - 16200;
+                            daytime = true;
+                        } else
+                        {
+                            gametime = 16200 + hour * 3600 + minute * 60;
+                            daytime = false;
+                        }
+                    } else if (hour > 4 && hour < 19)
+                    {
+                        gametime = hour * 3600 + minute * 60 - 16200;
+                        daytime = true;
+                    } else if (hour >= 19)
+                    {
+                        if (hour == 19 && minute < 30)
+                        {
+                            gametime = hour * 3600 + minute * 60 - 16200;
+                            daytime = true;
+                        } else if (hour == 19 && minute >= 30)
+                        {
+                            gametime = hour * 3600 + minute * 60 - 70200;
+                            daytime = false;
+                        } else
+                        {
+                            gametime = hour * 3600 + minute * 60 - 70200;
+                            daytime = false;
+                        }
+                    }
+                }
+
+                Main.time = gametime;
+                Main.dayTime = daytime;
+                Main.NewText("Time successfully changed to " + time);
+            } else
+            {
+                Main.NewText("Wrong time format!", Color.Red);
+            }
+        }
+    }
 }

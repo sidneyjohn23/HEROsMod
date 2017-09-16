@@ -24,7 +24,7 @@ namespace HEROsMod.HEROsModServices
 			if (!psaRequested)
 			{
 				psaRequested = true;
-				GetPSA();
+				//GetPSA();
 			}
 		}
 

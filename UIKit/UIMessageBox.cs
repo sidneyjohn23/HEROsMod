@@ -86,9 +86,8 @@ namespace HEROsMod.UIKit
 
 		private void yesButton_onLeftClick(object sender, EventArgs e)
 		{
-			if (yesClicked != null)
-				yesClicked(this, EventArgs.Empty);
-			if (Parent != null)
+            yesClicked?.Invoke(this, EventArgs.Empty);
+            if (Parent != null)
 			{
 				if (UIView.exclusiveControl == this) UIView.exclusiveControl = null;
                 Parent.RemoveChild(this);
@@ -97,9 +96,8 @@ namespace HEROsMod.UIKit
 
 		private void noButton_onLeftClick(object sender, EventArgs e)
 		{
-			if (noClicked != null)
-				noClicked(this, EventArgs.Empty);
-			if (Parent != null)
+            noClicked?.Invoke(this, EventArgs.Empty);
+            if (Parent != null)
 			{
 				if (UIView.exclusiveControl == this) UIView.exclusiveControl = null;
                 Parent.RemoveChild(this);
