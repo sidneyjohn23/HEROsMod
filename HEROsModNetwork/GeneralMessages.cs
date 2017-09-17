@@ -343,7 +343,17 @@ namespace HEROsMod.HEROsModNetwork
 			Network.SendDataToServer();
 		}
 
-		private static void ProcessTimeChangeRequest(ref BinaryReader reader, int playerNumber)
+        public static void ReqestTimeChange(TimeChangeType tct, double time, bool daytime)
+        {
+            WriteHeader(MessageType.RequestTimeChange);
+            Writer.Write((byte)tct);
+            Writer.Write(time);
+            Writer.Write(daytime);
+            Network.SendDataToServer();
+        }
+
+
+        private static void ProcessTimeChangeRequest(ref BinaryReader reader, int playerNumber)
 		{
 			if (Network.Players[playerNumber].Group.HasPermission("ChangeTimeWeather"))
 			{
@@ -381,6 +391,13 @@ namespace HEROsMod.HEROsModNetwork
 						}
 						TimePausedOrResumed();
 						break;
+
+                    case TimeChangeType.SpecificTime:
+                        double time = reader.ReadDouble();
+                        bool daytime = reader.ReadBoolean();
+                        Main.dayTime = daytime;
+                        Main.time = time;
+                        break;
 				}
 				NetMessage.SendData(7, -1, -1, null, 0, 0f, 0f, 0f, 0);
 			}
@@ -1266,7 +1283,8 @@ namespace HEROsMod.HEROsModNetwork
 			SetToNoon,
 			SetToNight,
 			SetToMidnight,
-			Pause
+			Pause,
+            SpecificTime
 		}
 	}
 }
