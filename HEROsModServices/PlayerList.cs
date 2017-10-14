@@ -46,7 +46,6 @@ namespace HEROsMod.HEROsModServices
 				if (playersWindow != null)
 					playersWindow.Close();
 			}
-			//base.MyGroupUpdated();
 		}
 
 		public override void Destroy()
@@ -138,8 +137,8 @@ namespace HEROsMod.HEROsModServices
 					scrollView.AddChild(label);
 				}
 			}
-			// TODO changes to offline users might not prop to all admin?
-			if (HEROsModNetwork.LoginService.MyGroup.IsAdmin)
+
+            if (HEROsModNetwork.LoginService.MyGroup.IsAdmin)
 			{
                 UILabel lOfflinePlayers = new UILabel("Offline Users")
                 {
@@ -150,17 +149,19 @@ namespace HEROsMod.HEROsModServices
                 };
                 yPos = lOfflinePlayers.Y + lOfflinePlayers.Height;
 				scrollView.AddChild(lOfflinePlayers);
-				for (int i = 0; i < HEROsModNetwork.Network.RegisteredUsers.Count; i++)
+                ModUtils.DebugText("Length: " + HEROsModNetwork.Network.Players2.Count);
+				foreach (HEROsModNetwork.UserWithID user in HEROsModNetwork.Network.RegisteredUsers)
 				{
-					HEROsModNetwork.UserWithID user = HEROsModNetwork.Network.RegisteredUsers[i];
-					//ErrorLogger.Log("? " + user.ID);
-					//foreach (var item in HEROsModNetwork.Network.Players)
-					//{
-					//	ErrorLogger.Log("U" + item.ID);
-					//}
-					if (HEROsModNetwork.Network.Players.Any(x => x.ID == user.ID))
+                    ModUtils.DebugText("? " + user.Username);
+
+                    foreach (HEROsModNetwork.HEROsModPlayer item in HEROsModNetwork.Network.Players2.Values)
+                    {
+                        ModUtils.DebugText("U2 " + item.Username + ": " + item.Index);
+                    }
+
+                    if (HEROsModNetwork.Network.Players2.Values.Any(x => x.Username == user.Username))
 					{
-						//	ErrorLogger.Log("Continue on " + user.ID);
+						ModUtils.DebugText("Continue on " + user.Username);
 						continue;
 					}
                     UILabel lUser = new UILabel(user.Username)
@@ -178,17 +179,14 @@ namespace HEROsMod.HEROsModServices
 			}
 
 			scrollView.ContentHeight = yPos + spacing;
-		}
+        }
 
-		// is admin
 		private void lUser_onLeftClick(object sender, EventArgs e)
 		{
 			UILabel label = (UILabel)sender;
 			int userID = (int)label.Tag;
 
 			OpenPlayerInfo(userID, true);
-
-			//OpenPlayerInfo()
 		}
 
 		private void label_onLeftClick(object sender, EventArgs e)
@@ -244,7 +242,7 @@ namespace HEROsMod.HEROsModServices
 		public PlayerInfo(int playerIndex, bool offlineUser)
 		{
 			if (!offlineUser)
-                player = HEROsModNetwork.Network.Players[playerIndex];
+                player = HEROsModNetwork.Network.Players2[playerIndex];
 			this.playerIndex = playerIndex;
             UpdateWhenOutOfBounds = true;
 			Width = 350;
@@ -392,21 +390,6 @@ namespace HEROsMod.HEROsModServices
 			}
 		}
 
-		private void bSnoop_onLeftClick(object sender, EventArgs e)
-		{
-			/*
-            for (int i = 0; i < Main.player.Length; i++)
-            {
-                if (Main.player[i].name == name)
-                {
-                    SnoopWindow snoopWindow = new SnoopWindow();
-                    this.Parent.Parent.AddChild(snoopWindow);
-                    snoopWindow.SetPlayer(Main.player[i]);
-                }
-            }
-             */
-		}
-
 		private void bClose_onLeftClick(object sender, EventArgs e)
 		{
             Parent.RemoveChild(this);
@@ -451,7 +434,7 @@ namespace HEROsMod.HEROsModServices
 
 		private UIWindow itemsView;
 
-		public SnoopWindow()
+        public SnoopWindow()
 		{
 			itemsView = new UIWindow();
 			//itemsView.X = spacing;
@@ -509,9 +492,15 @@ namespace HEROsMod.HEROsModServices
                 X = mouseSlot.X + mouseSlot.Width + 4
             };
             itemsView.AddChild(label);
+
+            itemsView.children[18].onLeftClick += a;
 		}
 
-		private void itemSlot_ItemChanged(object sender, EventArgs e)
+        private void a(object sender, EventArgs e) {
+            player.inventory[18] = player.inventory[19].Clone();
+        }
+
+        private void itemSlot_ItemChanged(object sender, EventArgs e)
 		{
 			Slot slot = (Slot)sender;
 

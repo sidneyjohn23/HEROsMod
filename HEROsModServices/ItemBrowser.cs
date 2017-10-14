@@ -54,7 +54,7 @@ namespace HEROsMod.HEROsModServices
 
 		public override void Unload()
 		{
-			global::HEROsMod.UIKit.UIComponents.ItemBrowser.Unload();
+			UIKit.UIComponents.ItemBrowser.Unload();
 		}
 	}
 }

@@ -64,7 +64,7 @@ namespace HEROsMod.HEROsModServices
 			_confirmationWindow.bConfirm.onLeftClick += bConfirm_onLeftClick;
 			_confirmationWindow.bCancel.onLeftClick += bCancel_onLeftClick;
 
-			HEROsModNetwork.GeneralMessages.RegionsUpdated += GeneralMessages_RegionsUpdated;
+            GeneralMessages.RegionsUpdated += GeneralMessages_RegionsUpdated;
 		}
 
 		private void bAddGroup_onLeftClick(object sender, EventArgs e)
@@ -100,8 +100,8 @@ namespace HEROsMod.HEROsModServices
 
 		public override void MyGroupUpdated()
 		{
-			canView = HEROsModNetwork.LoginService.MyGroup.HasPermission("ViewRegions");
-			canEdit = HEROsModNetwork.LoginService.MyGroup.HasPermission("EditRegions");
+			canView = LoginService.MyGroup.HasPermission("ViewRegions");
+			canEdit = LoginService.MyGroup.HasPermission("EditRegions");
             HasPermissionToUse = canView || canEdit;
 			// this._canAccessSettings = HEROsModNetwork.LoginService.MyGroup.IsAdmin;
 
@@ -564,7 +564,7 @@ namespace HEROsMod.HEROsModServices
 		{
 			for (int i = 0; i < HEROsModNetwork.Network.Regions.Count; i++)
 			{
-				HEROsModNetwork.GeneralMessages.RequestRemoveRegion(HEROsModNetwork.Network.Regions[i]);
+                GeneralMessages.RequestRemoveRegion(HEROsModNetwork.Network.Regions[i]);
 			}
 		}
 
@@ -669,7 +669,7 @@ namespace HEROsMod.HEROsModServices
 			{
 				textbox.Unfocus();
 				HEROsModNetwork.Region region = new HEROsModNetwork.Region(textbox.Text, SelectionTool.Position, SelectionTool.Size);
-				HEROsModNetwork.GeneralMessages.RequestCreateRegion(region);
+                GeneralMessages.RequestCreateRegion(region);
 				SelectionTool.Reset();
 			}
 			else

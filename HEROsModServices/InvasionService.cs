@@ -16,7 +16,7 @@ namespace HEROsMod.HEROsModServices
 
 		public InvasionService()
 		{
-            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/event")/*Main.itemTexture[14]*/)
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/event"))
             {
                 Tooltip = "Open Event Starter"
             };
@@ -37,7 +37,6 @@ namespace HEROsMod.HEROsModServices
 		public override void MyGroupUpdated()
 		{
             HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("StartEvents");
-			//base.MyGroupUpdated();
 		}
 
 		public static void StopAllEvents()
@@ -49,6 +48,7 @@ namespace HEROsMod.HEROsModServices
 				Main.eclipse = false;
 				Main.stopMoonEvent();
 				EnemyToggler.ClearNPCs();
+                Main.slimeRain = false;
 				Main.NewText("All events have been stopped");
 			}
 			else
@@ -77,6 +77,13 @@ namespace HEROsMod.HEROsModServices
 			Main.eclipse = true;
 		}
 
+        private static void StartSlimeRain() {
+            Main.slimeRain = true;
+            Main.slimeRainTime = 0;
+            Main.slimeRainKillCount = 0;
+        }
+
+
 		private static void StartInvasion(int type)
 		{
 			int numberOfPlayers = 0;
@@ -99,7 +106,7 @@ namespace HEROsMod.HEROsModServices
 				Main.invasionX = 0.0;
 				return;
 			}
-			Main.invasionX = (double)Main.maxTilesX;
+			Main.invasionX = Main.maxTilesX;
 			ModUtils.InvasionWarning();
 		}
 
@@ -175,6 +182,10 @@ namespace HEROsMod.HEROsModServices
 					case Events.FrostMoon:
 						StartFrostMoon();
 						break;
+
+                    case Events.SlimeRain:
+                        StartSlimeRain();
+                        break;
 				}
 			}
 			else
@@ -196,8 +207,12 @@ namespace HEROsMod.HEROsModServices
 				"Solar Eclipse",
 				"Blood Moon",
 				"Pumpkin Moon",
-				"Frost Moon"
+				"Frost Moon",
+                "Slime Rain"
 			};
+
+            CenterToParent();
+            Position = new Microsoft.Xna.Framework.Vector2(Width / 2, Height / 2);
 
             CanMove = true;
 			int buttonWidth = 175;
@@ -274,6 +289,7 @@ namespace HEROsMod.HEROsModServices
 		SolarEclipse,
 		BloodMoon,
 		PumpkinMoon,
-		FrostMoon
+		FrostMoon,
+        SlimeRain
 	}
 }

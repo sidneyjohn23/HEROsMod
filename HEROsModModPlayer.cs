@@ -6,59 +6,57 @@ using Terraria.ModLoader;
 namespace HEROsMod
 {
     public class HEROsModModPlayer : ModPlayer
-	{
-		public override bool Autoload(ref string name) => true;
+    {
+        public override bool Autoload(ref string name) => true;
 
-		public override void SetControls()
-		{
-			if (FlyCam.Enabled)
-			{
-				player.controlDown = false;
-				player.controlUp = false;
-				player.controlLeft = false;
-				player.controlRight = false;
+        public override void SetControls()
+        {
+            if (FlyCam.Enabled)
+            {
+                player.controlDown = false;
+                player.controlUp = false;
+                player.controlLeft = false;
+                player.controlRight = false;
 
-				player.controlMount = false;
-				player.controlHook = false;
-				player.controlThrow = false;
-				//	player.controlJump = false;
-				player.controlSmart = false;
-				player.controlTorch = false;
-			}
-		}
+                player.controlMount = false;
+                player.controlHook = false;
+                player.controlThrow = false;
+                //	player.controlJump = false;
+                player.controlSmart = false;
+                player.controlTorch = false;
+            }
+        }
 
-		public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
-		{
-			if (GodModeService.Enabled)
-			{
-				return false;
-			}
-			return true;
-		}
+        public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
+        {
+            if (GodModeService.Enabled)
+                return false;
+            return true;
+        }
 
-		public override void PreUpdate()
-		{
-			if (GodModeService.Enabled)
-			{
-				player.statLife = player.statLifeMax2;
-				player.statMana = player.statManaMax2;
-			}
-		}
+        public override void PreUpdate()
+        {
+            if (GodModeService.Enabled)
+            {
+                player.statLife = player.statLifeMax2;
+                player.statMana = player.statManaMax2;
+            }
+        }
 
-		// TODO - make tmodloader hook, this only gets called while there are players in the world.
-		private double time;
+        // TODO - make tmodloader hook, this only gets called while there are players in the world.
+        private double time;
 
-		public override void PostUpdate()
-		{
-			if (Main.dedServ)
-			{
-				if (time != Main.time)
-				{
-					time = Main.time;
-					HEROsModNetwork.Network.Update();
-				}
-			}
-		}
-	}
+        public override void PostUpdate()
+        {
+            if (Main.dedServ)
+            {
+                if (time != Main.time)
+                {
+                    time = Main.time;
+                    HEROsModNetwork.Network.Update();
+                }
+            }
+        }
+    }
 
 }

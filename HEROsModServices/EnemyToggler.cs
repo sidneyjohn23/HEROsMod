@@ -1,6 +1,7 @@
 ﻿using HEROsMod.UIKit;
 using System;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace HEROsMod.HEROsModServices
@@ -49,7 +50,7 @@ namespace HEROsMod.HEROsModServices
 		{
 			for (int i = 0; i < Main.npc.Length; i++)
 			{
-				if (Main.npc[i] != null && !Main.npc[i].townNPC)
+				if (Main.npc[i] != null && !Main.npc[i].townNPC && !(Main.npc[i].netID == NPCID.LunarTowerNebula || Main.npc[i].netID == NPCID.LunarTowerSolar || Main.npc[i].netID == NPCID.LunarTowerStardust || Main.npc[i].netID == NPCID.LunarTowerVortex))
 				{
 					Main.npc[i].life = 0;
 					if (Main.netMode == 2) NetMessage.SendData(23, -1, -1, null, i, 0f, 0f, 0f, 0);

@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using HEROsMod.HEROsModNetwork;
+using System.IO;
 
 namespace HEROsMod.HEROsModServices
 {
@@ -50,7 +52,7 @@ namespace HEROsMod.HEROsModServices
 
             Hotbar = timeWeatherHotbar;
 
-            HEROsModNetwork.GeneralMessages.TimePausedOrResumedByServer += GeneralMessages_TimePausedOrResumedByServer;
+            GeneralMessages.TimePausedOrResumedByServer += GeneralMessages_TimePausedOrResumedByServer;
         }
 
         private void GeneralMessages_TimePausedOrResumedByServer(bool timePaused)
@@ -92,7 +94,7 @@ namespace HEROsMod.HEROsModServices
 
         public override void Destroy()
         {
-            HEROsModNetwork.GeneralMessages.TimePausedOrResumedByServer -= GeneralMessages_TimePausedOrResumedByServer;
+            GeneralMessages.TimePausedOrResumedByServer -= GeneralMessages_TimePausedOrResumedByServer;
             TimePaused = false;
             HEROsMod.ServiceHotbar.RemoveChild(timeWeatherHotbar);
             base.Destroy();
@@ -315,7 +317,7 @@ namespace HEROsMod.HEROsModServices
         {
             if (Main.netMode == 1) // Client
             {
-                HEROsModNetwork.GeneralMessages.RequestForcedSundial();
+                GeneralMessages.RequestForcedSundial();
             }
             else // Single
             {
@@ -351,7 +353,7 @@ namespace HEROsMod.HEROsModServices
             }
             else
             {
-                HEROsModNetwork.GeneralMessages.ReqestTimeChange(HEROsModNetwork.GeneralMessages.TimeChangeType.Pause);
+                GeneralMessages.RequestTimeChange(GeneralMessages.TimeChangeType.Pause);
             }
         }
 
@@ -359,7 +361,7 @@ namespace HEROsMod.HEROsModServices
         {
             if (Main.netMode == 1)
             {
-                HEROsModNetwork.GeneralMessages.RequestStopRain();
+                GeneralMessages.RequestStopRain();
                 return;
             }
             Main.NewText("Rain has been turned off");
@@ -371,18 +373,43 @@ namespace HEROsMod.HEROsModServices
         {
             if (Main.netMode == 1)
             {
-                HEROsModNetwork.GeneralMessages.RequestStartRain();
+                GeneralMessages.RequestStartRain();
+
+                StreamWriter file = new StreamWriter("G:/terraria-chat2.txt", true);
+                var chatLines = Main.chatLine;
+                for (int i = 0; i < Main.numChatLines; i++)
+                {
+                    if (chatLines[i].text == "whatever")
+                    {
+                        string a = "";
+                        foreach (var j in chatLines[i].parsedText)
+                        {
+                            a += j.Text;
+                            a += ";";
+                        }
+                        file.WriteLine("Snippets:: " + a);
+                    }
+                    else
+                    {
+                        file.WriteLine(chatLines[i].text);
+                    }
+                }
+                file.Flush();
+                file.Close();
+
                 return;
             }
             Main.NewText("Rain has been turned on");
             ModUtils.StartRain();
+
+
         }
 
         private void bStopSandstorm_onLeftClick(object sender, EventArgs e)
         {
             if (Main.netMode == 1)
             {
-                HEROsModNetwork.GeneralMessages.RequestStopSandstorm();
+                GeneralMessages.RequestStopSandstorm();
                 return;
             }
             Main.NewText("Sandstorm has been turned off");
@@ -394,7 +421,7 @@ namespace HEROsMod.HEROsModServices
         {
             if (Main.netMode == 1)
             {
-                HEROsModNetwork.GeneralMessages.RequestStartSandstorm();
+                GeneralMessages.RequestStartSandstorm();
                 return;
             }
             Main.NewText("Sandstorm has been turned on");
@@ -423,7 +450,7 @@ namespace HEROsMod.HEROsModServices
             }
             else
             {
-                HEROsModNetwork.GeneralMessages.ReqestTimeChange(HEROsModNetwork.GeneralMessages.TimeChangeType.SetToNight);
+                GeneralMessages.RequestTimeChange(GeneralMessages.TimeChangeType.SetToNight);
             }
         }
 
@@ -436,7 +463,7 @@ namespace HEROsMod.HEROsModServices
             }
             else
             {
-                HEROsModNetwork.GeneralMessages.ReqestTimeChange(HEROsModNetwork.GeneralMessages.TimeChangeType.SetToNoon);
+                GeneralMessages.RequestTimeChange(GeneralMessages.TimeChangeType.SetToNoon);
             }
         }
 
@@ -558,7 +585,7 @@ namespace HEROsMod.HEROsModServices
             {
                 double gametime = 0; bool daytime = true;
                 ParseTime(timeBox.Text, ref gametime, ref daytime);
-                HEROsModNetwork.GeneralMessages.ReqestTimeChange(HEROsModNetwork.GeneralMessages.TimeChangeType.SpecificTime, gametime, daytime);
+                GeneralMessages.RequestTimeChange(GeneralMessages.TimeChangeType.SpecificTime, gametime, daytime);
                 timeBox.Text = "";
                 Visible = false;
             }

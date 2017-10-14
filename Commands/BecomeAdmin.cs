@@ -28,10 +28,10 @@ namespace HEROsMod.Commands
 			if (args[0] == Network.AuthCode.ToString())
 			{
 				
-				if (Network.Players[caller.Player.whoAmI].Username.Length > 0)
+				if (Network.Players2[caller.Player.whoAmI].Username.Length > 0)
 				{
-					Network.Players[caller.Player.whoAmI].Group = Network.AdminGroup;
-					DatabaseController.SetPlayerGroup(Network.Players[caller.Player.whoAmI].ID, Network.Players[caller.Player.whoAmI].Group.ID);
+					Network.Players2[caller.Player.whoAmI].Group = Network.AdminGroup;
+					DatabaseController.SetPlayerGroup(Network.Players2[caller.Player.whoAmI].ID, Network.Players2[caller.Player.whoAmI].Group.ID);
 					LoginService.SendPlayerPermissions(caller.Player.whoAmI);
 					Network.SendTextToPlayer("You are now Admin", caller.Player.whoAmI);
 					return;

@@ -34,7 +34,7 @@ namespace HEROsMod.HEROsModServices
             _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
             HotbarIcon.Tooltip = "Disable Gravestones";
             _hotbarIcon.Opacity = 1f;
-			HEROsModNetwork.GeneralMessages.GravestonesToggleByServer += GeneralMessages_GravestonesToggleByServer;
+            GeneralMessages.GravestonesToggleByServer += GeneralMessages_GravestonesToggleByServer;
 		}
 
 		private void GeneralMessages_GravestonesToggleByServer(bool gravestonesCanSpawn)
@@ -56,7 +56,7 @@ namespace HEROsMod.HEROsModServices
 		{
 			if (ModUtils.NetworkMode != NetworkMode.None)
 			{
-				HEROsModNetwork.GeneralMessages.RequestToggleGravestones();
+                GeneralMessages.RequestToggleGravestones();
 			}
 			else
 			{
@@ -67,7 +67,7 @@ namespace HEROsMod.HEROsModServices
 
 		public override void MyGroupUpdated()
 		{
-            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ToggleGravestones");
+            HasPermissionToUse = LoginService.MyGroup.HasPermission("ToggleGravestones");
 			//base.MyGroupUpdated();
 		}
 	}

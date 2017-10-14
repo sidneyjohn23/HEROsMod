@@ -38,7 +38,6 @@ namespace HEROsMod.HEROsModServices
 			{
 				foreach (HEROsModService service in _services)
 				{
-					//ErrorLogger.Log("MyGroupChanged for " + service.Name);
 					service.MyGroupUpdated();
 				}
 				ServiceRemoved(null);
