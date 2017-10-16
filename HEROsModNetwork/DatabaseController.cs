@@ -84,8 +84,6 @@ namespace HEROsMod.HEROsModNetwork
 
     internal class DatabaseController
     {
-        //private static SqliteConnection connection;
-        //static int latestDatabaseVersion = 0;
         private static string jsonDatabaseFilename = "HEROsModDatabase";
 
         private static HEROsModDatabase database;
@@ -174,7 +172,6 @@ namespace HEROsMod.HEROsModNetwork
                     Main.SavePath,
                     Path.DirectorySeparatorChar,
                     settingName,
-					//".xml"
 					".json"
                 });
             string json = JsonConvert.SerializeObject(database, Formatting.Indented);
@@ -240,7 +237,6 @@ namespace HEROsMod.HEROsModNetwork
                 worlds = new List<DatabaseWorld>()
             };
             currentDatabaseWorld = null;
-            //database.regions = new List<DatabaseRegion>();
         }
 
         public static bool Login(ref string username, string password, ref int playerID, ref int groupID)
@@ -254,7 +250,14 @@ namespace HEROsMod.HEROsModNetwork
                     playerID = user.ID;
                     groupID = user.group;
                     return true;
+                } else if (user.username.ToLower() == username.ToLower() && user.password == password) {
+                    user.password = BitConverter.ToString(md5hash.ComputeHash(password.ToByteArray()));
+                    username = user.username;
+                    playerID = user.ID;
+                    groupID = user.group;
+                    return true;
                 }
+                
             }
             return false;
         }

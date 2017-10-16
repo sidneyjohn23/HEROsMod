@@ -37,6 +37,7 @@ namespace HEROsMod.HEROsModNetwork
             new PermissionInfo("CheckTiles", "Check Tiles"),
             new PermissionInfo("ViewRegions", "View Regions"),
             new PermissionInfo("EditRegions", "Edit Regions"),
+            new PermissionInfo("PurifyWorld", "Purify the World")
         };
 
         private bool _isAdmin = false;

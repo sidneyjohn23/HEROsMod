@@ -544,6 +544,21 @@ namespace HEROsMod.HEROsModNetwork {
             }
         }
 
+        public static void ResendPlayerAllTileData(HEROsModPlayer player) {
+            SendTextToPlayer("Getting the complete tile data, please wait...", player.Index, Color.Red);
+            NetMessage.SendData(9, player.Index, -1, Language.GetText("LegacyInterface.44").ToNetworkText(), 0, 0f, 0f, 0f, 0);
+            Netplay.Clients[player.Index].StatusText2 = "is receiving tile data";
+            for (int k = 0; k < Main.maxSectionsX; k++) {
+                for (int l = 0; l < Main.maxSectionsY; l++) {
+                    if (k >= 0 && k < Main.maxSectionsX && l >= 0 && l < Main.maxSectionsY) {
+                        NetMessage.SendSection(player.Index, k, l, false);
+                        NetMessage.SendData(11, player.Index, -1, null, k, l, k, l, 0);
+                    }
+                }
+            }
+            SendTextToPlayer("Receiving tile data successful!", player.Index, Color.Red);
+        }
+
         public enum MessageType {
             GeneralMessage,
             LoginMessage

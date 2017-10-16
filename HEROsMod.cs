@@ -246,6 +246,7 @@ namespace HEROsMod
             ServiceController.AddService(new ItemBanner(instance.miscOptions.Hotbar));
             ServiceController.AddService(new ToggleGravestones(instance.miscOptions.Hotbar));
             ServiceController.AddService(new GroupInspector(instance.miscOptions.Hotbar));
+            ServiceController.AddService(new WorldPurifier(instance.miscOptions.Hotbar));
 
             instance.extensionMenuService = new ExtensionMenuService();
             ServiceController.AddService(instance.extensionMenuService);
@@ -364,7 +365,7 @@ namespace HEROsMod
                     Network.Groups.Clear();
                     Network.Regions.Clear();
 
-                    StreamWriter file = new StreamWriter("G:/terraria-chat2.txt", true);
+                    /*StreamWriter file = new StreamWriter("G:/terraria-chat2.txt", true);
                     var chatLines = Main.chatLine;
                     for (int i = 0; i < Main.numChatLines; i++)
                     {
@@ -384,7 +385,7 @@ namespace HEROsMod
                         }
                     }
                     file.Flush();
-                    file.Close();
+                    file.Close();*/
                     break;
                 case NetworkMode.Server:
                     break;

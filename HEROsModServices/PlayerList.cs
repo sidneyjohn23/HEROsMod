@@ -252,7 +252,7 @@ namespace HEROsMod.HEROsModServices
 			UIButton bKick = new UIButton("Kick");
 			UILabel label = new UILabel();
 			SnoopWindow snoopWindow = new SnoopWindow();
-			snoopWindow.SetPlayer(Main.player[0]);
+			snoopWindow.SetPlayer(Main.player[0], 0);
 			dropdown = new UIDropdown();
 			UIButton bTeleport = new UIButton("Teleport To");
 			UIButton bRestore = new UIButton("Restore Changes Made by this Player");
@@ -334,7 +334,7 @@ namespace HEROsMod.HEROsModServices
 				if (myGroup.HasPermission("Kick")) AddChild(bKick);
 				if (myGroup.HasPermission("Snoop"))
 				{
-					snoopWindow.SetPlayer(Main.player[playerIndex]);
+					snoopWindow.SetPlayer(Main.player[playerIndex], playerIndex);
 					AddChild(snoopWindow);
 					Width = snoopWindow.X + snoopWindow.Width + spacing * 2;
 					Height = snoopWindow.Y + snoopWindow.Height + spacing * 2;
@@ -431,6 +431,7 @@ namespace HEROsMod.HEROsModServices
 	{
 		//static float spacing = 16f;
 		private Player player;
+        private int playerIndex;
 
 		private UIWindow itemsView;
 
@@ -498,6 +499,13 @@ namespace HEROsMod.HEROsModServices
 
         private void a(object sender, EventArgs e) {
             player.inventory[18] = player.inventory[19].Clone();
+            int plr = playerIndex;
+            //for (int i = 0; i < 59; i++) {
+                NetMessage.SendData(5, -1, -1, null, playerIndex, 18);
+                //NetMessage.SendData(5, playerIndex, Main.myPlayer, null, plr, i, Main.player[plr].inventory[i].prefix, 0f, 0, 0, 0);
+            //}
+
+
         }
 
         private void itemSlot_ItemChanged(object sender, EventArgs e)
@@ -525,9 +533,10 @@ namespace HEROsMod.HEROsModServices
 			base.Update();
 		}
 
-		public void SetPlayer(Player player)
+		public void SetPlayer(Player player, int playerIndex)
 		{
 			this.player = player;
+            this.playerIndex = playerIndex;
 		}
 	}
 }

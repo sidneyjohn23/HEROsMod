@@ -7,16 +7,13 @@ using Terraria;
 using HEROsMod.HEROsModNetwork;
 using System.IO;
 
-namespace HEROsMod.HEROsModServices
-{
-    internal class TimeWeatherChanger : HEROsModService
-    {
+namespace HEROsMod.HEROsModServices {
+    internal class TimeWeatherChanger : HEROsModService {
         public static bool TimePaused { get; set; }
         private static double _pausedTime = 0;
         public TimeSetWindow timeSetWindow;
 
-        public static double PausedTime
-        {
+        public static double PausedTime {
             get { return _pausedTime; }
             set { _pausedTime = value; }
         }
@@ -24,8 +21,7 @@ namespace HEROsMod.HEROsModServices
         //	public static bool PausedTimeDayTime = false;
         private TimeWeatherControlHotbar timeWeatherHotbar;
 
-        public TimeWeatherChanger()
-        {
+        public TimeWeatherChanger() {
             IsHotbar = true;
 
             TimePaused = false;
@@ -41,8 +37,7 @@ namespace HEROsMod.HEROsModServices
             //timeWeatherHotbar = new TimeWeatherControlHotbar();
             //HEROsMod.ServiceHotbar.AddChild(timeWeatherHotbar);
 
-            timeWeatherHotbar = new TimeWeatherControlHotbar()
-            {
+            timeWeatherHotbar = new TimeWeatherControlHotbar() {
                 HotBarParent = HEROsMod.ServiceHotbar,
                 timeSetWindow = timeSetWindow
 
@@ -55,21 +50,16 @@ namespace HEROsMod.HEROsModServices
             GeneralMessages.TimePausedOrResumedByServer += GeneralMessages_TimePausedOrResumedByServer;
         }
 
-        private void GeneralMessages_TimePausedOrResumedByServer(bool timePaused)
-        {
+        private void GeneralMessages_TimePausedOrResumedByServer(bool timePaused) {
             TimePaused = timePaused;
             timeWeatherHotbar.TimePausedOfResumed();
         }
 
-        private void HotbarIcon_onLeftClick(object sender, EventArgs e)
-        {
-            if (timeWeatherHotbar.selected)
-            {
+        private void HotbarIcon_onLeftClick(object sender, EventArgs e) {
+            if (timeWeatherHotbar.selected) {
                 timeWeatherHotbar.selected = false;
                 timeWeatherHotbar.Hide();
-            }
-            else
-            {
+            } else {
                 timeWeatherHotbar.selected = true;
                 timeWeatherHotbar.Show();
             }
@@ -82,39 +72,31 @@ namespace HEROsMod.HEROsModServices
             //}
         }
 
-        public override void MyGroupUpdated()
-        {
-            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ChangeTimeWeather");
-            if (!HasPermissionToUse)
-            {
+        public override void MyGroupUpdated() {
+            HasPermissionToUse = LoginService.MyGroup.HasPermission("ChangeTimeWeather");
+            if (!HasPermissionToUse) {
                 timeWeatherHotbar.Hide();
             }
             //base.MyGroupUpdated();
         }
 
-        public override void Destroy()
-        {
+        public override void Destroy() {
             GeneralMessages.TimePausedOrResumedByServer -= GeneralMessages_TimePausedOrResumedByServer;
             TimePaused = false;
             HEROsMod.ServiceHotbar.RemoveChild(timeWeatherHotbar);
             base.Destroy();
         }
 
-        public static void ToggleTimePause()
-        {
+        public static void ToggleTimePause() {
             TimePaused = !TimePaused;
-            if (TimePaused)
-            {
+            if (TimePaused) {
                 PausedTime = Main.time;
             }
         }
 
-        public override void Update()
-        {
-            if (ModUtils.NetworkMode == NetworkMode.None)
-            {
-                if (TimePaused)
-                {
+        public override void Update() {
+            if (ModUtils.NetworkMode == NetworkMode.None) {
+                if (TimePaused) {
                     Main.time = PausedTime;
                 }
             }
@@ -122,8 +104,7 @@ namespace HEROsMod.HEROsModServices
         }
     }
 
-    internal class TimeWeatherControlHotbar : UIHotbar
-    {
+    internal class TimeWeatherControlHotbar : UIHotbar {
         //	static float spacing = 8f;
 
         public UIImage bPause;
@@ -139,26 +120,21 @@ namespace HEROsMod.HEROsModServices
         //		return _rainTexture;
         //	}
         //}
-        public static Texture2D playTexture
-        {
-            get
-            {
+        public static Texture2D playTexture {
+            get {
                 if (_playTexture == null) _playTexture = HEROsMod.instance.GetTexture("Images/speed1");
                 return _playTexture;
             }
         }
 
-        public static Texture2D pauseTexture
-        {
-            get
-            {
+        public static Texture2D pauseTexture {
+            get {
                 if (_pauseTexture == null) _pauseTexture = HEROsMod.instance.GetTexture("Images/speed0");
                 return _pauseTexture;
             }
         }
 
-        public TimeWeatherControlHotbar()
-        {
+        public TimeWeatherControlHotbar() {
             buttonView = new UIView();
             Height = 54;
             UpdateWhenOutOfBounds = true;
@@ -202,16 +178,14 @@ namespace HEROsMod.HEROsModServices
             //Width = xPos;
         }
 
-        public override void test()
-        {
+        public override void test() {
             //	ModUtils.DebugText("TEST " + buttonView.ChildCount);
 
             Height = 54;
             UpdateWhenOutOfBounds = true;
 
             UIImage bStopRain = new UIImage(HEROsMod.instance.GetTexture("Images/rainStop"));
-            UIImage bStartRain = new UIImage(HEROsMod.instance.GetTexture("Images/rainIcon"))
-            {
+            UIImage bStartRain = new UIImage(HEROsMod.instance.GetTexture("Images/rainIcon")) {
                 Tooltip = "Start Rain"
             };
             bStopRain.Tooltip = "Stop Rain";
@@ -220,24 +194,22 @@ namespace HEROsMod.HEROsModServices
             buttonView.AddChild(bStopRain);
             buttonView.AddChild(bStartRain);
 
-            UIImage bStopSandstorm = new UIImage(HEROsMod.instance.GetTexture("Images/rainStop"));
-            UIImage bStartSandstorm = new UIImage(HEROsMod.instance.GetTexture("Images/rainIcon"))
-            {
+            UIImage bStopSandstorm = new UIImage(HEROsMod.instance.GetTexture("Images/rainStop")) {
+                Tooltip = "Stop Sandstorm"
+            };
+            UIImage bStartSandstorm = new UIImage(HEROsMod.instance.GetTexture("Images/rainIcon")) {
                 Tooltip = "Start Sandstorm"
             };
-            bStopSandstorm.Tooltip = "Stop Sandstorm";
             bStartSandstorm.onLeftClick += bStartSandstorm_onLeftClick;
             bStopSandstorm.onLeftClick += bStopSandstorm_onLeftClick;
             buttonView.AddChild(bStopSandstorm);
             buttonView.AddChild(bStartSandstorm);
 
-            UIImage nightButton = new UIImage(HEROsMod.instance.GetTexture("Images/moonIcon"))
-            {
+            UIImage nightButton = new UIImage(HEROsMod.instance.GetTexture("Images/moonIcon")) {
                 Tooltip = "Night"
             };
             nightButton.onLeftClick += nightButton_onLeftClick;
-            UIImage noonButton = new UIImage(HEROsMod.instance.GetTexture("Images/sunIcon"))
-            {
+            UIImage noonButton = new UIImage(HEROsMod.instance.GetTexture("Images/sunIcon")) {
                 Tooltip = "Noon"
             };
             noonButton.onLeftClick += noonButton_onLeftClick;
@@ -249,15 +221,13 @@ namespace HEROsMod.HEROsModServices
             buttonView.AddChild(noonButton);
             buttonView.AddChild(bPause);
 
-            UIImage sundialButton = new UIImage(HEROsMod.instance.GetTexture("Images/timeRain"))
-            {
+            UIImage sundialButton = new UIImage(HEROsMod.instance.GetTexture("Images/timeRain")) {
                 Tooltip = "Force Enchanted Sundial"
             };
             sundialButton.onLeftClick += sundialButton_onLeftClick;
             buttonView.AddChild(sundialButton);
 
-            UIImage changeTimeButton = new UIImage(HEROsMod.instance.GetTexture("Images/clockIcon"))
-            {
+            UIImage changeTimeButton = new UIImage(HEROsMod.instance.GetTexture("Images/clockIcon")) {
                 Tooltip = "Change Time...",
             };
             changeTimeButton.onLeftClick += ChangeTimeButton_onLeftClick;
@@ -277,8 +247,7 @@ namespace HEROsMod.HEROsModServices
 
             base.CenterXAxisToParentCenter();
             float num = spacing;
-            for (int i = 0; i < buttonView.children.Count; i++)
-            {
+            for (int i = 0; i < buttonView.children.Count; i++) {
                 buttonView.children[i].Anchor = AnchorPosition.Left;
                 buttonView.children[i].Position = new Vector2(num, 0f);
                 buttonView.children[i].CenterYAxisToParentCenter();
@@ -291,8 +260,7 @@ namespace HEROsMod.HEROsModServices
             buttonView.Width = base.Width;
         }
 
-        public override void Update()
-        {
+        public override void Update() {
             DoSlideMovement();
             //base.CenterXAxisToParentCenter();
             base.Update();
@@ -313,14 +281,12 @@ namespace HEROsMod.HEROsModServices
         //	this.buttonView.Width = base.Width;
         //}
 
-        private void sundialButton_onLeftClick(object sender, EventArgs e)
-        {
+        private void sundialButton_onLeftClick(object sender, EventArgs e) {
             if (Main.netMode == 1) // Client
             {
                 GeneralMessages.RequestForcedSundial();
-            }
-            else // Single
-            {
+            } else // Single
+              {
                 Main.fastForwardTime = true;
                 Main.sundialCooldown = 0;
                 //NetMessage.SendData(7, -1, -1, "", 0, 0f, 0f, 0f, 0, 0, 0);
@@ -342,25 +308,19 @@ namespace HEROsMod.HEROsModServices
             //}
         }
 
-        private void bPause_onLeftClick(object sender, EventArgs e)
-        {
-            if (Main.netMode != 1)
-            {
+        private void bPause_onLeftClick(object sender, EventArgs e) {
+            if (Main.netMode != 1) {
                 TimeWeatherChanger.ToggleTimePause();
-                UIImage b = (UIImage)sender;
+                UIImage b = (UIImage) sender;
                 TimePausedOfResumed();
                 Main.NewText("Time has " + (TimeWeatherChanger.TimePaused ? "been paused" : "resumed"));
-            }
-            else
-            {
+            } else {
                 GeneralMessages.RequestTimeChange(GeneralMessages.TimeChangeType.Pause);
             }
         }
 
-        private void bStopRain_onLeftClick(object sender, EventArgs e)
-        {
-            if (Main.netMode == 1)
-            {
+        private void bStopRain_onLeftClick(object sender, EventArgs e) {
+            if (Main.netMode == 1) {
                 GeneralMessages.RequestStopRain();
                 return;
             }
@@ -369,28 +329,21 @@ namespace HEROsMod.HEROsModServices
             ModUtils.StopRain();
         }
 
-        private void bStartRain_onLeftClick(object sender, EventArgs e)
-        {
-            if (Main.netMode == 1)
-            {
+        private void bStartRain_onLeftClick(object sender, EventArgs e) {
+            if (Main.netMode == 1) {
                 GeneralMessages.RequestStartRain();
 
                 StreamWriter file = new StreamWriter("G:/terraria-chat2.txt", true);
                 var chatLines = Main.chatLine;
-                for (int i = 0; i < Main.numChatLines; i++)
-                {
-                    if (chatLines[i].text == "whatever")
-                    {
+                for (int i = 0; i < Main.numChatLines; i++) {
+                    if (chatLines[i].text == "whatever") {
                         string a = "";
-                        foreach (var j in chatLines[i].parsedText)
-                        {
+                        foreach (var j in chatLines[i].parsedText) {
                             a += j.Text;
                             a += ";";
                         }
                         file.WriteLine("Snippets:: " + a);
-                    }
-                    else
-                    {
+                    } else {
                         file.WriteLine(chatLines[i].text);
                     }
                 }
@@ -405,10 +358,8 @@ namespace HEROsMod.HEROsModServices
 
         }
 
-        private void bStopSandstorm_onLeftClick(object sender, EventArgs e)
-        {
-            if (Main.netMode == 1)
-            {
+        private void bStopSandstorm_onLeftClick(object sender, EventArgs e) {
+            if (Main.netMode == 1) {
                 GeneralMessages.RequestStopSandstorm();
                 return;
             }
@@ -417,10 +368,8 @@ namespace HEROsMod.HEROsModServices
             ModUtils.StopSandstorm();
         }
 
-        private void bStartSandstorm_onLeftClick(object sender, EventArgs e)
-        {
-            if (Main.netMode == 1)
-            {
+        private void bStartSandstorm_onLeftClick(object sender, EventArgs e) {
+            if (Main.netMode == 1) {
                 GeneralMessages.RequestStartSandstorm();
                 return;
             }
@@ -428,68 +377,50 @@ namespace HEROsMod.HEROsModServices
             ModUtils.StartSandstorm();
         }
 
-        public void TimePausedOfResumed()
-        {
-            if (TimeWeatherChanger.TimePaused)
-            {
+        public void TimePausedOfResumed() {
+            if (TimeWeatherChanger.TimePaused) {
                 bPause.Texture = playTexture;
-            }
-            else
-            {
+            } else {
                 bPause.Texture = pauseTexture;
             }
             bPause.Tooltip = TimeWeatherChanger.TimePaused ? "Resume Time" : "Pause Time";
         }
 
-        private void nightButton_onLeftClick(object sender, EventArgs e)
-        {
-            if (Main.netMode != 1)
-            {
+        private void nightButton_onLeftClick(object sender, EventArgs e) {
+            if (Main.netMode != 1) {
                 Main.dayTime = false;
                 Main.time = 0;// 19:30
-            }
-            else
-            {
+            } else {
                 GeneralMessages.RequestTimeChange(GeneralMessages.TimeChangeType.SetToNight);
             }
         }
 
-        private void noonButton_onLeftClick(object sender, EventArgs e)
-        {
-            if (Main.netMode != 1)
-            {
+        private void noonButton_onLeftClick(object sender, EventArgs e) {
+            if (Main.netMode != 1) {
                 Main.dayTime = true;
                 Main.time = 27000.0;
-            }
-            else
-            {
+            } else {
                 GeneralMessages.RequestTimeChange(GeneralMessages.TimeChangeType.SetToNoon);
             }
         }
 
-        private void TimeControlWindow_onLeftClick(object sender, EventArgs e)
-        {
-            UIImage b = (UIImage)sender;
-            int rate = (int)b.Tag;
-            if (rate > 0)
-            {
+        private void TimeControlWindow_onLeftClick(object sender, EventArgs e) {
+            UIImage b = (UIImage) sender;
+            int rate = (int) b.Tag;
+            if (rate > 0) {
                 //pauseTime = false;
-                Main.dayRate = (int)b.Tag;
-            }
-            else
-            {
+                Main.dayRate = (int) b.Tag;
+            } else {
                 //pauseTime = true;
                 //previousTime = Main.time;
             }
         }
 
-        private void ChangeTimeButton_onLeftClick(object sender, EventArgs e)
-        {
+        private void ChangeTimeButton_onLeftClick(object sender, EventArgs e) {
             timeSetWindow.Visible = !timeSetWindow.Visible;
         }
 
-        internal static void Unload()
-        {
+        internal static void Unload() {
             _playTexture = null;
             _pauseTexture = null;
         }
@@ -518,15 +449,13 @@ namespace HEROsMod.HEROsModServices
         //}
     }
 
-    internal class TimeSetWindow : UIWindow
-    {
+    internal class TimeSetWindow : UIWindow {
         private static float spacing = 8;
         private UITextbox timeBox;
         private UIButton SetButton;
         private UIButton CancelButton;
 
-        public TimeSetWindow()
-        {
+        public TimeSetWindow() {
             X = 200;
             Y = 250;
             CanMove = true;
@@ -538,21 +467,18 @@ namespace HEROsMod.HEROsModServices
             CancelButton = new UIButton("Cancel");
             CancelButton.onLeftClick += CancelButton_onLeftClick;
             CancelButton.Position = new Vector2(spacing * 2 + SetButton.Width, this.Height - 40);
-            UILabel SetTimeLabel = new UILabel("Set Time")
-            {
+            UILabel SetTimeLabel = new UILabel("Set Time") {
                 X = spacing,
                 Y = spacing,
                 OverridesMouse = false,
                 Scale = .6f
             };
 
-            timeBox = new UITextbox()
-            {
+            timeBox = new UITextbox() {
                 Width = 55,
                 Position = new Vector2(spacing, SetTimeLabel.Height + spacing)
             };
-            UILabel HoursLabel = new UILabel("(24 hours 0:00-23:59)")
-            {
+            UILabel HoursLabel = new UILabel("(24 hours 0:00-23:59)") {
                 Position = new Vector2(timeBox.Width + 2 * spacing, SetTimeLabel.Height + 12),
                 Scale = .3f
             };
@@ -568,21 +494,16 @@ namespace HEROsMod.HEROsModServices
 
         }
 
-        private void CancelButton_onLeftClick(object sender, EventArgs e)
-        {
+        private void CancelButton_onLeftClick(object sender, EventArgs e) {
             Visible = false;
         }
 
-        private void SetButton_onLeftClick(object sender, EventArgs e)
-        {
-            if (Main.netMode != 1)
-            {
+        private void SetButton_onLeftClick(object sender, EventArgs e) {
+            if (Main.netMode != 1) {
                 ParseTime(timeBox.Text, ref Main.time, ref Main.dayTime);
                 timeBox.Text = "";
                 Visible = false;
-            }
-            else
-            {
+            } else {
                 double gametime = 0; bool daytime = true;
                 ParseTime(timeBox.Text, ref gametime, ref daytime);
                 GeneralMessages.RequestTimeChange(GeneralMessages.TimeChangeType.SpecificTime, gametime, daytime);
@@ -591,53 +512,35 @@ namespace HEROsMod.HEROsModServices
             }
         }
 
-        private void ParseTime(string time, ref double timeI, ref bool dayTime)
-        {
+        private void ParseTime(string time, ref double timeI, ref bool dayTime) {
             double gametime = 0;
             bool daytime = true;
-            if (System.Text.RegularExpressions.Regex.IsMatch(time, "^[0-9]{1,2}:[0-9]{1,2}$"))
-            {
+            if (System.Text.RegularExpressions.Regex.IsMatch(time, "^[0-9]{1,2}:[0-9]{1,2}$")) {
                 int hour = int.Parse(time.Split(':')[0]);
                 int minute = int.Parse(time.Split(':')[1]);
-                if (hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59)
-                {
-                    if (hour >= 0 && hour <= 4)
-                    {
-                        if (hour == 4 && minute < 30)
-                        {
+                if (hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59) {
+                    if (hour >= 0 && hour <= 4) {
+                        if (hour == 4 && minute < 30) {
                             gametime = 16200 + hour * 3600 + minute * 60;
                             daytime = false;
-                        }
-                        else if (hour == 4 && minute >= 30)
-                        {
+                        } else if (hour == 4 && minute >= 30) {
                             gametime = hour * 3600 + minute * 60 - 16200;
                             daytime = true;
-                        }
-                        else
-                        {
+                        } else {
                             gametime = 16200 + hour * 3600 + minute * 60;
                             daytime = false;
                         }
-                    }
-                    else if (hour > 4 && hour < 19)
-                    {
+                    } else if (hour > 4 && hour < 19) {
                         gametime = hour * 3600 + minute * 60 - 16200;
                         daytime = true;
-                    }
-                    else if (hour >= 19)
-                    {
-                        if (hour == 19 && minute < 30)
-                        {
+                    } else if (hour >= 19) {
+                        if (hour == 19 && minute < 30) {
                             gametime = hour * 3600 + minute * 60 - 16200;
                             daytime = true;
-                        }
-                        else if (hour == 19 && minute >= 30)
-                        {
+                        } else if (hour == 19 && minute >= 30) {
                             gametime = hour * 3600 + minute * 60 - 70200;
                             daytime = false;
-                        }
-                        else
-                        {
+                        } else {
                             gametime = hour * 3600 + minute * 60 - 70200;
                             daytime = false;
                         }
@@ -647,9 +550,7 @@ namespace HEROsMod.HEROsModServices
                 timeI = gametime;
                 dayTime = daytime;
                 Main.NewText("Time successfully changed to " + time);
-            }
-            else
-            {
+            } else {
                 Main.NewText("Wrong time format!", Color.Red);
             }
         }

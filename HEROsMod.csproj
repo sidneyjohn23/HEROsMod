@@ -94,6 +94,9 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Terraria">
+      <HintPath>G:\Program Files (x86)\Steam\steamapps\common\Terraria\Terraria.exe</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\AdminInstructionsCommand.cs" />
@@ -114,6 +117,8 @@
     <Compile Include="HEROsModServices\ExtensionMenuService.cs" />
     <Compile Include="HEROsModServices\FlyCam.cs" />
     <Compile Include="HEROsModServices\GenericExtensionService.cs" />
+    <Compile Include="HEROsModServices\HardmodeEnemyToggler.cs" />
+    <Compile Include="HEROsModServices\HellevatorBuilder.cs" />
     <Compile Include="HEROsModServices\HEROsModService.cs" />
     <Compile Include="HEROsModServices\GodModeService.cs" />
     <Compile Include="HEROsModServices\GroupInspector.cs" />
@@ -131,6 +136,7 @@
     <Compile Include="HEROsModServices\PlayerList.cs" />
     <Compile Include="HEROsModServices\PrefixEditor.cs" />
     <Compile Include="HEROsModServices\PrefixScraper.cs" />
+    <Compile Include="HEROsModServices\PurifyWorld.cs" />
     <Compile Include="HEROsModServices\RegionService.cs" />
     <Compile Include="HEROsModServices\SelectionTool.cs" />
     <Compile Include="HEROsModServices\ServiceController.cs" />
@@ -180,12 +186,6 @@
   <ItemGroup>
     <Content Include="build.txt" />
     <Content Include="description.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="C:\Users\sidne\Source\Repos\tModLoader\src\tModLoader\Terraria.csproj">
-      <Project>{3996d5fa-6e59-4fe4-9f2b-40eeef9645d5}</Project>
-      <Name>Terraria</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -29,15 +29,15 @@ namespace HEROsMod.HEROsModServices
 		{
 			if (ListeningForInput && !Main.gameMenu)
 			{
-				if (ModUtils.MouseState.LeftButton == ButtonState.Pressed && ModUtils.PreviousMouseState.LeftButton == ButtonState.Released && !UIKit.UIView.GameMouseOverwritten)
+				if (ModUtils.MouseState.LeftButton == ButtonState.Pressed && ModUtils.PreviousMouseState.LeftButton == ButtonState.Released && !UIView.GameMouseOverwritten)
 				{
 					HEROsModNetwork.GeneralMessages.RequestTileModificationCheck(ModUtils.CursorTileCoords);
 				}
-				if (ModUtils.MouseState.RightButton == ButtonState.Pressed && ModUtils.PreviousMouseState.RightButton == ButtonState.Released && !UIKit.UIView.GameMouseOverwritten)
+				if (ModUtils.MouseState.RightButton == ButtonState.Pressed && ModUtils.PreviousMouseState.RightButton == ButtonState.Released && !UIView.GameMouseOverwritten)
 				{
 					ListeningForInput = false;
 				}
-				UIKit.UIView.OverWriteGameMouseInput();
+				UIView.OverWriteGameMouseInput();
 			}
 			base.Update();
 		}

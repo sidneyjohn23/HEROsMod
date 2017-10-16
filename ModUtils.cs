@@ -404,7 +404,7 @@ namespace HEROsMod
             return Color.White;
         }
 
-        private static bool debug = true;
+        private static bool debug = false;
 
         public static void DebugText(string message)
         {
@@ -452,6 +452,16 @@ namespace HEROsMod
             result.Height = Utils.Clamp<int>(result.Height, 0, height - result.Y);
             return result;
         }
+
+        public static bool NumberIsOneOfThese(long number, long[] numbers2) {
+            foreach (long number2 in numbers2) {
+                if (number == number2) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
     }
 
     public enum NetworkMode : byte
