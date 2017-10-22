@@ -60,8 +60,9 @@ namespace HEROsMod.HEROsModServices {
         UIButton bDebuffs;
         List<int> buffs = new List<int>();
         List<int> category = new List<int>();
-        UIScrollView buffView;
+        UIScrollView buffView = new UIScrollView();
         float yPos = Spacing;
+
         public BuffWindow() {
             CanMove = true;
 
@@ -75,15 +76,13 @@ namespace HEROsMod.HEROsModServices {
             UILabel lSeconds = new UILabel("Seconds");
 
             tbSeconds = new UITextbox() {
-
                 Text = "60",
                 Numeric = true,
                 MaxCharacters = 5,
                 Width = 75,
                 Y = lTitle.Y + lTitle.Height
             };
-
-            UIScrollView buffView = new UIScrollView() {
+            buffView = new UIScrollView() {
                 X = lTitle.X,
                 Y = tbSeconds.Y + tbSeconds.Height + Spacing,
                 Width = 300,
@@ -99,14 +98,14 @@ namespace HEROsMod.HEROsModServices {
 
             bBuffs = new UIButton("Buffs") {
                 X = lTitle.X + buffView.Width + Spacing,
-                Y = tbSeconds.Y + tbSeconds.Height + Spacing,
+                Y = bAll.Y + bAll.Height + Spacing,
                 Width = 300
             };
             bBuffs.onLeftClick += BBuffs_onLeftClick;
 
             bDebuffs = new UIButton("Debuffs") {
                 X = lTitle.X + buffView.Width + Spacing,
-                Y = tbSeconds.Y + tbSeconds.Height + Spacing,
+                Y = bBuffs.Y + bBuffs.Height + Spacing,
                 Width = 300
             };
             bDebuffs.onLeftClick += BDebuffs_onLeftClick;
@@ -115,10 +114,11 @@ namespace HEROsMod.HEROsModServices {
                 Y = Spacing
             };
             bClose.onLeftClick += bClose_onLeftClick;
-            
-            buffView.ContentHeight = yPos;
 
-            Width = buffView.X + buffView.Width + Spacing;
+            buildBuffList();
+            BAll_onLeftClick(bAll, new EventArgs());
+
+            Width = buffView.X + buffView.Width + 2 * Spacing + bDebuffs.Width;
             Height = buffView.Y + buffView.Height + Spacing;
 
             tbSeconds.X = Width - tbSeconds.Width - Spacing;
@@ -137,12 +137,10 @@ namespace HEROsMod.HEROsModServices {
             AddChild(bAll);
             AddChild(bBuffs);
             AddChild(bDebuffs);
-
-            buildBuffList();
-            BAll_onLeftClick(bAll, new EventArgs());
         }
 
         private void BDebuffs_onLeftClick(object sender, EventArgs e) {
+            category.Clear();
             foreach (int i in buffs) {
                 if (Main.debuff[i]) category.Add(i);
             }
@@ -152,6 +150,7 @@ namespace HEROsMod.HEROsModServices {
         }
 
         private void BBuffs_onLeftClick(object sender, EventArgs e) {
+            category.Clear();
             foreach (int i in buffs) {
                 if (Main.debuff[i] || Main.lightPet[i] || Main.vanityPet[i] || i == 0 || BuffService.SkipBuffs.Contains(i)) continue;
                 category.Add(i);
@@ -162,6 +161,7 @@ namespace HEROsMod.HEROsModServices {
         }
 
         private void BAll_onLeftClick(object sender, EventArgs e) {
+            category.Clear();
             category = buffs.ToList();
             BuildImages();
             WhiteAllButtons();
@@ -185,6 +185,7 @@ namespace HEROsMod.HEROsModServices {
         }
 
         void buildBuffList() {
+            buffs.Clear();
             for (int i = 1; i < Main.debuff.Length; i++) {
                 buffs.Add(i);
             }
@@ -197,9 +198,9 @@ namespace HEROsMod.HEROsModServices {
         }
 
         void BuildImages() {
+            buffView.ClearContent();
             foreach (int i in category) {
                 int buffType = i;
-
                 UIRect bg = new UIRect();
                 bg.ForegroundColor = i % 2 == 0 ? Color.Transparent : Color.Blue * .1f;
                 bg.X = Spacing;
@@ -228,7 +229,10 @@ namespace HEROsMod.HEROsModServices {
                 bg.AddChild(buffImage);
                 bg.AddChild(label);
                 buffView.AddChild(bg);
+                Main.NewText("build image " + i);
             }
+            buffView.ContentHeight = yPos;
+            yPos = Spacing;
         }
     }
 }

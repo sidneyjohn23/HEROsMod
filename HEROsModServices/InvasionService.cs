@@ -48,7 +48,7 @@ namespace HEROsMod.HEROsModServices
 				Main.eclipse = false;
 				Main.stopMoonEvent();
 				EnemyToggler.ClearNPCs();
-                Main.slimeRain = false;
+                Main.StopSlimeRain();
 				Main.NewText("All events have been stopped");
 			}
 			else
@@ -78,9 +78,7 @@ namespace HEROsMod.HEROsModServices
 		}
 
         private static void StartSlimeRain() {
-            Main.slimeRain = true;
-            Main.slimeRainTime = 0;
-            Main.slimeRainKillCount = 0;
+            Main.StartSlimeRain();
         }
 
 

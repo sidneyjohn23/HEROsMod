@@ -22,9 +22,6 @@ namespace HEROsMod.HEROsModNetwork
 
         // Specific to world
         public List<DatabaseWorld> worlds;
-
-        //public List<DatabaseRegion> regions;
-        //public bool BanDestructiveExplosives;
     }
 
     public class DatabasePlayer
@@ -66,13 +63,10 @@ namespace HEROsMod.HEROsModNetwork
         public int y;
         public int width;
         public int height;
+        public int owner;
         public Color color;
-
-        //public byte[] permissions;
         public int[] permissionsGroups;
-
         public int[] permissionsPlayers;
-        //public int world;
     }
 
     public class DatabaseWaypoint
@@ -223,9 +217,6 @@ namespace HEROsMod.HEROsModNetwork
                 Group defaultGroup = new Group("Default");
                 AddGroup(ref defaultGroup);
             }
-
-
-            //ItemBanner.ItemsBanned = database.BanDestructiveExplosives;
         }
 
         private static void ResetDatabase()
@@ -281,6 +272,7 @@ namespace HEROsMod.HEROsModNetwork
                 );
             }
             SaveSetting(jsonDatabaseFilename);
+            Network.RegisteredUsers.AddRange(GetRegisteredUsers());
             return RegistrationResult.Sucess;
         }
 
@@ -401,7 +393,7 @@ namespace HEROsMod.HEROsModNetwork
             List<Region> result = new List<Region>();
             foreach (DatabaseRegion dbRegion in currentDatabaseWorld.regions)
             {
-                Region region = new Region(dbRegion.name, dbRegion.x, dbRegion.y, dbRegion.width, dbRegion.height);
+                Region region = new Region(dbRegion.name, dbRegion.x, dbRegion.y, dbRegion.width, dbRegion.height, dbRegion.owner);
                 region.ImportPermissions(dbRegion.permissionsGroups, dbRegion.permissionsPlayers);
                 region.ID = dbRegion.ID;
 
@@ -411,12 +403,11 @@ namespace HEROsMod.HEROsModNetwork
             return result;
         }
 
-        public static void AddRegion(ref Region region)
+        public static void AddRegion(ref Region region, ref int owner)
         {
             int newid = GetAvailableRegionID();
 
-            DatabaseRegion dbRegion = new DatabaseRegion()
-            {
+            DatabaseRegion dbRegion = new DatabaseRegion() {
                 ID = newid,
                 name = region.Name,
                 x = region.X,
@@ -425,7 +416,8 @@ namespace HEROsMod.HEROsModNetwork
                 height = region.Height,
                 color = region.Color,
                 permissionsPlayers = region.AllowedPlayersIDs.ToArray(),
-                permissionsGroups = region.AllowedGroupsIDs.ToArray()
+                permissionsGroups = region.AllowedGroupsIDs.ToArray(),
+                owner = owner
             };
             region.ID = dbRegion.ID;
             currentDatabaseWorld.regions.Add(dbRegion);

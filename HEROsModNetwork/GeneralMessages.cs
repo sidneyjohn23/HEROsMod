@@ -662,13 +662,13 @@ namespace HEROsMod.HEROsModNetwork {
         }
 
         private static void ProcessCreateRegionRequest(ref BinaryReader reader, int playerNumber) {
-            if (Network.Players2[playerNumber].Group.IsAdmin) {
-                Region region = Region.GetRegionFromBinaryReader(ref reader);
-                DatabaseController.AddRegion(ref region);
-                Network.Regions.Add(region);
-                SendRegionListToAllPlayers();
-                Network.SendTextToAllPlayers(@"'" + region.Name + "' region created by " + Network.Players2[playerNumber].ServerInstance.Name);
-            }
+            Region region = Region.GetRegionFromBinaryReader(ref reader);
+            int a = Network.RegisteredUsers.First(x => x.Username == Network.Players2[playerNumber].Username).ID;
+            DatabaseController.AddRegion(ref region, ref a);
+            Network.Regions.Add(region);
+
+            SendRegionListToAllPlayers();
+            Network.SendTextToAllPlayers(@"'" + region.Name + "' region created by " + Network.Players2[playerNumber].ServerInstance.Name);
         }
 
         public static void RequestRemoveRegion(Region region) {
@@ -742,9 +742,9 @@ namespace HEROsMod.HEROsModNetwork {
         }
 
         private static void ProcessAddPlayerToRegionRequest(ref BinaryReader reader, int playerNumber) {
-            if (Network.Players2[playerNumber].Group.IsAdmin) {
                 Region region = Network.GetRegionByID(reader.ReadInt32());
-                if (region == null) return;
+            if (region == null) return;
+            if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID) {
                 int playerID = reader.ReadInt32();
                 if (region.AddPlayer(playerID)) {
                     DatabaseController.WriteRegionPermissions(region);
@@ -761,9 +761,9 @@ namespace HEROsMod.HEROsModNetwork {
         }
 
         private static void ProcessRemovePlayerFromRegionRequest(ref BinaryReader reader, int playerNumber) {
-            if (Network.Players2[playerNumber].Group.IsAdmin) {
                 Region region = Network.GetRegionByID(reader.ReadInt32());
-                if (region == null) return;
+            if (region == null) return;
+            if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID) {
                 int playerID = reader.ReadInt32();
                 if (region.RemovePlayer(playerID)) {
                     DatabaseController.WriteRegionPermissions(region);
@@ -780,10 +780,10 @@ namespace HEROsMod.HEROsModNetwork {
         }
 
         private static void ProcessAddGroupToRegionRequest(ref BinaryReader reader, int playerNumber) {
-            if (Network.Players2[playerNumber].Group.IsAdmin) {
                 Region region = Network.GetRegionByID(reader.ReadInt32());
                 if (region == null) return;
-                int groupID = reader.ReadInt32();
+                if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID) {
+                    int groupID = reader.ReadInt32();
                 if (region.AddGroup(groupID)) {
                     DatabaseController.WriteRegionPermissions(region);
                     SendRegionListToAllPlayers();
@@ -799,9 +799,9 @@ namespace HEROsMod.HEROsModNetwork {
         }
 
         private static void ProcessRemoveGroupFromRegionRequest(ref BinaryReader reader, int playerNumber) {
-            if (Network.Players2[playerNumber].Group.IsAdmin) {
                 Region region = Network.GetRegionByID(reader.ReadInt32());
                 if (region == null) return;
+            if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID) {
                 int groupID = reader.ReadInt32();
                 if (region.RemoveGroup(groupID)) {
                     DatabaseController.WriteRegionPermissions(region);
@@ -818,9 +818,9 @@ namespace HEROsMod.HEROsModNetwork {
         }
 
         private static void ProcessChangeRegionColorRequest(ref BinaryReader reader, int playerNumber) {
-            if (Network.Players2[playerNumber].Group.IsAdmin) {
                 Region region = Network.GetRegionByID(reader.ReadInt32());
                 if (region == null) return;
+            if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID) {
                 Color color = reader.ReadRGB();
 
                 region.Color = color;

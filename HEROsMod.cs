@@ -247,6 +247,8 @@ namespace HEROsMod
             ServiceController.AddService(new ToggleGravestones(instance.miscOptions.Hotbar));
             ServiceController.AddService(new GroupInspector(instance.miscOptions.Hotbar));
             ServiceController.AddService(new WorldPurifier(instance.miscOptions.Hotbar));
+            ServiceController.AddService(new HardmodeEnemyToggler(instance.miscOptions.Hotbar));
+            ServiceController.AddService(new HellevatorBuilder(instance.miscOptions.Hotbar));
 
             instance.extensionMenuService = new ExtensionMenuService();
             ServiceController.AddService(instance.extensionMenuService);

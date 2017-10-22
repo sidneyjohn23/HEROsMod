@@ -62,6 +62,23 @@ namespace HEROsMod.HEROsModServices {
                         } else if (ModUtils.NumberIsOneOfThese(tile.type, new long[] { TileID.CorruptPlants, TileID.HallowedPlants, TileID.HallowedPlants2, TileID.FleshWeeds })) {
                             tile.type = TileID.Plants;
                         }
+                        if (tile.wall != 0) {
+                            if (ModUtils.NumberIsOneOfThese(tile.wall, new long[] { WallID.CorruptGrassUnsafe, WallID.HallowedGrassUnsafe, WallID.CrimsonGrassUnsafe })) {
+                                tile.wall = WallID.GrassUnsafe;
+                            } else if (ModUtils.NumberIsOneOfThese(tile.wall, new long[] { WallID.EbonstoneUnsafe, WallID.PearlstoneBrickUnsafe, WallID.CrimstoneUnsafe})) {
+                                tile.wall = WallID.Stone;
+                            } else if (ModUtils.NumberIsOneOfThese(tile.wall, new long[] { WallID.CorruptionUnsafe1, WallID.HallowUnsafe1, WallID.CrimsonUnsafe1} )) {
+                                tile.wall = WallID.DirtUnsafe1;
+                            } else if (ModUtils.NumberIsOneOfThese(tile.wall, new long[] { WallID.CorruptionUnsafe2, WallID.HallowUnsafe2, WallID.CrimsonUnsafe2 })) {
+                                tile.wall = WallID.DirtUnsafe2;
+                            } else if (ModUtils.NumberIsOneOfThese(tile.wall, new long[] { WallID.CorruptionUnsafe3, WallID.HallowUnsafe3, WallID.CrimsonUnsafe3 })) {
+                                tile.wall = WallID.DirtUnsafe3;
+                            } else if (ModUtils.NumberIsOneOfThese(tile.wall, new long[] { WallID.CorruptionUnsafe4, WallID.HallowUnsafe4, WallID.CrimsonUnsafe4 })) {
+                                tile.wall = WallID.DirtUnsafe4;
+                            } else if (ModUtils.NumberIsOneOfThese(tile.wall, new long[] { WallID.CorruptHardenedSand, WallID.CrimsonHardenedSand, WallID.HallowHardenedSand})) {
+                                tile.wall = WallID.HardenedSand;
+                            }
+                        }
                     }
                 }
             }

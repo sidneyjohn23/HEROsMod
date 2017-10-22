@@ -99,6 +99,8 @@ namespace HEROsMod.HEROsModNetwork {
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("HERO's Mod: Create an account, login, and type /auth " + AuthCode + " to become Admin.");
                 Console.ResetColor();
+
+                RegisteredUsers.AddRange(DatabaseController.GetRegisteredUsers());
             }
         }
 

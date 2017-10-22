@@ -16,7 +16,6 @@ namespace HEROsMod.HEROsModServices {
 
         public override void MyGroupUpdated() {
             HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ToggleHardmodeEnemies");
-            base.MyGroupUpdated();
         }
 
         void _hotbarIcon_onLeftClick(object sender, EventArgs e) {

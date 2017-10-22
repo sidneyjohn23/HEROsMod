@@ -404,7 +404,7 @@ namespace HEROsMod
             return Color.White;
         }
 
-        private static bool debug = false;
+        private static bool debug = true;
 
         public static void DebugText(string message)
         {

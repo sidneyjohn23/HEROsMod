@@ -81,10 +81,6 @@ namespace HEROsMod.HEROsModServices
             //base.MyGroupUpdated();
         }
 
-        //public static void RequestAddWayPoint()
-        //{
-        //}
-
         public static void ClearPoints()
         {
             points.Clear();
@@ -106,10 +102,6 @@ namespace HEROsMod.HEROsModServices
             return true;
         }
 
-        public static void RequestRemoveWaypoint()
-        {
-        }
-
         public static void RemoveWaypoint(int index)
         {
             points.RemoveAt(index);
@@ -124,57 +116,6 @@ namespace HEROsMod.HEROsModServices
             points.Clear();
             base.Destroy();
         }
-
-        //public static void Save()
-        //{
-        //	if (points.Count > 0)
-        //	{
-        //		string path = Main.worldPathName + ".waypoints";
-        //		using (FileStream fileStream = new FileStream(path, FileMode.Create))
-        //		{
-        //			using (BinaryWriter binaryWriter = new BinaryWriter(fileStream))
-        //			{
-        //				binaryWriter.Write(points.Count); //Number of waypoints
-        //				for (int i = 0; i < points.Count; i++)
-        //				{
-        //					binaryWriter.Write(points[i].name);
-        //					binaryWriter.Write(points[i].position.X);
-        //					binaryWriter.Write(points[i].position.Y);
-        //				}
-        //				binaryWriter.Close();
-        //			}
-        //		}
-        //	}
-        //}
-
-        //public static void Load()
-        //{
-        //	if (points.Count > 0)
-        //	{
-        //		points.Clear();
-        //		if (waypointWindow != null) waypointWindow.UpdateWaypointList();
-        //	}
-        //	string path = Main.worldPathName + ".waypoints";
-
-        //	if (File.Exists(path))
-        //	{
-        //		using (FileStream fileStream = new FileStream(path, FileMode.Open))
-        //		{
-        //			using (BinaryReader binaryReader = new BinaryReader(fileStream))
-        //			{
-        //				int numOfWaypoints = binaryReader.ReadInt32();
-        //				for (int i = 0; i < numOfWaypoints; i++)
-        //				{
-        //					string name = binaryReader.ReadString();
-        //					float X = binaryReader.ReadSingle();
-        //					float Y = binaryReader.ReadSingle();
-        //					AddWaypoint(name, new Vector2(X, Y));
-        //				}
-        //				binaryReader.Close();
-        //			}
-        //		}
-        //	}
-        //}
     }
 
     internal class Waypoint
@@ -211,8 +152,8 @@ namespace HEROsMod.HEROsModServices
             Height = 300 + title.Height + spacing * 2;
 
             UIButton bAddWaypoint = new UIButton("Add Waypoint");
-            UIButton bClose = new UIButton("Close");
             bAddWaypoint.Anchor = AnchorPosition.BottomRight;
+            UIButton bClose = new UIButton("Close");
             bClose.Anchor = AnchorPosition.BottomRight;
             bClose.onLeftClick += bClose_onLeftClick;
             bAddWaypoint.onLeftClick += bAddWaypoint_onLeftClick;

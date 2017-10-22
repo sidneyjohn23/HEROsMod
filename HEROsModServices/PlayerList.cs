@@ -150,9 +150,11 @@ namespace HEROsMod.HEROsModServices
                 yPos = lOfflinePlayers.Y + lOfflinePlayers.Height;
 				scrollView.AddChild(lOfflinePlayers);
                 ModUtils.DebugText("Length: " + HEROsModNetwork.Network.Players2.Count);
-				foreach (HEROsModNetwork.UserWithID user in HEROsModNetwork.Network.RegisteredUsers)
+                ModUtils.DebugText("Registered count: " + HEROsModNetwork.Network.RegisteredUsers.Count);
+                foreach (HEROsModNetwork.UserWithID user in HEROsModNetwork.Network.RegisteredUsers)
 				{
                     ModUtils.DebugText("? " + user.Username);
+
 
                     foreach (HEROsModNetwork.HEROsModPlayer item in HEROsModNetwork.Network.Players2.Values)
                     {

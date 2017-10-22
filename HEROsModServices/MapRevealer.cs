@@ -11,7 +11,6 @@ namespace HEROsMod.HEROsModServices
 	/// </summary>
 	internal class MapRevealer : HEROsModService
 	{
-		// TODO, is this how I want to do this?
 		public static MapRevealer instance;
 
 		public MapRevealer(UIHotbar hotbar)

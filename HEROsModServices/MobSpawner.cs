@@ -383,9 +383,9 @@ namespace HEROsMod.HEROsModServices
             if (textbox.Text.Length > 0)
             {
                 List<NPCStats> matches = new List<NPCStats>();
-                foreach (var npc in category)
+                foreach (NPCStats npc in category)
                 {
-                    if (npc.Name.ToLower().IndexOf(textbox.Text.ToLower(), System.StringComparison.Ordinal) != -1)
+                    if (npc.Name.ToLower().IndexOf(textbox.Text.ToLower(), StringComparison.Ordinal) != -1)
                     {
                         matches.Add(npc);
                     }
@@ -610,7 +610,7 @@ namespace HEROsMod.HEROsModServices
             CurrentNPC = npc;
             ModUtils.LoadNPC(npc.Type);
             mobImage.Texture = Main.npcTexture[npc.Type];
-            mobImage.SourceRectangle = new Rectangle(0, 0, (int)mobImage.Texture.Width, (int)mobImage.Texture.Height / Main.npcFrameCount[npc.Type]);
+            mobImage.SourceRectangle = new Rectangle(0, 0, mobImage.Texture.Width, mobImage.Texture.Height / Main.npcFrameCount[npc.Type]);
             //mobImage.ForegroundColor = CurrentNPC.AlphaColor;
             AddChild(mobImage);
 
@@ -852,7 +852,7 @@ namespace HEROsMod.HEROsModServices
 
             Vector2 pos = player.position;
 
-            if (pos.Y / 16f < (float)(Main.maxTilesY - 205))
+            if (pos.Y / 16f < Main.maxTilesY - 205)
             {
                 Main.NewText("Please move to the underworld to spawn WoF");
                 return;
@@ -863,7 +863,7 @@ namespace HEROsMod.HEROsModServices
             }
             Player.FindClosest(pos, 16, 16);
             int num = 1;
-            if (pos.X / 16f > (float)(Main.maxTilesX / 2))
+            if (pos.X / 16f > Main.maxTilesX / 2)
             {
                 num = -1;
             }
@@ -874,7 +874,7 @@ namespace HEROsMod.HEROsModServices
                 flag = true;
                 for (int i = 0; i < 255; i++)
                 {
-                    if (Main.player[i].active && Main.player[i].position.X > (float)(num2 - 1200) && Main.player[i].position.X < (float)(num2 + 1200))
+                    if (Main.player[i].active && Main.player[i].position.X > num2 - 1200 && Main.player[i].position.X < num2 + 1200)
                     {
                         num2 -= num * 16;
                         flag = false;

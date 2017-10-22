@@ -35,12 +35,13 @@ namespace HEROsMod.HEROsModNetwork
             }
         }
 
+        public int Owner { get; set; }
         public List<int> AllowedPlayersIDs { get; set; }
         public List<int> AllowedGroupsIDs { get; set; }
 
         public Color Color { get; set; }
 
-        public Region(string name, int x, int y, int width, int height)
+        public Region(string name, int x, int y, int width, int height, int owner)
         {
             Name = name;
             X = x;
@@ -48,17 +49,19 @@ namespace HEROsMod.HEROsModNetwork
             Width = width;
             Height = height;
             ID = -1;
+            Owner = owner;
             AllowedPlayersIDs = new List<int>();
             AllowedGroupsIDs = new List<int>();
             Color = GetRandomColor();
         }
 
-        public Region(string name, Vector2 position, Vector2 size)
+        public Region(string name, Vector2 position, Vector2 size, int owner)
         {
             Name = name;
             Position = position;
             Size = size;
             ID = -1;
+            Owner = owner;
             AllowedPlayersIDs = new List<int>();
             AllowedGroupsIDs = new List<int>();
             Color = GetRandomColor();
@@ -142,7 +145,7 @@ namespace HEROsMod.HEROsModNetwork
                     writer.Write(ID);
                     writer.WriteVector2(Position);
                     writer.WriteVector2(Size);
-
+                    writer.Write(Owner);
                     writer.Write(AllowedPlayersIDs.Count);
                     for (int j = 0; j < AllowedPlayersIDs.Count; j++)
                     {
@@ -165,9 +168,13 @@ namespace HEROsMod.HEROsModNetwork
         {
             string name = reader.ReadString();
             int id = reader.ReadInt32();
+
             Vector2 position = reader.ReadVector2();
+
             Vector2 size = reader.ReadVector2();
-            Region region = new Region(name, position, size)
+            int owner = reader.ReadInt32();
+
+            Region region = new Region(name, position, size, owner)
             {
                 ID = id
             };
@@ -182,6 +189,7 @@ namespace HEROsMod.HEROsModNetwork
                 region.AllowedGroupsIDs.Add(reader.ReadInt32());
             }
             region.Color = reader.ReadRGB();
+
             return region;
         }
 

@@ -179,7 +179,7 @@ namespace HEROsMod.HEROsModNetwork {
             if (Network.NetworkMode == NetworkMode.Server) {
                 HEROsModPlayer player = Network.Players2[playerNumber];
                 player.Group = Network.DefaultGroup;
-                player.Username = String.Empty;
+                player.Username = string.Empty;
                 if (player.UsingHEROsMod) {
                     WriteHeader(MessageType.LogoutSucess);
                     Writer.Write(player.Group.ID);
@@ -219,7 +219,7 @@ namespace HEROsMod.HEROsModNetwork {
                 case DatabaseController.RegistrationResult.Sucess:
                     Network.SendTextToPlayer("You have successfully registered.  Please login.", playerNumber);
                     foreach (var player in Network.Players2) {
-                        if (player.Value.ServerInstance.IsActive && player.Value.Group.IsAdmin) {
+                        if (player.Value.ServerInstance.IsActive) {
                             GeneralMessages.SendRegisteredUsersToPlayer(player.Key);
                         }
                     }
@@ -386,15 +386,11 @@ namespace HEROsMod.HEROsModNetwork {
                 Writer.Write(group.ID);
                 Writer.Write(group.IsAdmin);
                 byte[] permissions = group.ExportPermissions();
-                //if(CTF.CaptureTheFlag.GameInProgress)
-                //{
-                //    permissions = Network.CTFGroup.ExportPermissions();
-                //}
                 Writer.Write(permissions.Length);
                 Writer.Write(permissions);
                 Network.SendDataToPlayer(playerNumber);
 
-                if (group.IsAdmin) GeneralMessages.SendRegisteredUsersToPlayer(playerNumber);
+                GeneralMessages.SendRegisteredUsersToPlayer(playerNumber);
             }
         }
 
@@ -511,11 +507,11 @@ namespace HEROsMod.HEROsModNetwork {
                 //SendPlayerPermissions(id);
                 DatabaseController.SetPlayerGroup(id, groupID);
                 foreach (var player in Network.Players2) {
-                    if (player.Value.ServerInstance.IsActive && player.Value.Group.IsAdmin) {
+                    if (player.Value.ServerInstance.IsActive) {
                         GeneralMessages.SendRegisteredUsersToPlayer(player.Key);
                     }
                 }
-                //GeneralMessages.SendRegisteredUsersToPlayer(playerNumber);
+                GeneralMessages.SendRegisteredUsersToPlayer(playerNumber);
             }
         }
 

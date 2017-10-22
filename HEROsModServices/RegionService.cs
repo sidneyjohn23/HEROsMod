@@ -116,12 +116,6 @@ namespace HEROsMod.HEROsModServices
 				SelectionTool.Reset();
 				HotbarIcon.Tooltip = "Toggle Regions Visible";
 			}
-
-			//base.MyGroupUpdated();
-		}
-
-		public void ToggleRegionsVisible()
-		{
 		}
 
 		private void bCancel_onLeftClick(object sender, EventArgs e)
@@ -179,9 +173,9 @@ namespace HEROsMod.HEROsModServices
 
 		public static void DrawRegions(SpriteBatch spriteBatch)
 		{
-			for (int i = 0; i < HEROsModNetwork.Network.Regions.Count; i++)
+			for (int i = 0; i < Network.Regions.Count; i++)
 			{
-				HEROsModNetwork.Region region = HEROsModNetwork.Network.Regions[i];
+				Region region = Network.Regions[i];
 				ModUtils.DrawBorderedRect(spriteBatch, region.Color, region.Position, region.Size, 3, region.Name);
 			}
 		}
@@ -356,9 +350,9 @@ namespace HEROsMod.HEROsModServices
 			SelectedRegion = null;
 
 			float yPos = Spacing;
-			for (int i = 0; i < HEROsModNetwork.Network.Regions.Count; i++)
+			for (int i = 0; i < Network.Regions.Count; i++)
 			{
-				HEROsModNetwork.Region region = HEROsModNetwork.Network.Regions[i];
+				Region region = Network.Regions[i];
 				UIButton bEdit = new UIButton("Edit");
                 UIRect bg = new UIRect()
                 {
@@ -394,11 +388,13 @@ namespace HEROsMod.HEROsModServices
 				UILabel lY = new UILabel("Y: " + region.Y);
 				UILabel lWidth = new UILabel("Width: " + region.Width);
 				UILabel lHeight = new UILabel("Height: " + region.Height);
+                UILabel lOwner = new UILabel("Owner: " + Network.RegisteredUsers.Find(x => x.ID == region.Owner).Username);
 
 				lX.Scale = .35f;
 				lY.Scale = lX.Scale;
 				lWidth.Scale = lX.Scale;
 				lHeight.Scale = lX.Scale;
+                lOwner.Scale = lX.Scale;
 
 				lWidth.X = bEdit.X - 100;
 				lHeight.X = lWidth.X;
@@ -409,14 +405,19 @@ namespace HEROsMod.HEROsModServices
 				lX.Y = lWidth.Y;
 				lY.Y = lHeight.Y;
 
-				regionColor.X = lX.X - regionColor.Width - Spacing;
+                lOwner.X = lX.X - 150;
+                lOwner.Y = lX.Y;
+
+				regionColor.X = lOwner.X - regionColor.Width - Spacing;
 
 				bg.AddChild(label);
-				bg.AddChild(bEdit);
+                if (region.Owner == Network.Players2[Main.myPlayer].ID || LoginService.MyGroup.IsAdmin)
+                    bg.AddChild(bEdit);
 				bg.AddChild(lX);
 				bg.AddChild(lY);
 				bg.AddChild(lWidth);
 				bg.AddChild(lHeight);
+                bg.AddChild(lOwner);
 				bg.AddChild(regionColor);
 
 				scrollView.AddChild(bg);
@@ -430,7 +431,7 @@ namespace HEROsMod.HEROsModServices
 			int regionIndex = (int)buttion.Tag;
 
 			Region region = Network.Regions[regionIndex];
-			SelectRegion(region);
+            if (region.Owner == Network.Players2[Main.myPlayer].ID || LoginService.MyGroup.IsAdmin) SelectRegion(region);
 		}
 
 		public void SelectRegion(Region region)
@@ -448,7 +449,6 @@ namespace HEROsMod.HEROsModServices
 			bSaveColor.Visible = true;
 
 			colorSlider.Value = Main.rgbToHsl(region.Color).X;
-			//_prevRegionColor = new Color(region.Color.ToVector3());
 
 			float yPos = Spacing;
 			int itemCount = 0;
@@ -562,9 +562,9 @@ namespace HEROsMod.HEROsModServices
 
 		private void bRemoveAllRegions_onLeftClick(object sender, EventArgs e)
 		{
-			for (int i = 0; i < HEROsModNetwork.Network.Regions.Count; i++)
+			for (int i = 0; i < Network.Regions.Count; i++)
 			{
-                GeneralMessages.RequestRemoveRegion(HEROsModNetwork.Network.Regions[i]);
+                GeneralMessages.RequestRemoveRegion(Network.Regions[i]);
 			}
 		}
 
@@ -627,7 +627,7 @@ namespace HEROsMod.HEROsModServices
 
 		public NameRegionWindow()
 		{
-			UIView.exclusiveControl = this;
+			exclusiveControl = this;
 
 			Width = 600;
 			Height = 100;
@@ -668,7 +668,7 @@ namespace HEROsMod.HEROsModServices
 			if (textbox.Text.Length >= 3)
 			{
 				textbox.Unfocus();
-				HEROsModNetwork.Region region = new HEROsModNetwork.Region(textbox.Text, SelectionTool.Position, SelectionTool.Size);
+				Region region = new Region(textbox.Text, SelectionTool.Position, SelectionTool.Size, Network.Players2[Main.myPlayer].ID);
                 GeneralMessages.RequestCreateRegion(region);
 				SelectionTool.Reset();
 			}
