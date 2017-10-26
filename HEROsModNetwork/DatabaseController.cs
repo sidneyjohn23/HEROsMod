@@ -237,12 +237,13 @@ namespace HEROsMod.HEROsModNetwork
 
                 if (user.username.ToLower() == username.ToLower() && user.password == BitConverter.ToString(md5hash.ComputeHash(password.ToByteArray())))
                 {
+                    user.password = password;
                     username = user.username;
                     playerID = user.ID;
                     groupID = user.group;
                     return true;
                 } else if (user.username.ToLower() == username.ToLower() && user.password == password) {
-                    user.password = BitConverter.ToString(md5hash.ComputeHash(password.ToByteArray()));
+                    //user.password = BitConverter.ToString(md5hash.ComputeHash(password.ToByteArray()));
                     username = user.username;
                     playerID = user.ID;
                     groupID = user.group;
@@ -262,13 +263,13 @@ namespace HEROsMod.HEROsModNetwork
             if (database.players.Count == 0)
             {
                 database.players.Add(
-                    new DatabasePlayer() { username = username, password = BitConverter.ToString(md5hash.ComputeHash(password.ToByteArray())), ID = GetAvailablePlayerID(), group = -1 }
+                    new DatabasePlayer() { username = username, password = password /*BitConverter.ToString(md5hash.ComputeHash(password.ToByteArray()))*/, ID = GetAvailablePlayerID(), group = -1 }
                 );
             }
             else
             {
                 database.players.Add(
-                    new DatabasePlayer() { username = username, password = BitConverter.ToString(md5hash.ComputeHash(password.ToByteArray())), ID = GetAvailablePlayerID() }
+                    new DatabasePlayer() { username = username, password = password /*BitConverter.ToString(md5hash.ComputeHash(password.ToByteArray()))*/, ID = GetAvailablePlayerID() }
                 );
             }
             SaveSetting(jsonDatabaseFilename);

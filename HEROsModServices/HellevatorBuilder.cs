@@ -44,7 +44,6 @@ namespace HEROsMod.HEROsModServices {
             Height = 150;
             Width = 250;
 
-
             UILabel lTitle = new UILabel("Hellevator Builder") {
                 Scale = .6f,
                 X = LargeSpacing,
@@ -86,11 +85,10 @@ namespace HEROsMod.HEROsModServices {
         }
 
         private void BCancel_onLeftClick(object sender, EventArgs e) {
-            throw new NotImplementedException();
+            Visible = false;
         }
 
         private void BOK_onLeftClick(object sender, EventArgs e) {
-            throw new NotImplementedException();
         }
     }
 }

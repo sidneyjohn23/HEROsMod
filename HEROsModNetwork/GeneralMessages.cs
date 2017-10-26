@@ -664,6 +664,7 @@ namespace HEROsMod.HEROsModNetwork {
         private static void ProcessCreateRegionRequest(ref BinaryReader reader, int playerNumber) {
             Region region = Region.GetRegionFromBinaryReader(ref reader);
             int a = Network.RegisteredUsers.First(x => x.Username == Network.Players2[playerNumber].Username).ID;
+            region.AllowedPlayersIDs.Add(a);
             DatabaseController.AddRegion(ref region, ref a);
             Network.Regions.Add(region);
 
