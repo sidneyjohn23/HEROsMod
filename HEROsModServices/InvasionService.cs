@@ -16,11 +16,9 @@ namespace HEROsMod.HEROsModServices
 
 		public InvasionService()
 		{
-            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/event"))
-            {
-                Tooltip = "Open Event Starter"
-            };
-            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/event")/*Main.itemTexture[14]*/);
+			this._hotbarIcon.Tooltip = HEROsMod.HeroText("OpenEventStarter");
+			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
 
             _eventWindow = new EventWindow()
             {
@@ -49,7 +47,7 @@ namespace HEROsMod.HEROsModServices
 				Main.stopMoonEvent();
 				EnemyToggler.ClearNPCs();
                 Main.StopSlimeRain();
-				Main.NewText("All events have been stopped");
+				Main.NewText(HEROsMod.HeroText("AllEventsHaveBeenStopped"));
 			}
 			else
 			{
@@ -215,14 +213,12 @@ namespace HEROsMod.HEROsModServices
             CanMove = true;
 			int buttonWidth = 175;
 
-            UILabel lTitle = new UILabel("Events")
-            {
-                Scale = .6f,
-                X = LargeSpacing,
-                Y = LargeSpacing,
-                OverridesMouse = false
-            };
-            AddChild(lTitle);
+			UILabel lTitle = new UILabel(HEROsMod.HeroText("Events"));
+			lTitle.Scale = .6f;
+			lTitle.X = LargeSpacing;
+			lTitle.Y = LargeSpacing;
+			lTitle.OverridesMouse = false;
+			AddChild(lTitle);
 
 			UIImage bClose = new UIImage(closeTexture);
 			bClose.X = buttonWidth + LargeSpacing - bClose.Width;
@@ -247,14 +243,12 @@ namespace HEROsMod.HEROsModServices
 				AddChild(buttons[i]);
 			}
 
-            UIButton bStopEvents = new UIButton("Stop Events")
-            {
-                AutoSize = false,
-                Width = buttonWidth,
-                X = LargeSpacing,
-                Y = yPos + Spacing
-            };
-            bStopEvents.onLeftClick += bStopEvents_onLeftClick;
+			UIButton bStopEvents = new UIButton(HEROsMod.HeroText("Stop Events"));
+			bStopEvents.AutoSize = false;
+			bStopEvents.Width = buttonWidth;
+			bStopEvents.X = LargeSpacing;
+			bStopEvents.Y = yPos + Spacing;
+			bStopEvents.onLeftClick += bStopEvents_onLeftClick;
 			AddChild(bStopEvents);
 
             Height = bStopEvents.Y + bStopEvents.Height + LargeSpacing;

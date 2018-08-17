@@ -11,10 +11,10 @@ namespace HEROsMod.HEROsModServices
 
 		public ItemBrowser()
 		{
-            _name = "Item Browser";
-            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/items")/*Main.itemTexture[10]*/);
-            HotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-            HotbarIcon.Tooltip = "Item Browser";
+			this._name = "Item Browser";
+			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/items")/*Main.itemTexture[10]*/);
+			this.HotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+			this.HotbarIcon.Tooltip = HEROsMod.HeroText("ItemBrowser");
 
 			_itemBrowserWindow = new UIKit.UIComponents.ItemBrowser();
 			_itemBrowserWindow.CenterToParent();

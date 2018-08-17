@@ -97,8 +97,8 @@ namespace HEROsMod.HEROsModNetwork {
 
                 AuthCode = Main.rand.Next(100000, 999999);
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("HERO's Mod: Create an account, login, and type /auth " + AuthCode + " to become Admin.");
-                Console.ResetColor();
+				Console.WriteLine(string.Format(HEROsMod.HeroText("DedicatedServerAutoMessage"), AuthCode));
+				Console.ResetColor();
 
                 RegisteredUsers.AddRange(DatabaseController.GetRegisteredUsers());
             }
@@ -231,10 +231,10 @@ namespace HEROsMod.HEROsModNetwork {
                             }
                             return false;
                         } else {
-                            SendTextToPlayer("You do not have permission to build here", playerNumber, Color.Red);
-                        }
+							SendTextToPlayer(HEROsMod.HeroText("YouDoNotHavePermissionToBuildHere"), playerNumber, Color.Red);
+						}
 
-                        switch (tileModifyType) {
+						switch (tileModifyType) {
                             case TileModifyType.KillTile:
                                 NetMessage.SendData(17, playerNumber, -1, null, (int) TileModifyType.PlaceTile, x, y, tile.type, tile.slope());
                                 break;
@@ -306,17 +306,20 @@ namespace HEROsMod.HEROsModNetwork {
                         byte paintColor = binaryReader.ReadByte();
                         HEROsModPlayer player = Players2[playerNumber];
 
-                        if (PlayerHasPermissionToBuildAtBlock(player, x, y)) {
-                            TileLastChangedBy[x, y] = player.ID;
-                            binaryReader.BaseStream.Position = readerPos;
-                            return false;
-                        } else {
-                            NetMessage.SendData(63, playerNumber, -1, null, x, y, Main.tile[x, y].color());
-                            SendTextToPlayer("You do not have permission to build here", playerNumber, Color.Red);
-                            return true;
-                        }
-                    }
-                    break;
+						if (PlayerHasPermissionToBuildAtBlock(player, x, y))
+						{
+							TileLastChangedBy[x, y] = player.ID;
+							binaryReader.BaseStream.Position = readerPos;
+							return false;
+						}
+						else
+						{
+							NetMessage.SendData(63, playerNumber, -1, null, x, (float)y, (float)Main.tile[x, y].color());
+							SendTextToPlayer(HEROsMod.HeroText("YouDoNotHavePermissionToBuildHere"), playerNumber, Color.Red);
+							return true;
+						}
+					}
+					break;
 
                 case 64: //wall painted
                     if (NetworkMode == NetworkMode.Server) {
@@ -325,18 +328,21 @@ namespace HEROsMod.HEROsModNetwork {
                         byte paintColor = binaryReader.ReadByte();
                         HEROsModPlayer player = Players2[playerNumber];
 
-                        if (PlayerHasPermissionToBuildAtBlock(player, x, y)) {
-                            TileLastChangedBy[x, y] = player.ID;
-                            binaryReader.BaseStream.Position = readerPos;
-                            return false;
-                        } else {
-                            NetMessage.SendData(64, playerNumber, -1, null, x, y, Main.tile[x, y].wallColor());
-                            SendTextToPlayer("You do not have permission to build here", playerNumber, Color.Red);
-                            return true;
-                        }
-                    }
-                    break;
-            }
+						if (PlayerHasPermissionToBuildAtBlock(player, x, y))
+						{
+							TileLastChangedBy[x, y] = player.ID;
+							binaryReader.BaseStream.Position = readerPos;
+							return false;
+						}
+						else
+						{
+							NetMessage.SendData(64, playerNumber, -1, null, x, (float)y, (float)Main.tile[x, y].wallColor());
+							SendTextToPlayer(HEROsMod.HeroText("YouDoNotHavePermissionToBuildHere"), playerNumber, Color.Red);
+							return true;
+						}
+					}
+					break;
+			}
 
             //we need to set the stream position back to where it was before we got it
             binaryReader.BaseStream.Position = readerPos;
@@ -561,10 +567,13 @@ namespace HEROsMod.HEROsModNetwork {
             SendTextToPlayer("Receiving tile data successful!", player.Index, Color.Red);
         }
 
-        public enum MessageType {
-            GeneralMessage,
-            LoginMessage
-        }
+		public enum MessageType
+		{
+			GeneralMessage,
+			LoginMessage,
+			SnoopMessage,
+			CTFMessage
+		}
 
         public enum TileModifyType : byte {
             KillTile,

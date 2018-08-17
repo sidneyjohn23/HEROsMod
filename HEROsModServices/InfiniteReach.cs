@@ -1,6 +1,7 @@
 ﻿using HEROsMod.UIKit;
 using System;
 using Terraria;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace HEROsMod.HEROsModServices
@@ -27,10 +28,10 @@ namespace HEROsMod.HEROsModServices
 		public InfiniteReach()
 		{
 			Enabled = false;
-            _name = "Infinite Reach";
-            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/infiniteReach")/*Main.itemTexture[407]*/);
-            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-            HotbarIcon.Tooltip = "Enable Infinite Reach";
+			this._name = "Infinite Reach";
+			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/infiniteReach")/*Main.itemTexture[407]*/);
+			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+			this.HotbarIcon.Tooltip = HEROsMod.HeroText("EnableInfiniteReach");
 			Disable();
 		}
 
@@ -38,14 +39,14 @@ namespace HEROsMod.HEROsModServices
 		{
             _hotbarIcon.Opacity = 1f;
 			Enabled = true;
-            HotbarIcon.Tooltip = "Disable Infinite Reach";
+			this.HotbarIcon.Tooltip = HEROsMod.HeroText("DisableInfiniteReach");
 		}
 
 		private void Disable()
 		{
             _hotbarIcon.Opacity = .5f;
 			Enabled = false;
-            HotbarIcon.Tooltip = "Enable Infinite Reach";
+			this.HotbarIcon.Tooltip = HEROsMod.HeroText("EnableInfiniteReach");
 		}
 
 		private void _hotbarIcon_onLeftClick(object sender, EventArgs e)
@@ -128,7 +129,7 @@ namespace HEROsMod.HEROsModServices
 					if (Main.SmartCursorEnabled)
 					{
 						Main.SmartCursorEnabled = false;
-						Main.NewText("Smart Cursor automatically disabled in infinte reach mode.");
+						Main.NewText(HEROsMod.HeroText("SmartCursorAutomaticallyDisabledInfinteReachMod"));
 					}
 				}
 			}

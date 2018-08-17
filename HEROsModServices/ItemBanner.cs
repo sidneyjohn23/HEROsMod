@@ -30,12 +30,10 @@ namespace HEROsMod.HEROsModServices
 			IsInHotbar = true;
 			HotbarParent = hotbar;
 			MultiplayerOnly = true;
-            _name = "Item Banner";
-            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/explosives")/*Main.itemTexture[888]*/)
-            {
-                Tooltip = "Ban Destructive Explosives"
-            };
-            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+			this._name = "Item Banner";
+			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/explosives")/*Main.itemTexture[888]*/);
+			this._hotbarIcon.Tooltip = HEROsMod.HeroText("BanDestructiveExplosives");
+			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
 			HEROsModNetwork.GeneralMessages.ItemBannerToggleByServer += GeneralMessages_BannedItemsToggleByServer;
 		}
 
@@ -57,13 +55,13 @@ namespace HEROsMod.HEROsModServices
 		{
 			if (itemsbanned)
 			{
-                _hotbarIcon.Opacity = .5f;
-                HotbarIcon.Tooltip = "Unban Destructive Explosives";
+				this._hotbarIcon.Opacity = .5f;
+				this.HotbarIcon.Tooltip = HEROsMod.HeroText("UnbanDestructiveExplosives");
 			}
 			else
 			{
-                _hotbarIcon.Opacity = 1f;
-                HotbarIcon.Tooltip = "Ban Destructive Explosives";
+				this._hotbarIcon.Opacity = 1f;
+				this.HotbarIcon.Tooltip = HEROsMod.HeroText("BanDestructiveExplosives");
 			}
 			ItemsBanned = itemsbanned;
 		}
@@ -84,7 +82,7 @@ namespace HEROsMod.HEROsModServices
 					{
 						//Projectile newProj = new Projectile();
 						//newProj.SetDefaults(type);
-						Main.NewText(projectile.Name + " is banned on the server", Color.Red.R, Color.Red.G, Color.Red.B);
+						Main.NewText(string.Format(HEROsMod.HeroText("ProjectileIsBannerdOnTheServer"), projectile.Name), Color.Red.R, Color.Red.G, Color.Red.B);
 					}
 					//ErrorLogger.Log(Main.dedServ + " Item Banned");
 					projectile.active = false;

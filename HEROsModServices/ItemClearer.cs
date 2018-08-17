@@ -11,10 +11,10 @@ namespace HEROsMod.HEROsModServices
 	{
 		public ItemClearer()
 		{
-            _name = "Item Clearer";
-            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/canIcon"));
-            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-            HotbarIcon.Tooltip = "Clear Items on Ground";
+			this._name = "Item Clearer";
+			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/canIcon"));
+			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+			this.HotbarIcon.Tooltip = HEROsMod.HeroText("ClearItemsOnGround");
 		}
 
 		private void _hotbarIcon_onLeftClick(object sender, EventArgs e)
@@ -26,7 +26,7 @@ namespace HEROsMod.HEROsModServices
 				{
 					Main.item[i].active = false;
 				}
-				Main.NewText("Items on the ground were cleared");
+				Main.NewText(HEROsMod.HeroText("ItemsOnTheGroundWereCleared"));
 			}
 			else
 			{

@@ -32,9 +32,13 @@ namespace HEROsMod
         private static Texture2D _dummyTexture;
         private static float _deltaTime;
 
-        private static Item[] previousInventoryItems;
+		private static Texture2D _logoTexture;
+		private static Texture2D _logoTexture2;
+		private static Texture2D _testTubeTexture;
 
-        public static event EventHandler InventoryChanged;
+		internal static Item[] previousInventoryItems;
+
+		public static event EventHandler InventoryChanged;
 
         public static bool InterfaceVisible { get; set; }
 
@@ -86,11 +90,11 @@ namespace HEROsMod
             }
         }
 
-        public static Item HoverItem
-        {
-            get { return Main.HoverItem; }
-            set { Main.HoverItem = value; }
-        }
+		//public static Item HoverItem
+		//{
+		//	get { return Main.HoverItem; }// (Item)_hoverItem.GetValue(null); }
+		//	set { Main.HoverItem = value; }// _hoverItem.SetValue(null, value); }
+		//}
 
         /// <summary>
         /// Gets or Sets if the game camera is free to move from the players position
@@ -158,27 +162,27 @@ namespace HEROsMod
             }
         }
 
-        private static bool ItemChanged()
-        {
-            Player player = Main.player[Main.myPlayer];
-            for (int i = 0; i < player.inventory.Length - 1; i++)
-            {
-                if (player.inventory[i].IsNotTheSameAs(previousInventoryItems[i]))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+		private static bool ItemChanged()
+		{
+			Player player = Main.player[Main.myPlayer];
+			for (int i = 0; i < player.inventory.Length - 1; i++)
+			{
+				if (player.inventory[i].IsNotTheSameAs(previousInventoryItems[i]))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
 
-        private static void SetPreviousInventory()
-        {
-            Player player = Main.player[Main.myPlayer];
-            for (int i = 0; i < player.inventory.Length; i++)
-            {
-                previousInventoryItems[i] = player.inventory[i].Clone();
-            }
-        }
+		private static void SetPreviousInventory()
+		{
+			Player player = Main.player[Main.myPlayer];
+			for (int i = 0; i < player.inventory.Length; i++)
+			{
+				previousInventoryItems[i] = player.inventory[i].Clone();
+			}
+		}
 
         /// <summary>
         /// Draw the head of a player on screen

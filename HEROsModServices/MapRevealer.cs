@@ -17,10 +17,10 @@ namespace HEROsMod.HEROsModServices
 		{
 			IsInHotbar = true;
 			HotbarParent = hotbar;
-            _name = "Map Revealer";
-            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/map")/*ModUtils.RevealMapTexture*/);
-            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-            HotbarIcon.Tooltip = "Reveal Map";
+			this._name = "Map Revealer";
+			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/map")/*ModUtils.RevealMapTexture*/);
+			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+			this.HotbarIcon.Tooltip = HEROsMod.HeroText("RevealMap");
 			instance = this;
 		}
 

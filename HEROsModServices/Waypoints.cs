@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Localization;
 
 namespace HEROsMod.HEROsModServices
 {
@@ -52,12 +53,12 @@ namespace HEROsMod.HEROsModServices
         private static WaypointWindow waypointWindow;
         public static List<Waypoint> points = new List<Waypoint>();
 
-        public Waypoints()
-        {
-            _name = "Waypoints";
-            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/waypointIcon"));
-            HotbarIcon.Tooltip = "View Waypoints";
-            HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
+		public Waypoints()
+		{
+			this._name = "Waypoints";
+			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/waypointIcon"));
+			this.HotbarIcon.Tooltip = HEROsMod.HeroText("ViewWaypoints");
+			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 
             waypointWindow = new WaypointWindow()
             {
@@ -136,30 +137,29 @@ namespace HEROsMod.HEROsModServices
         private static bool prevGameMenu = true;
         private UIScrollView scrollView;
 
-        public WaypointWindow()
-        {
-            X = 50;
-            Y = 100;
-            CanMove = true;
+		public WaypointWindow()
+		{
+			X = 50;
+			Y = 100;
+			this.CanMove = true;
 
-            UILabel title = new UILabel("Waypoints")
-            {
-                Scale = .6f,
-                X = spacing,
-                Y = spacing,
-                OverridesMouse = false
-            };
-            Height = 300 + title.Height + spacing * 2;
+			UILabel title = new UILabel(HEROsMod.HeroText("Waypoints"));
+			title.Scale = .6f;
+			title.X = spacing;
+			title.Y = spacing;
+			title.OverridesMouse = false;
 
-            UIButton bAddWaypoint = new UIButton("Add Waypoint");
-            bAddWaypoint.Anchor = AnchorPosition.BottomRight;
-            UIButton bClose = new UIButton("Close");
-            bClose.Anchor = AnchorPosition.BottomRight;
-            bClose.onLeftClick += bClose_onLeftClick;
-            bAddWaypoint.onLeftClick += bAddWaypoint_onLeftClick;
-            Width = bClose.Width + bAddWaypoint.Width + spacing * 3;
-            bClose.Position = new Vector2(Width - spacing, Height - spacing);
-            bAddWaypoint.Position = new Vector2(bClose.Position.X - bClose.Width - spacing, bClose.Position.Y);
+			Height = 300 + title.Height + spacing * 2;
+
+			UIButton bAddWaypoint = new UIButton(HEROsMod.HeroText("AddWaypoint"));
+			UIButton bClose = new UIButton(Language.GetTextValue("LegacyInterface.71"));
+			bAddWaypoint.Anchor = AnchorPosition.BottomRight;
+			bClose.Anchor = AnchorPosition.BottomRight;
+			bClose.onLeftClick += bClose_onLeftClick;
+			bAddWaypoint.onLeftClick += bAddWaypoint_onLeftClick;
+			Width = bClose.Width + bAddWaypoint.Width + spacing * 3;
+			bClose.Position = new Vector2(Width - spacing, Height - spacing);
+			bAddWaypoint.Position = new Vector2(bClose.Position.X - bClose.Width - spacing, bClose.Position.Y);
 
             scrollView = new UIScrollView()
             {
@@ -267,10 +267,10 @@ namespace HEROsMod.HEROsModServices
             Height = 100;
             Anchor = AnchorPosition.Center;
 
-            label = new UILabel("Waypoint Name");
-            textbox = new UITextbox();
-            UIButton bSave = new UIButton("Ok");
-            UIButton bCancel = new UIButton("Cancel");
+			label = new UILabel(HEROsMod.HeroText("WaypointName"));
+			textbox = new UITextbox();
+			UIButton bSave = new UIButton(Language.GetTextValue("UI.Save"));
+			UIButton bCancel = new UIButton(Language.GetTextValue("UI.Cancel"));
 
             label.Scale = .5f;
 
@@ -303,25 +303,25 @@ namespace HEROsMod.HEROsModServices
             {
                 textbox.Unfocus();
 
-                if (ModUtils.NetworkMode == NetworkMode.None)
-                {
-                    if (!Waypoints.AddWaypoint(textbox.Text, waypointPos))
-                    {
-                        UIMessageBox mb = new UIMessageBox("A waypoint with this name already exists, please enter another name.", UIMessageBoxType.Ok, true);
-                        AddChild(mb);
-                    }
-                    else
-                    {
-                        Close();
-                    }
-                }
-                else
-                {
-                    HEROsModNetwork.GeneralMessages.RequestAddWaypoint(textbox.Text, waypointPos);
-                    Close();
-                }
-            }
-        }
+				if (ModUtils.NetworkMode == NetworkMode.None)
+				{
+					if (!Waypoints.AddWaypoint(textbox.Text, waypointPos))
+					{
+						UIMessageBox mb = new UIMessageBox(HEROsMod.HeroText("WaypointAlreadyExistsNote"), UIMessageBoxType.Ok, true);
+						this.AddChild(mb);
+					}
+					else
+					{
+						Close();
+					}
+				}
+				else
+				{
+					HEROsModNetwork.GeneralMessages.RequestAddWaypoint(textbox.Text, waypointPos);
+					Close();
+				}
+			}
+		}
 
         private void bCancel_onLeftClick(object sender, EventArgs e)
         {

@@ -13,9 +13,9 @@ namespace HEROsMod.HEROsModServices
 		{
 			IsHotbar = true;
 
-            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/settings")/*Main.buffTexture[BuffID.Confused]*/);
-            HotbarIcon.Tooltip = "Misc. Options";
-            HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
+			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/settings")/*Main.buffTexture[BuffID.Confused]*/);
+			this.HotbarIcon.Tooltip = HEROsMod.HeroText("MiscOptions");
+			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 
             _miscOptionsHotbar = new MiscOptionsWindow()
             {
@@ -55,6 +55,7 @@ namespace HEROsMod.HEROsModServices
 		{
             HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ToggleBannedItems") ||
 			HEROsModNetwork.LoginService.MyGroup.HasPermission("RevealMap") ||
+			HEROsModNetwork.LoginService.MyGroup.HasPermission("LightHack") ||
 			HEROsModNetwork.LoginService.MyGroup.IsAdmin ||
 			HEROsModNetwork.LoginService.MyGroup.HasPermission("ToggleHardmodeEnemies") ||
 			HEROsModNetwork.LoginService.MyGroup.HasPermission("ToggleGravestones");

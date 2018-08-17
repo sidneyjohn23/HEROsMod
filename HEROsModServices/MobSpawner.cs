@@ -18,11 +18,11 @@ namespace HEROsMod.HEROsModServices
         public const int NumberOfNegativeNPCs = 65;
         private MobSpawnWindow _spawnWindow;
 
-        public MobSpawner()
-        {
-            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/npcs")/*Main.itemTexture[666]*/);
-            HotbarIcon.Tooltip = "Open Mob Spawn Window";
-            HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
+		public MobSpawner()
+		{
+			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/npcs")/*Main.itemTexture[666]*/);
+			this.HotbarIcon.Tooltip = HEROsMod.HeroText("OpenMobSpawnWindow");
+			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 
             _spawnWindow = new MobSpawnWindow();
             _spawnWindow.CenterToParent();
@@ -90,19 +90,16 @@ namespace HEROsMod.HEROsModServices
         {
             //GetNPCList();
 
-            CanMove = true;
-            UILabel lTiltle = new UILabel("NPC Spawner")
-            {
-                OverridesMouse = false
-            };
-            scrollView = new UIScrollView();
-            searchBox = new UITextbox();
-            searchBox.KeyPressed += searchBox_KeyPressed;
-            mobInfo = new MobInfoPanel()
-            {
-                Visible = false
-            };
-            AddChild(mobInfo);
+			this.CanMove = true;
+			UILabel lTiltle = new UILabel(HEROsMod.HeroText("NPCSpawner"));
+			lTiltle.OverridesMouse = false;
+			scrollView = new UIScrollView();
+			searchBox = new UITextbox();
+			searchBox.KeyPressed += searchBox_KeyPressed;
+			mobInfo = new MobInfoPanel();
+			mobInfo.Visible = false;
+
+			AddChild(mobInfo);
 
             lTiltle.X = Spacing;
             lTiltle.Y = Spacing;
@@ -120,42 +117,32 @@ namespace HEROsMod.HEROsModServices
             //searchResults = category;
             // BuildList();
 
-            bAllNPCs = new UIButton("All")
-            {
-                X = scrollView.X + scrollView.Width + Spacing,
-                Y = scrollView.Y
-            };
-            bAllNPCs.onLeftClick += bAllNPCs_onLeftClick;
-            bAllNPCs.SetTextColor(Color.Yellow);
+			bAllNPCs = new UIButton(HEROsMod.HeroText("All"));
+			bAllNPCs.X = scrollView.X + scrollView.Width + Spacing;
+			bAllNPCs.Y = scrollView.Y;
+			bAllNPCs.onLeftClick += bAllNPCs_onLeftClick;
+			bAllNPCs.SetTextColor(Color.Yellow);
 
-            bTownNPCs = new UIButton("Town NPCs")
-            {
-                X = bAllNPCs.X,
-                Y = bAllNPCs.Y + bAllNPCs.Height + Spacing
-            };
-            bTownNPCs.onLeftClick += bTownNPCs_onLeftClick;
+			bTownNPCs = new UIButton(HEROsMod.HeroText("TownNPCs"));
+			bTownNPCs.X = bAllNPCs.X;
+			bTownNPCs.Y = bAllNPCs.Y + bAllNPCs.Height + Spacing;
+			bTownNPCs.onLeftClick += bTownNPCs_onLeftClick;
 
-            bFriendly = new UIButton("Friendly")
-            {
-                X = bTownNPCs.X,
-                Y = bTownNPCs.Y + bTownNPCs.Height + Spacing
-            };
-            bFriendly.onLeftClick += bFriendly_onLeftClick;
+			bFriendly = new UIButton(HEROsMod.HeroText("Friendly"));
+			bFriendly.X = bTownNPCs.X;
+			bFriendly.Y = bTownNPCs.Y + bTownNPCs.Height + Spacing;
+			bFriendly.onLeftClick += bFriendly_onLeftClick;
 
-            bBoss = new UIButton("Boss")
-            {
-                X = bFriendly.X,
-                Y = bFriendly.Y + bFriendly.Height + Spacing
-            };
-            bBoss.onLeftClick += bBoss_onLeftClick;
+			bBoss = new UIButton(HEROsMod.HeroText("Boss"));
+			bBoss.X = bFriendly.X;
+			bBoss.Y = bFriendly.Y + bFriendly.Height + Spacing;
+			bBoss.onLeftClick += bBoss_onLeftClick;
 
-            bMod = new UIButton("Mod")
-            {
-                X = bBoss.X,
-                Y = bBoss.Y + bBoss.Height + Spacing
-            };
-            bMod.onLeftClick += bMod_onLeftClick;
-            bMod.Tooltip = "";
+			bMod = new UIButton(HEROsMod.HeroText("Mod"));
+			bMod.X = bBoss.X;
+			bMod.Y = bBoss.Y + bBoss.Height + Spacing;
+			bMod.onLeftClick += bMod_onLeftClick;
+			bMod.Tooltip = "";
 
             bAllNPCs.AutoSize = false;
             bTownNPCs.AutoSize = false;
@@ -852,74 +839,74 @@ namespace HEROsMod.HEROsModServices
 
             Vector2 pos = player.position;
 
-            if (pos.Y / 16f < Main.maxTilesY - 205)
-            {
-                Main.NewText("Please move to the underworld to spawn WoF");
-                return;
-            }
-            if (Main.netMode == 1)
-            {
-                return;
-            }
-            Player.FindClosest(pos, 16, 16);
-            int num = 1;
-            if (pos.X / 16f > Main.maxTilesX / 2)
-            {
-                num = -1;
-            }
-            bool flag = false;
-            int num2 = (int)pos.X;
-            while (!flag)
-            {
-                flag = true;
-                for (int i = 0; i < 255; i++)
-                {
-                    if (Main.player[i].active && Main.player[i].position.X > num2 - 1200 && Main.player[i].position.X < num2 + 1200)
-                    {
-                        num2 -= num * 16;
-                        flag = false;
-                    }
-                }
-                if (num2 / 16 < 20 || num2 / 16 > Main.maxTilesX - 20)
-                {
-                    flag = true;
-                }
-            }
-            int num3 = (int)pos.Y;
-            int num4 = num2 / 16;
-            int num5 = num3 / 16;
-            int num6 = 0;
-            try
-            {
-                while (WorldGen.SolidTile(num4, num5 - num6) || Main.tile[num4, num5 - num6].liquid >= 100)
-                {
-                    if (!WorldGen.SolidTile(num4, num5 + num6) && Main.tile[num4, num5 + num6].liquid < 100)
-                    {
-                        num5 += num6;
-                        goto IL_162;
-                    }
-                    num6++;
-                }
-                num5 -= num6;
-            }
-            catch
-            {
-            }
-        IL_162:
-            num3 = num5 * 16;
-            int num7 = NPC.NewNPC(num2, num3, 113, 0);
-            if (Main.netMode == 0)
-            {
-                Main.NewText(Language.GetTextValue("Announcement.HasAwoken", Main.npc[num7].TypeName), 175, 75, 255, false);
-                return;
-            }
-            if (Main.netMode == 2)
-            {
-                NetMessage.BroadcastChatMessage(NetworkText.FromKey("Announcement.HasAwoken", new object[]
-                        {
-                            Main.npc[num7].GetTypeNetName()
-                        }), new Color(175, 75, 255), -1);
-            }
-        }
-    }
+			if (pos.Y / 16f < (float)(Main.maxTilesY - 205))
+			{
+				Main.NewText(HEROsMod.HeroText("UnderworldToSpawnWoF"));
+				return;
+			}
+			if (Main.netMode == 1)
+			{
+				return;
+			}
+			Player.FindClosest(pos, 16, 16);
+			int num = 1;
+			if (pos.X / 16f > (float)(Main.maxTilesX / 2))
+			{
+				num = -1;
+			}
+			bool flag = false;
+			int num2 = (int)pos.X;
+			while (!flag)
+			{
+				flag = true;
+				for (int i = 0; i < 255; i++)
+				{
+					if (Main.player[i].active && Main.player[i].position.X > (float)(num2 - 1200) && Main.player[i].position.X < (float)(num2 + 1200))
+					{
+						num2 -= num * 16;
+						flag = false;
+					}
+				}
+				if (num2 / 16 < 20 || num2 / 16 > Main.maxTilesX - 20)
+				{
+					flag = true;
+				}
+			}
+			int num3 = (int)pos.Y;
+			int num4 = num2 / 16;
+			int num5 = num3 / 16;
+			int num6 = 0;
+			try
+			{
+				while (WorldGen.SolidTile(num4, num5 - num6) || Main.tile[num4, num5 - num6].liquid >= 100)
+				{
+					if (!WorldGen.SolidTile(num4, num5 + num6) && Main.tile[num4, num5 + num6].liquid < 100)
+					{
+						num5 += num6;
+						goto IL_162;
+					}
+					num6++;
+				}
+				num5 -= num6;
+			}
+			catch
+			{
+			}
+		IL_162:
+			num3 = num5 * 16;
+			int num7 = NPC.NewNPC(num2, num3, 113, 0);
+			if (Main.netMode == 0)
+			{
+				Main.NewText(Language.GetTextValue("Announcement.HasAwoken", Main.npc[num7].TypeName), 175, 75, 255, false);
+				return;
+			}
+			if (Main.netMode == 2)
+			{
+				NetMessage.BroadcastChatMessage(NetworkText.FromKey("Announcement.HasAwoken", new object[]
+						{
+							Main.npc[num7].GetTypeNetName()
+						}), new Color(175, 75, 255), -1);
+			}
+		}
+	}
 }

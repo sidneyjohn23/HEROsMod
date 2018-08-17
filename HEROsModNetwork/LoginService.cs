@@ -126,8 +126,8 @@ namespace HEROsMod.HEROsModNetwork {
             int playerID = 0;
 
             if (Network.Players2.Values.Any((x) => x.Username == username)) {
-                Network.SendTextToPlayer("This account is already logged on in this server.", playerNumber);
-                return;
+				Network.SendTextToPlayer(HEROsMod.HeroText("AccountAlreadyLoggedIn"), playerNumber);
+				return;
             }
             if (DatabaseController.Login(ref username, password, ref playerID, ref groupID)) {
 
@@ -140,12 +140,13 @@ namespace HEROsMod.HEROsModNetwork {
                 Network.Players2[playerNumber].Group = Network.GetGroupByID(groupID);
                 if (Network.Players2[playerNumber].UsingHEROsMod)
                     LoginSuccess(playerNumber);
-                Network.SendTextToPlayer("You have successfully logged in.  You are in the " + Network.Players2[playerNumber].Group.Name + " Group.", playerNumber, Color.Green);
+				Network.SendTextToPlayer(string.Format(HEROsMod.HeroText("LoggedInSuccessfully"), Network.Players[playerNumber].Group.Name), playerNumber, Color.Green);
 
-            } else {
-                Network.SendTextToPlayer("Invalid Username or Password", playerNumber, Color.Red);
-            }
-        }
+			}
+			else {
+				Network.SendTextToPlayer(HEROsMod.HeroText("InvalidUsernameOrPassword"), playerNumber, Color.Red);
+			}
+		}
 
         private static void LoginSuccess(int playerNumber) {
             if (Network.NetworkMode == NetworkMode.Server) {
@@ -217,17 +218,17 @@ namespace HEROsMod.HEROsModNetwork {
             DatabaseController.RegistrationResult regResult = DatabaseController.Register(username, password);
             switch (regResult) {
                 case DatabaseController.RegistrationResult.Sucess:
-                    Network.SendTextToPlayer("You have successfully registered.  Please login.", playerNumber);
-                    foreach (var player in Network.Players2) {
+					Network.SendTextToPlayer(HEROsMod.HeroText("SuccessfullyRegistered"), playerNumber);
+					foreach (var player in Network.Players2) {
                         if (player.Value.ServerInstance.IsActive) {
                             GeneralMessages.SendRegisteredUsersToPlayer(player.Key);
                         }
                     }
                     break;
 
-                case DatabaseController.RegistrationResult.UsernameTaken:
-                    Network.SendTextToPlayer("This username has already been taken.", playerNumber);
-                    break;
+				case DatabaseController.RegistrationResult.UsernameTaken:
+					Network.SendTextToPlayer(HEROsMod.HeroText("UsernameAlreadyTaken"), playerNumber);
+					break;
 
                 case DatabaseController.RegistrationResult.Error:
                     Network.SendTextToPlayer("An error occured when trying to register.", playerNumber);
@@ -248,8 +249,8 @@ namespace HEROsMod.HEROsModNetwork {
                 for (int i = 0; i < Network.Groups.Count; i++) {
                     //Check to make sure that group does not already exist
                     if (Network.Groups[i].Name.ToLower() == newGroupName.ToLower()) {
-                        Network.SendTextToPlayer("A group with this name already exist", playerNumber);
-                        return;
+						Network.SendTextToPlayer(HEROsMod.HeroText("GroupAlreadyExists"), playerNumber);
+						return;
                     }
                 }
                 Group newGroup = new Group(newGroupName);
@@ -281,9 +282,9 @@ namespace HEROsMod.HEROsModNetwork {
                         Network.Groups.Remove(groupToDelete);
                         GroupChanged?.Invoke(null, EventArgs.Empty);
                     } else {
-                        Network.SendTextToPlayer("You can not delete the default group.", playerNumber);
-                    }
-                } else {
+						Network.SendTextToPlayer(HEROsMod.HeroText("CantDeleteDefaultGroup"), playerNumber);
+					}
+				} else {
                     Network.SendTextToPlayer("Group could not be found", playerNumber);
                 }
             }

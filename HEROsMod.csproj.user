@@ -7,6 +7,7 @@
     <StartAction>Program</StartAction>
     <StartProgram>C:\Program Files %28x86%29\Steam\steamapps\common\Terraria\Terraria.exe</StartProgram>
     <StartWorkingDirectory>C:\Program Files %28x86%29\Steam\steamapps\common\terraria</StartWorkingDirectory>
+    <StartArguments>-skipselect</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <StartProgram>C:\Program Files %28x86%29\Steam\steamapps\common\Terraria\Terraria.exe</StartProgram>

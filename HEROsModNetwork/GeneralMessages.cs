@@ -216,7 +216,11 @@ namespace HEROsMod.HEROsModNetwork {
                 case MessageType.PurifyWorld:
                     ProcessPurifyWorldRequest(playerNumber);
                     break;
-            }
+
+				case MessageType.SyncItemNonOwner:
+					HEROsModServices.SnoopWindow.ProcessSyncItemNonOwner(ref reader, playerNumber);
+					break;
+			}
         }
 
 
@@ -283,7 +287,7 @@ namespace HEROsMod.HEROsModNetwork {
                 SendWaypointListToPlayer(playerNumber);
                 SendRegionListToPlayer(playerNumber);
                 SendCurrentTogglesToPlayer(playerNumber);
-                Network.SendTextToPlayer(@"Click the 'Login' button on the HEROsMod hotbar to Login or Create an Account", playerNumber, Color.Red);
+				Network.SendTextToPlayer(HEROsMod.HeroText("LoginInstructions"), playerNumber, Color.Red);
             }
         }
         #endregion
@@ -310,29 +314,29 @@ namespace HEROsMod.HEROsModNetwork {
                     case TimeChangeType.SetToNoon:
                         Main.dayTime = true;
                         Main.time = 27000.0;
-                        Network.SendTextToAllPlayers("The time has been changed to noon by " + Main.player[playerNumber].name);
-                        break;
+						Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("TimeChangedNoonBy"), Main.player[playerNumber].name));
+						break;
 
-                    case TimeChangeType.SetToMidnight:
-                        Main.dayTime = false;
-                        Main.time = 27000.0;
-                        Network.SendTextToAllPlayers("The time has been changed to midnight by " + Main.player[playerNumber].name);
-                        break;
+					case TimeChangeType.SetToMidnight:
+						Main.dayTime = false;
+						Main.time = 27000.0;
+						Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("TimeChangedMidnightBy"), Main.player[playerNumber].name));
+						break;
 
-                    case TimeChangeType.SetToNight:
-                        Main.dayTime = false;
-                        Main.time = 0;
-                        Network.SendTextToAllPlayers("The time has been changed to night by " + Main.player[playerNumber].name);
-                        break;
+					case TimeChangeType.SetToNight:
+						Main.dayTime = false;
+						Main.time = 0;
+						Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("TimeChangedNightBy"), Main.player[playerNumber].name));
+						break;
 
                     case TimeChangeType.Pause:
                         HEROsModServices.TimeWeatherChanger.TimePaused = !HEROsModServices.TimeWeatherChanger.TimePaused;
                         if (HEROsModServices.TimeWeatherChanger.TimePaused) {
                             HEROsModServices.TimeWeatherChanger.PausedTime = Main.time;
-                            Network.SendTextToAllPlayers("Time has been paused by " + Main.player[playerNumber].name);
-                        } else {
-                            Network.SendTextToAllPlayers("Time has been resumed by " + Main.player[playerNumber].name);
-                        }
+							Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("TimePausedBy"), Main.player[playerNumber].name));
+						} else {
+							Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("TimeResumedBy"), Main.player[playerNumber].name));
+						}
                         TimePausedOrResumed();
                         break;
 
@@ -367,13 +371,14 @@ namespace HEROsMod.HEROsModNetwork {
             Network.SendDataToServer();
         }
 
-        private static void ProcessClearGroundItemsRequest(int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("ClearItems")) {
-                Network.ClearGroundItems();
-                Network.SendTextToAllPlayers("Items on the ground were cleared by " + Netplay.Clients/*.serverSock*/[playerNumber].Name/*name*/);
-            }
-        }
-        #endregion
+		private static void ProcessClearGroundItemsRequest(int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("ClearItems"))
+			{
+				Network.ClearGroundItems();
+				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("ItemsClearedBy"), Main.player[playerNumber].name));
+			}
+		}
 
         #region Toggle Enemies
         public static void RequestToggleEnemies() {
@@ -381,17 +386,22 @@ namespace HEROsMod.HEROsModNetwork {
             Network.SendDataToServer();
         }
 
-        private static void ProcessToggleEnemiesRequest(int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("ToggleEnemies")) {
-                HEROsModServices.EnemyToggler.ToggleNPCs();
-                if (HEROsModServices.EnemyToggler.EnemiesAllowed) {
-                    Network.SendTextToAllPlayers("Enemy spawns were enabled by " + Main.player[playerNumber].name);
-                } else {
-                    Network.SendTextToAllPlayers("Enemy spawns were disabled by " + Main.player[playerNumber].name);
-                }
-                EnemiesToggled();
-            }
-        }
+		private static void ProcessToggleEnemiesRequest(int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("ToggleEnemies"))
+			{
+				HEROsModServices.EnemyToggler.ToggleNPCs();
+				if (HEROsModServices.EnemyToggler.EnemiesAllowed)
+				{
+					Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("EnemySpawnsEnabledBy"), Main.player[playerNumber].name));
+				}
+				else
+				{
+					Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("EnemySpawnsDisabledBy"), Main.player[playerNumber].name));
+				}
+				EnemiesToggled();
+			}
+		}
 
         private static void EnemiesToggled() {
             WriteHeader(MessageType.EnemiesToggled);
@@ -427,25 +437,28 @@ namespace HEROsMod.HEROsModNetwork {
             Network.SendDataToServer();
         }
 
-        private static void ProcessStartRainRequest(int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("ChangeTimeWeather")) {
-                ModUtils.StartRain();
-                Network.SendTextToAllPlayers("Rain has been turned on by " + Main.player[playerNumber].name);
-            }
-        }
+		private static void ProcessStartRainRequest(int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("ChangeTimeWeather"))
+			{
+				ModUtils.StartRain();
+				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("RainTurnedOnBy"), Main.player[playerNumber].name));
+			}
+		}
 
         public static void RequestStopRain() {
             WriteHeader(MessageType.RequestStopRain);
             Network.SendDataToServer();
         }
 
-        private static void ProcessStopRainRequest(int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("ChangeTimeWeather")) {
-                ModUtils.StopRain();
-                Network.SendTextToAllPlayers("Rain has been turned off by " + Main.player[playerNumber].name);
-            }
-        }
-        #endregion
+		private static void ProcessStopRainRequest(int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("ChangeTimeWeather"))
+			{
+				ModUtils.StopRain();
+				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("RainTurnedOffBy"), Main.player[playerNumber].name));
+			}
+		}
 
         #region Start/Stop Sandstorm
         public static void RequestStartSandstorm() {
@@ -453,25 +466,28 @@ namespace HEROsMod.HEROsModNetwork {
             Network.SendDataToServer();
         }
 
-        private static void ProcessStartSandstormRequest(int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("ChangeTimeWeather")) {
-                ModUtils.StartSandstorm();
-                Network.SendTextToAllPlayers("Sandstorm has been turned on by " + Main.player[playerNumber].name);
-            }
-        }
+		private static void ProcessStartSandstormRequest(int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("ChangeTimeWeather"))
+			{
+				ModUtils.StartSandstorm();
+				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("SandstormTurnedOnBy"), Main.player[playerNumber].name));
+			}
+		}
 
         public static void RequestStopSandstorm() {
             WriteHeader(MessageType.RequestStopSandstorm);
             Network.SendDataToServer();
         }
 
-        private static void ProcessStopSandstormRequest(int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("ChangeTimeWeather")) {
-                ModUtils.StopSandstorm();
-                Network.SendTextToAllPlayers("Sandstorm has been turned off by " + Main.player[playerNumber].name);
-            }
-        }
-        #endregion
+		private static void ProcessStopSandstormRequest(int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("ChangeTimeWeather"))
+			{
+				ModUtils.StopSandstorm();
+				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("SandstormTurnedOffBy"), Main.player[playerNumber].name));
+			}
+		}
 
         #region Forced Sundial
         public static void RequestForcedSundial() {
@@ -479,15 +495,16 @@ namespace HEROsMod.HEROsModNetwork {
             Network.SendDataToServer();
         }
 
-        private static void ProcessForcedSundialRequest(int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("ChangeTimeWeather")) {
-                Main.fastForwardTime = true;
-                Main.sundialCooldown = 0;
-                NetMessage.SendData(7, -1, -1, null, 0, 0f, 0f, 0f, 0, 0, 0);
-                Network.SendTextToAllPlayers("Forced Enchanted Sundial initiated by " + Main.player[playerNumber].name);
-            }
-        }
-        #endregion
+		private static void ProcessForcedSundialRequest(int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("ChangeTimeWeather"))
+			{
+				Main.fastForwardTime = true;
+				Main.sundialCooldown = 0;
+				NetMessage.SendData(7, -1, -1, null, 0, 0f, 0f, 0f, 0, 0, 0);
+				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("ForcedEnchangedSundialBy"), Main.player[playerNumber].name));
+			}
+		}
 
         #region Waypoint List; Add/Remove Waypoint
         public static void SendWaypointListToPlayer(int playerNumber) {
@@ -522,17 +539,22 @@ namespace HEROsMod.HEROsModNetwork {
             Network.SendDataToServer();
         }
 
-        private static void ProcessAddWaypointRequest(ref BinaryReader reader, int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("EditWaypoints")) {
-                string name = reader.ReadString();
-                Vector2 position = reader.ReadVector2();
-                if (HEROsModServices.Waypoints.AddWaypoint(name, position)) {
-                    SendWaypointListToPlayer(-2);
-                } else {
-                    Network.SendTextToPlayer("A waypoint with this name already exists, please enter another name.", playerNumber);
-                }
-            }
-        }
+		private static void ProcessAddWaypointRequest(ref BinaryReader reader, int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("EditWaypoints"))
+			{
+				string name = reader.ReadString();
+				Vector2 position = reader.ReadVector2();
+				if (HEROsModServices.Waypoints.AddWaypoint(name, position))
+				{
+					SendWaypointListToPlayer(-2);
+				}
+				else
+				{
+					Network.SendTextToPlayer(HEROsMod.HeroText("WaypointAlreadyExists"), playerNumber);
+				}
+			}
+		}
 
         public static void RequestRemoveWaypoint(int waypointIndex) {
             WriteHeader(MessageType.RequestRemoveWaypoint);
@@ -669,8 +691,8 @@ namespace HEROsMod.HEROsModNetwork {
             Network.Regions.Add(region);
 
             SendRegionListToAllPlayers();
-            Network.SendTextToAllPlayers(@"'" + region.Name + "' region created by " + Network.Players2[playerNumber].ServerInstance.Name);
-        }
+			Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("RegionCreatedBy"), region.Name, Network.Players2[playerNumber].ServerInstance.Name));
+		}
 
         public static void RequestRemoveRegion(Region region) {
             WriteHeader(MessageType.RequestRemoveRegion);
@@ -865,8 +887,8 @@ namespace HEROsMod.HEROsModNetwork {
                 Main.spawnTileX = (int) (player.position.X - 8 + player.width / 2) / 16;
                 Main.spawnTileY = (int) (player.position.Y + player.height) / 16;
 
-                Network.SendTextToAllPlayers(string.Format("Spawn Point set to X:{0} Y:{1} by {2}", Main.spawnTileX, Main.spawnTileY, player.name));
-            }
+				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("SpawnPointSetToBy"), Main.spawnTileX, Main.spawnTileY, player.name));
+			}
         }
         #endregion
 
@@ -876,17 +898,22 @@ namespace HEROsMod.HEROsModNetwork {
             Network.SendDataToServer();
         }
 
-        private static void ProcessToggleGravestonesRequest(int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("ToggleGravestones")) {
-                Network.GravestonesAllowed = !Network.GravestonesAllowed;
-                if (Network.GravestonesAllowed) {
-                    Network.SendTextToAllPlayers("Gravestones were enabled by " + Main.player[playerNumber].name);
-                } else {
-                    Network.SendTextToAllPlayers("Gravestones were disabled by " + Main.player[playerNumber].name);
-                }
-                GravestonesToggled();
-            }
-        }
+		private static void ProcessToggleGravestonesRequest(int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("ToggleGravestones"))
+			{
+				Network.GravestonesAllowed = !Network.GravestonesAllowed;
+				if (Network.GravestonesAllowed)
+				{
+					Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("GravestonesEnabledBy"), Main.player[playerNumber].name));
+				}
+				else
+				{
+					Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("GravestonesDisabledBy"), Main.player[playerNumber].name));
+				}
+				GravestonesToggled();
+			}
+		}
 
         private static void GravestonesToggled() {
             WriteHeader(MessageType.GravestonesToggled);
@@ -939,31 +966,41 @@ namespace HEROsMod.HEROsModNetwork {
                 int x = reader.ReadInt32();
                 int y = reader.ReadInt32();
 
-                if (x >= 0 && y >= 0 && x < Main.maxTilesX && y < Main.maxTilesY) {
-                    int playerID = Network.TileLastChangedBy[x, y];
-                    if (playerID >= 0) {
-                        UserWithID user = null;
-                        UserWithID[] users = DatabaseController.GetRegisteredUsers();
-                        for (int i = 0; i < users.Length; i++) {
-                            if (users[i].ID == playerID) {
-                                user = users[i];
-                            }
-                        }
-                        if (user != null) {
-                            Network.SendTextToPlayer("Tile last modified by " + user.Username, playerNumber);
-                        }
-                    } else {
-                        Network.SendTextToPlayer("This tile has not been modified since last server boot up.", playerNumber);
-                    }
-                }
-            } else {
-                Network.SendTextToPlayer("You don't have permission to do that.", playerNumber);
-            }
-        }
-        #endregion
+				if (x >= 0 && y >= 0 && x < Main.maxTilesX && y < Main.maxTilesY)
+				{
+					int playerID = Network.TileLastChangedBy[x, y];
+					if (playerID >= 0)
+					{
+						UserWithID user = null;
+						UserWithID[] users = DatabaseController.GetRegisteredUsers();
+						for (int i = 0; i < users.Length; i++)
+						{
+							if (users[i].ID == playerID)
+							{
+								user = users[i];
+							}
+						}
+						if (user != null)
+						{
+							Network.SendTextToPlayer(string.Format(HEROsMod.HeroText("TileLastModifiedBy"), user.Username), playerNumber);
+						}
+					}
+					else
+					{
+						// TODO: These should all be NetworkText.FromKey so they show up in correct language on Client
+						Network.SendTextToPlayer(HEROsMod.HeroText("TileNotModified"), playerNumber);
+					}
+				}
+			}
+			else
+			{
+				Network.SendTextToPlayer(HEROsMod.HeroText("YouDontHavePermissionToDoThat"), playerNumber);
+			}
+		}
+		#endregion
 
-        #region Spawn NPC
-        public static void RequestSpawnNPC(int npcType) {
+		#region Spawn NPC
+		public static void RequestSpawnNPC(int npcType) {
             WriteHeader(MessageType.RequestSpawnNPC);
             Writer.Write(npcType);
             Network.SendDataToServer();
@@ -1009,13 +1046,14 @@ namespace HEROsMod.HEROsModNetwork {
             Network.SendDataToServer();
         }
 
-        private static void ProcessStopEventsRequest(int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("StartEvents")) {
-                HEROsModServices.InvasionService.StopAllEvents();
-                Network.SendTextToAllPlayers("All events have been stopped by " + Network.Players2[playerNumber].GameInstance.name);
-            }
-        }
-        #endregion
+		private static void ProcessStopEventsRequest(int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("StartEvents"))
+			{
+				HEROsModServices.InvasionService.StopAllEvents();
+				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("EventsStoppedBy"), Network.Players[playerNumber].GameInstance.name));
+			}
+		}
 
         #region Toggle Banned Items
         public static void RequestToggleBannedItems() {
@@ -1023,17 +1061,22 @@ namespace HEROsMod.HEROsModNetwork {
             Network.SendDataToServer();
         }
 
-        private static void ProcessToggleBannedItemsRequest(int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("ToggleBannedItems")) {
-                HEROsModServices.ItemBanner.ItemsBanned = !HEROsModServices.ItemBanner.ItemsBanned;
-                if (HEROsModServices.ItemBanner.ItemsBanned) {
-                    Network.SendTextToAllPlayers("Destructive Explosives banned by " + Network.Players2[playerNumber].ServerInstance.Name);
-                } else {
-                    Network.SendTextToAllPlayers("Destructive Explosives unbanned by " + Network.Players2[playerNumber].ServerInstance.Name);
-                }
-                BannedItemsToggled();
-            }
-        }
+		private static void ProcessToggleBannedItemsRequest(int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("ToggleBannedItems"))
+			{
+				HEROsModServices.ItemBanner.ItemsBanned = !HEROsModServices.ItemBanner.ItemsBanned;
+				if (HEROsModServices.ItemBanner.ItemsBanned)
+				{
+					Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("DestructiveExplosivesBannedBy"), Main.player[playerNumber].name));
+				}
+				else
+				{
+					Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("DestructiveExplosivesUnbannedBy"), Main.player[playerNumber].name));
+				}
+				BannedItemsToggled();
+			}
+		}
 
         private static void BannedItemsToggled() {
             WriteHeader(MessageType.BannedItemsToggled);
@@ -1153,7 +1196,8 @@ namespace HEROsMod.HEROsModNetwork {
             RequestTeleport,
             RequestForcedSundial,
             CurrentToggles,
-            ServerPlayerJoined,
+			SyncItemNonOwner,
+			ServerPlayerJoined,
             ServerPlayerLeft,
             PurifyWorld
         }

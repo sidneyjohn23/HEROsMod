@@ -15,11 +15,11 @@ namespace HEROsMod.HEROsModServices
 
 		public EnemyToggler()
 		{
-            _name = "Enemy Toggler";
-            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/npcIcon"));
-            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-            HotbarIcon.Tooltip = "Disable Enemy Spawns";
-            _hotbarIcon.Opacity = 1f;
+			this._name = "Enemy Toggler";
+			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/npcIcon"));
+			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+			this.HotbarIcon.Tooltip = HEROsMod.HeroText("DisableEnemySpawns");
+			this._hotbarIcon.Opacity = 1f;
 			HEROsModNetwork.GeneralMessages.EnemiesToggledByServer += GeneralMessages_EnemiesToggledByServer;
 		}
 
@@ -27,13 +27,13 @@ namespace HEROsMod.HEROsModServices
 		{
 			if (enemiesCanSpawn)
 			{
-                _hotbarIcon.Opacity = 1f;
-                HotbarIcon.Tooltip = "Disable Enemy Spawns";
+				this._hotbarIcon.Opacity = 1f;
+				this.HotbarIcon.Tooltip = HEROsMod.HeroText("DisableEnemySpawns");
 			}
 			else
 			{
-                _hotbarIcon.Opacity = .5f;
-                HotbarIcon.Tooltip = "Enable Enemy Spawns";
+				this._hotbarIcon.Opacity = .5f;
+				this.HotbarIcon.Tooltip = HEROsMod.HeroText("EnableEnemySpawns");
 			}
 		}
 
@@ -69,15 +69,18 @@ namespace HEROsMod.HEROsModServices
 				ToggleNPCs();
 				if (EnemiesAllowed)
 				{
-                    _hotbarIcon.Opacity = 1f;
-                    HotbarIcon.Tooltip = "Disable Enemy Spawns";
+					this._hotbarIcon.Opacity = 1f;
+					this.HotbarIcon.Tooltip = HEROsMod.HeroText("DisableEnemySpawns");
 				}
 				else
 				{
-                    _hotbarIcon.Opacity = .5f;
-                    HotbarIcon.Tooltip = "Enable Enemy Spawns";
+					this._hotbarIcon.Opacity = .5f;
+					this.HotbarIcon.Tooltip = HEROsMod.HeroText("EnableEnemySpawns");
 				}
-				Main.NewText("Enemy spawns " + (EnemiesAllowed ? "enabled" : "disabled"));
+				if(EnemiesAllowed)
+					Main.NewText(HEROsMod.HeroText("EnemySpawnsEnabled"));
+				else
+					Main.NewText(HEROsMod.HeroText("EnemySpawnsDisabled"));
 			}
 		}
 

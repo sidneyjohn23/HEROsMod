@@ -5,21 +5,26 @@ using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace HEROsMod.UIKit.UIComponents {
-    internal class ItemBrowser : UIWindow {
-        private ItemCollectionView _itemView;
-        private Slot _trashCan;
-        private UIScrollView _categoryView;
-        private Category _selectedCategory;
-        private Item[] _currentItems;
-        private UIImage _bCollapseCategories;
-        private UIButton _bBack;
-        private UIImage _bClose;
-        private UIView _filterView;
-        private UIImage _spacer;
-        private UIView _sortView;
+namespace HEROsMod.UIKit.UIComponents
+{
+	internal class ItemBrowser : UIWindow
+	{
+		internal static string HeroText(string key, string category = "ItemBrowser") => HEROsMod.HeroText($"{category}.{key}");
+
+		private ItemCollectionView _itemView;
+		private Slot _trashCan;
+		private UIScrollView _categoryView;
+		private Category _selectedCategory;
+		private Item[] _currentItems;
+		private UIImage _bCollapseCategories;
+		private UIButton _bBack;
+		private UIImage _bClose;
+		private UIView _filterView;
+		private UIImage _spacer;
+		private UIView _sortView;
 
         private Texture2D _collapseTexture;
         private Texture2D _expandTexture;
@@ -127,12 +132,17 @@ namespace HEROsMod.UIKit.UIComponents {
             };
             AddChild(_sortView);
 
-            _bBack = new UIButton("Back") {
-                X = _categoryView.X
-            };
-            _bBack.Y = _categoryView.Y - _bBack.Height - Spacing;
-            _bBack.onLeftClick += _bViewAllItems_onLeftClick;
-            AddChild(_bBack);
+			//_trashCan = new Slot(0);
+			//_trashCan.IsTrachCan = true;
+			//_trashCan.X = _itemView.X;
+			//_trashCan.Y = _itemView.Y - _trashCan.Height - SmallSpacing/2;
+			//AddChild(_trashCan);
+
+			_bBack = new UIButton(Language.GetTextValue("UI.Back"));
+			_bBack.X = _categoryView.X;
+			_bBack.Y = _categoryView.Y - _bBack.Height - Spacing;
+			_bBack.onLeftClick += _bViewAllItems_onLeftClick;
+			AddChild(_bBack);
 
             _bCollapseCategories = new UIImage(_collapseTexture);
             _bCollapseCategories.X = Width - _bCollapseCategories.Width - LargeSpacing;
@@ -180,35 +190,37 @@ namespace HEROsMod.UIKit.UIComponents {
                 if (categories.Length == 0) return;
             }
 
-            _categoryView.ClearContent();
-            float yPos = 0;
-            for (int i = 0; i < categories.Length; i++) {
-                UIButton button = new UIButton(categories[i].Name) {
-                    Tag = categories[i],
-                    AutoSize = false,
-                    Width = 100
-                };
-                int x = i % numberCategoryColumns;
-                int y = i / numberCategoryColumns;
-                button.X = Spacing + x * (button.Width + Spacing);
-                button.Y = Spacing + y * (button.Height + Spacing);
-                button.onLeftClick += button_onLeftClick;
-                yPos = button.Y + button.Height + Spacing;
-                _categoryView.AddChild(button);
-            }
-            _categoryView.ContentHeight = yPos;
-        }
+			_categoryView.ClearContent();
+			float yPos = 0;
+			for (int i = 0; i < categories.Length; i++)
+			{
+				UIButton button = new UIButton(categories[i].LocalizedName);
+				button.Tag = categories[i];
+				button.AutoSize = false;
+				button.Width = 100;
+				int x = i % numberCategoryColumns;
+				int y = i / numberCategoryColumns;
+				button.X = Spacing + x * (button.Width + Spacing);
+				button.Y = Spacing + y * (button.Height + Spacing);
+				button.onLeftClick += button_onLeftClick;
+				yPos = button.Y + button.Height + Spacing;
+				_categoryView.AddChild(button);
+			}
+			_categoryView.ContentHeight = yPos;
+		}
 
-        private void PopulateSortView() {
-            if (DefaultSorts == null) {
-                DefaultSorts = new Sort[]
-                {
-                    new Sort( new UIImage(HEROsMod.instance.GetTexture("Images/sortItemID")){Tooltip = "ItemID"} , (x,y)=>x.type.CompareTo(y.type)),
-                    new Sort( new UIImage(HEROsMod.instance.GetTexture("Images/sortValue")){Tooltip = "Value"} , (x,y)=>x.value.CompareTo(y.value)),
-                    new Sort( new UIImage(HEROsMod.instance.GetTexture("Images/sortAZ")){Tooltip = "Alphabetical"} , (x,y)=>x.Name.CompareTo(y.Name)),
-                };
-            }
-            List<Sort> sorts = DefaultSorts.ToList();
+		private void PopulateSortView()
+		{
+			if(DefaultSorts == null)
+			{
+				DefaultSorts = new Sort[]
+				{
+					new Sort( new UIImage(HEROsMod.instance.GetTexture("Images/sortItemID")){Tooltip = HeroText("SortName.ItemID")} , (x,y)=>x.type.CompareTo(y.type)),
+					new Sort( new UIImage(HEROsMod.instance.GetTexture("Images/sortValue")){Tooltip = HeroText("SortName.Value")} , (x,y)=>x.value.CompareTo(y.value)),
+					new Sort( new UIImage(HEROsMod.instance.GetTexture("Images/sortAZ")){Tooltip = HeroText("SortName.Alphabetical")} , (x,y)=>x.Name.CompareTo(y.Name)),
+				};
+			}
+			List<Sort> sorts = DefaultSorts.ToList();
 
             if (SelectedCategory != null) {
                 if (SelectedCategory.ParentCategory != null) {
@@ -239,19 +251,21 @@ namespace HEROsMod.UIKit.UIComponents {
             _sortView.Width = xPos;
         }
 
-        private void PopulateFilterView() {
-            if (Filters == null) {
-                Filters = new Filter[]
-                {
-                    new Filter( new UIImage(HEROsMod.instance.GetTexture("Images/filterMod")) {Tooltip = "Mod Filter"}, x=>x.modItem != null),
-                };
-            }
-            //Category[] categories = Categories;
-            //if (SelectedCategory != null)
-            //{
-            //	categories = SelectedCategory.SubCategories.ToArray();
-            //	if (categories.Length == 0) return;
-            //}
+		private void PopulateFilterView()
+		{
+			if (Filters == null)
+			{
+				Filters = new Filter[]
+				{
+					new Filter( new UIImage(HEROsMod.instance.GetTexture("Images/filterMod")) {Tooltip = HeroText("FilterName.ModFilter")}, x=>x.modItem != null),
+				};
+			}
+			//Category[] categories = Categories;
+			//if (SelectedCategory != null)
+			//{
+			//	categories = SelectedCategory.SubCategories.ToArray();
+			//	if (categories.Length == 0) return;
+			//}
 
             _filterView.RemoveAllChildren();
             float xPos = 0;
@@ -570,80 +584,50 @@ namespace HEROsMod.UIKit.UIComponents {
             //cats.Insert(cats.Count - 1, modCategory);
             //Categories = cats.ToArray();
 
-            for (int i = 1; i < Main.itemTexture.Length; i++) {
-                if (!ItemID.Sets.Deprecated[i]) {
-                    Item item = new Item();
-                    item.SetDefaults(i);
-                    bool other = true;
-                    foreach (var category in Categories) {
-                        if (category.belongs(item)) {
-                            other = false;
-                            category.Items.Add(item);
-                        }
-                        foreach (var subCategory in category.SubCategories) {
-                            if (subCategory.belongs(item)) {
-                                other = false;
-                                subCategory.Items.Add(item);
-                            }
-                        }
-                    }
-                    if (other) {
-                        Categories[Categories.Length - 1].Items.Add(item);
-                    }
-                }
-            }
-            foreach (var category in Categories) {
-                // Sort? Value, damage, Tile/Placestyle, rare.
-            }
-            CategoriesLoaded = true;
-            //foreach (var cat in Categories)
-            //{
-            //	ErrorLogger.Log("ParseList2 End");
-            //	ErrorLogger.Log(cat.ToString());
-            //}
-            // Categories, subcats: what is it
-            // Filters: string match, mod specific/vanilla/Anymod. Global?, multiple active
-            // Sorts: default: ID, damage, alphabetical, add at each level?, 1 active at a time
-
-            //   string resourceName = "HEROsModMod.Categories.xml";
-            //         XmlSerializer serializer = new XmlSerializer(typeof(CategoryCollection));
-            //         CategoryCollection cc;
-            //Stream s = new MemoryStream(HEROsMod.instance.GetFileBytes("Categories.xml"));
-            //         //using (StreamReader reader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName)))
-            //using (StreamReader reader = new StreamReader(s))
-            //         {
-            //             cc = (CategoryCollection)serializer.Deserialize(reader);
-            //         }
-
-            // List<Category> categories = new List<Category>();
-
-            //categories.Add()
-
-            //foreach(XMLCategory category in cc.Categories)
-            //{
-            //    categories.Add(category.Convert());
-            //}
-            //Categories = categories.OrderBy(x => x.Name).ToArray();
-
-            /*
-            categoryNames = categNames.ToList();
-            for (int i = 0; i < categoryNums.Length; i++)
-            {
-                categories.Add(new List<int>());
-                for (int j = 0; j < categoryNums[i].Length; j++)
-                {
-                    categories[i].Add(categoryNums[i][j]);
-                }
-            }
-             */
-            //itemView.category = itemView.allItemsSlots;
-            /*
-            int[] items = new int[itemView.allItemsSlots.Length];
-            for (int i = 0; i < itemView.allItemsSlots.Length; i++) items[i] = i;
-            itemView.category = items;
-            */
-        }
-    }
+			for (int i = 1; i < Main.itemTexture.Length; i++)
+			{
+				if (!ItemID.Sets.Deprecated[i])
+				{
+					Item item = new Item();
+					item.SetDefaults(i);
+					bool other = true;
+					foreach (var category in Categories)
+					{
+						if (category.belongs(item))
+						{
+							other = false;
+							category.Items.Add(item);
+						}
+						foreach (var subCategory in category.SubCategories)
+						{
+							if (subCategory.belongs(item))
+							{
+								other = false;
+								subCategory.Items.Add(item);
+							}
+						}
+					}
+					if (other)
+					{
+						Categories[Categories.Length - 1].Items.Add(item);
+					}
+				}
+			}
+			foreach (var category in Categories)
+			{
+				// Sort? Value, damage, Tile/Placestyle, rare.
+			}
+			CategoriesLoaded = true;
+			//foreach (var cat in Categories)
+			//{
+			//	ErrorLogger.Log("ParseList2 End");
+			//	ErrorLogger.Log(cat.ToString());
+			//}
+			// Categories, subcats: what is it
+			// Filters: string match, mod specific/vanilla/Anymod. Global?, multiple active
+			// Sorts: default: ID, damage, alphabetical, add at each level?, 1 active at a time
+		}
+	}
 
     internal class MyComparer : IComparer<Item> {
         internal ItemBrowser br;
@@ -718,26 +702,31 @@ namespace HEROsMod.UIKit.UIComponents {
 
         public Predicate<Item> belongs;
 
-        public string Name { get; set; }
-        public List<Item> Items { get; set; }
-        public List<Category> SubCategories { get; set; }
-        internal Sort[] Sorts { get; set; }
+		public string Name { get; set; }
+		public string LocalizedName { get; set; }
+		public List<Item> Items { get; set; }
+		public List<Category> SubCategories { get; set; }
+		internal Sort[] Sorts { get; set; }
 
-        public Category(string name) {
-            Name = name;
-            Items = new List<Item>();
-            SubCategories = new List<Category>();
-            Sorts = new Sort[0];
-            belongs = x => false;
-        }
+		public Category(string name)
+		{
+			this.Name = name;
+			this.LocalizedName = HEROsMod.HeroText($"ItemBrowser.CategoryName.{name}");
+			Items = new List<Item>();
+			SubCategories = new List<Category>();
+			Sorts = new Sort[0];
+			this.belongs = x => false;
+		}
 
-        public Category(string name, Predicate<Item> belongs) {
-            Name = name;
-            Items = new List<Item>();
-            SubCategories = new List<Category>();
-            Sorts = new Sort[0];
-            this.belongs = belongs;
-        }
+		public Category(string name, Predicate<Item> belongs, bool skipLocalization = false)
+		{
+			this.Name = name;
+			this.LocalizedName = skipLocalization ? name : HEROsMod.HeroText($"ItemBrowser.CategoryName.{name}");
+			Items = new List<Item>();
+			SubCategories = new List<Category>();
+			Sorts = new Sort[0];
+			this.belongs = belongs;
+		}
 
         //public void AddCategory(Category category)
         //{

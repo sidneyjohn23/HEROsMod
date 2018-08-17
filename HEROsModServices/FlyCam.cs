@@ -22,16 +22,20 @@ namespace HEROsMod.HEROsModServices
 
 		internal static bool Enabled { get; set; }
 
+		internal static bool LockCamera { get; set; }
+
 		/// <summary>
 		/// A service that allows the player to take controll of the camera
 		/// </summary>
 		public FlyCam()
 		{
 			Enabled = false;
-            _name = "Fly Camera";
-            _hotbarIcon = new UIKit.UIImage(Main.itemTexture[493]);
-            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-            HotbarIcon.Tooltip = "Enable Fly Camera";
+			LockCamera = false;
+			this._name = "Fly Camera";
+			this._hotbarIcon = new UIKit.UIImage(Main.itemTexture[493]);
+			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+			this._hotbarIcon.onRightClick += _hotbarIcon_onRightClick;
+			this.HotbarIcon.Tooltip = HEROsMod.HeroText("FlyCamEnableTooltip");
 			//Make sure FreeCamera is off by default
 			Disable();
 		}
@@ -40,22 +44,46 @@ namespace HEROsMod.HEROsModServices
 		{
             _hotbarIcon.Opacity = 1f;
 			Enabled = true;
-            HotbarIcon.Tooltip = "Disable Fly Camera";
+			LockCamera = false;
+			this.HotbarIcon.Tooltip = HEROsMod.HeroText("FlyCamDisableTooltip");
 		}
 
 		private void Disable()
 		{
             _hotbarIcon.Opacity = .5f;
 			Enabled = false;
-            HotbarIcon.Tooltip = "Enable Fly Camera";
+			LockCamera = false;
+			this.HotbarIcon.Tooltip = HEROsMod.HeroText("FlyCamEnableTooltip");
 		}
 
 		private void _hotbarIcon_onLeftClick(object sender, EventArgs e)
 		{
-			Enabled = !Enabled;
-			if (Enabled)
+			if (LockCamera)
 			{
 				Enable();
+			}
+			else
+			{
+				Enabled = !Enabled;
+				if (Enabled)
+				{
+					Enable();
+				}
+				else
+				{
+					Disable();
+				}
+			}
+		}
+
+		private void _hotbarIcon_onRightClick(object sender, EventArgs e)
+		{
+			if (!LockCamera)
+			{
+				Enable();
+				this._hotbarIcon.Opacity = .75f;
+				LockCamera = true;
+				HotbarIcon.Tooltip = HEROsMod.HeroText("FlyCamDisableTooltip");
 			}
 			else
 			{
@@ -69,6 +97,7 @@ namespace HEROsMod.HEROsModServices
 			if (!HasPermissionToUse)
 			{
 				Enabled = false;
+				LockCamera = false;
 			}
 			base.MyGroupUpdated();
 		}
@@ -80,13 +109,16 @@ namespace HEROsMod.HEROsModServices
 				//move camera with arrow keys
 				float speed = 30f;
 
-				if (Main.keyState.IsKeyDown(Keys.LeftAlt)) speed *= .3f;
-				if (Main.keyState.IsKeyDown(Keys.LeftShift)) speed *= 1.5f;
+				if (!LockCamera)
+				{
+					if (Main.keyState.IsKeyDown(Keys.LeftAlt)) speed *= .3f;
+					if (Main.keyState.IsKeyDown(Keys.LeftShift)) speed *= 1.5f;
 
-				if (PlayerInput.Triggers.Current.KeyStatus["Left"]) FlyCamPosition.X -= speed;
-				if (PlayerInput.Triggers.Current.KeyStatus["Right"]) FlyCamPosition.X += speed;
-				if (PlayerInput.Triggers.Current.KeyStatus["Up"]) FlyCamPosition.Y -= speed;
-				if (PlayerInput.Triggers.Current.KeyStatus["Down"]) FlyCamPosition.Y += speed;
+					if (PlayerInput.Triggers.Current.KeyStatus["Left"]) FlyCamPosition.X -= speed;
+					if (PlayerInput.Triggers.Current.KeyStatus["Right"]) FlyCamPosition.X += speed;
+					if (PlayerInput.Triggers.Current.KeyStatus["Up"]) FlyCamPosition.Y -= speed;
+					if (PlayerInput.Triggers.Current.KeyStatus["Down"]) FlyCamPosition.Y += speed;
+				}
 
 				//Vector2 size = new Vector2(Main.screenWidth, Main.screenHeight);
 				//Main.screenPosition = FlyCamPosition - size / 2;
@@ -96,7 +128,7 @@ namespace HEROsMod.HEROsModServices
 				Player player = Main.player[Main.myPlayer];
 
 				//if player right clicks, move their character to that position.
-				if (!Main.mapFullscreen && !player.mouseInterface && Main.mouseRight)
+				if (!Main.mapFullscreen && !player.mouseInterface && Main.mouseRight && !LockCamera && Main.mouseY < Main.screenHeight - 80)
 				{
 					Vector2 cursorPosition = new Vector2(Main.mouseX - player.width / 2, Main.mouseY - player.height);
 					Vector2 cursorWorldPosition = Main.screenPosition + cursorPosition;
@@ -130,10 +162,10 @@ namespace HEROsMod.HEROsModServices
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			if (Enabled)
+			if (Enabled && !LockCamera)
 			{
-				Main.spriteBatch.DrawString(Main.fontMouseText, "Right Click to teleport", new Vector2(15, Main.screenHeight - 120), Color.White);
-				Main.spriteBatch.DrawString(Main.fontMouseText, "Arrow Keys to pan, Shift for faster, Alt for slower", new Vector2(15, Main.screenHeight - 90), Color.White);
+				Main.spriteBatch.DrawString(Main.fontMouseText, HEROsMod.HeroText("RightClickToTeleport"), new Vector2(15, Main.screenHeight - 120), Color.White);
+				Main.spriteBatch.DrawString(Main.fontMouseText, HEROsMod.HeroText("FlyCamInstructions"), new Vector2(15, Main.screenHeight - 90), Color.White);
 			}
 		}
 	}

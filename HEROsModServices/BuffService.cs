@@ -21,10 +21,11 @@ namespace HEROsMod.HEROsModServices {
             BuffID.SharknadoMinion, BuffID.UFOMinion, BuffID.DeadlySphere, BuffID.SolarShield1, BuffID.SolarShield2, BuffID.SolarShield3, BuffID.StardustDragonMinion,
             BuffID.StardustGuardianMinion, BuffID.HornetMinion, BuffID.PirateMinion, BuffID.StardustMinion, BuffID.Oiled, BuffID.SugarRush, BuffID.StardustMinionBleed, BuffID.Daybreak, BuffID.BetsysCurse, BuffID.ShadowFlame, BuffID.Midas, BuffID.VortexDebuff, BuffID.DryadsWardDebuff,  };
 
-        public BuffService() {
-            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/buffs"));
-            HotbarIcon.Tooltip = "Open Buff Window";
-            HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
+		public BuffService()
+		{
+			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/buffs")/*Main.buffTexture[2]*/);
+			this.HotbarIcon.Tooltip = HEROsMod.HeroText("OpenBuffWindow");
+			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 
             //_buffWindow = new BuffWindow();
             //this.AddUIView(_buffWindow);
@@ -66,14 +67,14 @@ namespace HEROsMod.HEROsModServices {
         public BuffWindow() {
             CanMove = true;
 
-            UILabel lTitle = new UILabel("Buffs") {
+            UILabel lTitle = new UILabel(HEROsMod.HeroText("Buffs")) {
                 Scale = .6f,
                 X = Spacing,
                 Y = Spacing,
                 OverridesMouse = false
             };
 
-            UILabel lSeconds = new UILabel("Seconds");
+            UILabel lSeconds = new UILabel(HEROsMod.HeroText("Seconds"));
 
             tbSeconds = new UITextbox() {
                 Text = "60",

@@ -7,8 +7,11 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
@@ -18,90 +21,111 @@ using Terraria.UI;
 // TODO -- Should I have all services use the same Global hooks?
 namespace HEROsMod
 {
-    internal class HEROsMod : Mod
-    {
-        public static HEROsMod instance;
+	internal class HEROsMod : Mod
+	{
+		public static HEROsMod instance;
+		internal static Dictionary<string, ModTranslation> translations; // reference to private field.
 
-        public override void Load()
-        {
-            if (ModLoader.version < new Version(0, 10))
-            {
-                throw new Exception("\nThis mod uses functionality only present in the latest tModLoader. Please update tModLoader to use this mod\n\n");
-            }
+		public override void Load()
+		{
+			// Since we are using hooks not in older versions, and since ItemID.Count changed, we need to do this.
+			if (ModLoader.version < new Version(0, 10, 1, 3))
+			{
+				throw new Exception(HEROsMod.HeroText("UpdateTModLoaderToUse"));
+			}
 
-            try
-            {
-                instance = this;
+			try
+			{
+				instance = this;
 
-                if (!Main.dedServ)
-                {
-                    UIButton.buttonBackground = instance.GetTexture("Images/UIKit/buttonEdge");
-                    UIView.closeTexture = instance.GetTexture("Images/closeButton");
-                    UITextbox.textboxBackground = instance.GetTexture("Images/UIKit/textboxEdge");
-                    UISlider.barTexture = instance.GetTexture("Images/UIKit/barEdge");
-                    UIScrollView.ScrollbgTexture = GetTexture("Images/UIKit/scrollbgEdge");
-                    UIScrollBar.ScrollbarTexture = instance.GetTexture("Images/UIKit/scrollbarEdge");
-                    UIDropdown.capUp = instance.GetTexture("Images/UIKit/dropdownCapUp");
-                    UIDropdown.capDown = instance.GetTexture("Images/UIKit/dropdownCapDown");
-                    UICheckbox.checkboxTexture = instance.GetTexture("Images/UIKit/checkBox");
-                    UICheckbox.checkmarkTexture = instance.GetTexture("Images/UIKit/checkMark");
-                }
-                ModUtils.DebugText("Mod Load");
-                Init();
-            }
-            catch (Exception e)
-            {
-                ModUtils.DebugText("Load:\n" + e.Message + "\n" + e.StackTrace + "\n");
-            }
-        }
+				FieldInfo translationsField = typeof(Mod).GetField("translations", BindingFlags.Instance | BindingFlags.NonPublic);
+				translations = (Dictionary<string, ModTranslation>)translationsField.GetValue(this);
+				//LoadTranslations();
 
-        // Clear EVERYthing, mod is unloaded.
-        public override void Unload()
-        {
-            UIKit.UIComponents.ItemBrowser.Filters = null;
-            UIKit.UIComponents.ItemBrowser.DefaultSorts = null;
-            UIButton.buttonBackground = null;
-            UIView.closeTexture = null;
-            UITextbox.textboxBackground = null;
-            UISlider.barTexture = null;
-            UIScrollView.ScrollbgTexture = null;
-            UIScrollBar.ScrollbarTexture = null;
-            UIDropdown.capUp = null;
-            UIDropdown.capDown = null;
-            UICheckbox.checkboxTexture = null;
-            UICheckbox.checkmarkTexture = null;
-            Login._loginTexture = null;
-            Login._logoutTexture = null;
-            try
-            {
-                KeybindController.bindings.Clear();
-                if (ServiceController != null)
-                {
-                    if (ServiceController.Services != null)
-                    {
-                        foreach (var service in ServiceController.Services)
-                        {
-                            service.Unload();
-                        }
-                    }
-                    ServiceController.RemoveAllServices();
-                }
-                Network.ResetAllPlayers();
-                Network.ServerUsingHEROsMod = false;
-                Network.Regions.Clear();
-                MasterView.ClearMasterView();
-            }
-            catch (Exception e)
-            {
-                ModUtils.DebugText("Unload:\n" + e.Message + "\n" + e.StackTrace + "\n");
-            }
-            extensionMenuService = null;
-            miscOptions = null;
-            _hotbar = null;
-            ServiceController = null;
-            TimeWeatherControlHotbar.Unload();
-            instance = null;
-        }
+				//	AddGlobalItem("HEROsModGlobalItem", new HEROsModGlobalItem());
+				// AddPlayer("HEROsModModPlayer", new HEROsModModPlayer());
+				//if (ModUtils.NetworkMode != NetworkMode.Server)
+
+				if (!Main.dedServ)
+				{
+					UIKit.UIButton.buttonBackground = HEROsMod.instance.GetTexture("Images/UIKit/buttonEdge");
+					UIKit.UIView.closeTexture = HEROsMod.instance.GetTexture("Images/closeButton");
+					UIKit.UITextbox.textboxBackground = HEROsMod.instance.GetTexture("Images/UIKit/textboxEdge");
+					UIKit.UISlider.barTexture = HEROsMod.instance.GetTexture("Images/UIKit/barEdge");
+					UIKit.UIScrollView.ScrollbgTexture = GetTexture("Images/UIKit/scrollbgEdge");
+					UIKit.UIScrollBar.ScrollbarTexture = HEROsMod.instance.GetTexture("Images/UIKit/scrollbarEdge");
+					UIKit.UIDropdown.capUp = HEROsMod.instance.GetTexture("Images/UIKit/dropdownCapUp");
+					UIKit.UIDropdown.capDown = HEROsMod.instance.GetTexture("Images/UIKit/dropdownCapDown");
+					UIKit.UICheckbox.checkboxTexture = HEROsMod.instance.GetTexture("Images/UIKit/checkBox");
+					UIKit.UICheckbox.checkmarkTexture = HEROsMod.instance.GetTexture("Images/UIKit/checkMark");
+				}
+
+				Init();
+			}
+			catch (Exception e)
+			{
+				ModUtils.DebugText("Load:\n" + e.Message + "\n" + e.StackTrace + "\n");
+			}
+		}
+
+		internal static string HeroText(string key)
+		{
+			return translations[$"Mods.HEROsMod.{key}"].GetTranslation(Language.ActiveCulture);
+			// This isn't good until after load....
+			// return Language.GetTextValue($"Mods.HEROsMod.{category}.{key}");
+		}
+
+		// Clear EVERYthing, mod is unloaded.
+		public override void Unload()
+		{
+			UIKit.UIComponents.ItemBrowser.Filters = null;
+			UIKit.UIComponents.ItemBrowser.DefaultSorts = null;
+			UIKit.UIComponents.ItemBrowser.Categories = null;
+			UIKit.UIComponents.ItemBrowser.CategoriesLoaded = false;
+			UIKit.UIButton.buttonBackground = null;
+			UIKit.UIView.closeTexture = null;
+			UIKit.UITextbox.textboxBackground = null;
+			UIKit.UISlider.barTexture = null;
+			UIKit.UIScrollView.ScrollbgTexture = null;
+			UIKit.UIScrollBar.ScrollbarTexture = null;
+			UIKit.UIDropdown.capUp = null;
+			UIKit.UIDropdown.capDown = null;
+			UIKit.UICheckbox.checkboxTexture = null;
+			UIKit.UICheckbox.checkmarkTexture = null;
+			HEROsModServices.Login._loginTexture = null;
+			HEROsModServices.Login._logoutTexture = null;
+			try
+			{
+				KeybindController.bindings.Clear();
+				if (ServiceController != null)
+				{
+					if (ServiceController.Services != null)
+					{
+						foreach (var service in ServiceController.Services)
+						{
+							service.Unload();
+						}
+					}
+					ServiceController.RemoveAllServices();
+				}
+				HEROsModNetwork.Network.ResetAllPlayers();
+				HEROsModNetwork.Network.ServerUsingHEROsMod = false;
+				HEROsModNetwork.Network.Regions.Clear();
+				MasterView.ClearMasterView();
+			}
+			catch (Exception e)
+			{
+				ModUtils.DebugText("Unload:\n" + e.Message + "\n" + e.StackTrace + "\n");
+			}
+			extensionMenuService = null;
+			miscOptions = null;
+			_hotbar = null;
+			ServiceController = null;
+			TimeWeatherControlHotbar.Unload();
+			ModUtils.previousInventoryItems = null;
+			translations = null;
+			instance = null;
+		}
 
         public override void PostSetupContent()
         {
@@ -178,7 +202,65 @@ namespace HEROsMod
             return false;
         }
 
-        private static bool _prevGameMenu = true;
+		/*
+		private void LoadTranslations()
+		{
+			// 0.10.1.2 already does this
+			if (ModLoader.version >= new Version(0, 10, 1, 2))
+				return;
+
+			var modTranslationDictionary = new Dictionary<string, ModTranslation>();
+			var translationFiles = File.Where(x => Path.GetExtension(x.Key) == ".lang");
+			foreach (var translationFile in translationFiles)
+			{
+				string translationFileContents = System.Text.Encoding.UTF8.GetString(translationFile.Value);
+				GameCulture culture = GameCulture.FromName(Path.GetFileNameWithoutExtension(translationFile.Key));
+
+				using (StringReader reader = new StringReader(translationFileContents))
+				{
+					string line;
+					while ((line = reader.ReadLine()) != null)
+					{
+						int split = line.IndexOf('=');
+						if (split < 0)
+							continue; // lines witout a = are ignored
+						string key = line.Substring(0, split).Trim().Replace(" ", "_");
+						string value = line.Substring(split + 1).Trim();
+						if (value.Length == 0)
+						{
+							continue;
+						}
+						value = value.Replace("\\n", "\n");
+						// TODO: Maybe prepend key with filename: en.US.ItemName.lang would automatically assume "ItemName." for all entries.
+						//string key = key;
+						ModTranslation mt;
+						if (!modTranslationDictionary.TryGetValue(key, out mt))
+							modTranslationDictionary[key] = mt = CreateTranslation(key);
+						mt.AddTranslation(culture, value);
+					}
+				}
+			}
+
+			foreach (var value in modTranslationDictionary.Values)
+			{
+				AddTranslation(value);
+			}
+		}
+		*/
+
+		//public override Matrix ModifyTransformMatrix(Matrix Transform)
+		//{
+		//	if (!Main.gameMenu)
+		//	{
+		//		return Transform *= HEROsModMod.HEROsModServices.ZoomToolsService.OffsetMatrix;
+		//	}
+		//	return Transform;
+		//}
+
+		//public static bool CreateiveDisabled = false;
+
+		private static bool _prevGameMenu = true;
+		//internal ModExtensions modExtensions;
 
         // Holds all the loaded services.
         public static ServiceController ServiceController;
@@ -248,9 +330,10 @@ namespace HEROsMod
             ServiceController.AddService(new GroupInspector(instance.miscOptions.Hotbar));
             ServiceController.AddService(new WorldPurifier(instance.miscOptions.Hotbar));
             ServiceController.AddService(new HardmodeEnemyToggler(instance.miscOptions.Hotbar));
-            //ServiceController.AddService(new HellevatorBuilder(instance.miscOptions.Hotbar));
+			ServiceController.AddService(new LightHack(instance.miscOptions.Hotbar));
+			//ServiceController.AddService(new HellevatorBuilder(instance.miscOptions.Hotbar));
 
-            instance.extensionMenuService = new ExtensionMenuService();
+			instance.extensionMenuService = new ExtensionMenuService();
             ServiceController.AddService(instance.extensionMenuService);
 
             ServiceController.AddService(new Login());

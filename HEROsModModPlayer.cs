@@ -1,7 +1,17 @@
-﻿using HEROsMod.HEROsModServices;
+﻿using HEROsMod.HEROsModNetwork;
+using HEROsMod.HEROsModServices;
+using HEROsMod.UIKit;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
+using Terraria.UI;
 
 namespace HEROsMod
 {
@@ -9,14 +19,14 @@ namespace HEROsMod
     {
         public override bool Autoload(ref string name) => true;
 
-        public override void SetControls()
-        {
-            if (FlyCam.Enabled)
-            {
-                player.controlDown = false;
-                player.controlUp = false;
-                player.controlLeft = false;
-                player.controlRight = false;
+		public override void SetControls()
+		{
+			if (FlyCam.Enabled && !FlyCam.LockCamera)
+			{
+				player.controlDown = false;
+				player.controlUp = false;
+				player.controlLeft = false;
+				player.controlRight = false;
 
                 player.controlMount = false;
                 player.controlHook = false;

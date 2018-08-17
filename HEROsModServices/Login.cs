@@ -40,8 +40,8 @@ namespace HEROsMod.HEROsModServices
             _hotbarIcon = new UIImage(_loginTexture);
             _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
 			LoginStatusChanged += Login_LoginStatusChanged;
-            HotbarIcon.Tooltip = "Login";
-            HasPermissionToUse = true;
+			this.HotbarIcon.Tooltip = HEROsMod.HeroText("Login");
+			this.HasPermissionToUse = true;
 		}
 
 		private void Login_LoginStatusChanged(object sender, EventArgs e)
@@ -49,13 +49,13 @@ namespace HEROsMod.HEROsModServices
 			//ErrorLogger.Log("Login_LoginStatusChanged to "+ LoggedIn);
 			if (LoggedIn)
 			{
-                _hotbarIcon.Texture = _logoutTexture;
-                HotbarIcon.Tooltip = "Logout";
+				this._hotbarIcon.Texture = _logoutTexture;
+				this.HotbarIcon.Tooltip = HEROsMod.HeroText("Logout");
 			}
 			else
 			{
-                _hotbarIcon.Texture = _loginTexture;
-                HotbarIcon.Tooltip = "Login";
+				this._hotbarIcon.Texture = _loginTexture;
+				this.HotbarIcon.Tooltip = HEROsMod.HeroText("Login");
 			}
 		}
 
@@ -95,21 +95,18 @@ namespace HEROsMod.HEROsModServices
 			Width = 600;
             Anchor = AnchorPosition.Center;
 
-			lUsername = new UILabel("Username");
+			lUsername = new UILabel(HEROsMod.HeroText("Username"));
 			tbUsername = new UITextbox();
-			lPassword = new UILabel("Password");
-            tbPassword = new UITextbox()
-            {
-                PasswordBox = true
-            };
-            UIButton bLogin = new UIButton("Login");
-			UIButton bCancel = new UIButton("Cancel");
-            UIButton bRegister = new UIButton("Register")
-            {
-                AutoSize = false,
-                Width = 100
-            };
-            lUsername.Scale = .5f;
+			lPassword = new UILabel(HEROsMod.HeroText("Password"));
+			tbPassword = new UITextbox();
+			tbPassword.PasswordBox = true;
+			UIButton bLogin = new UIButton(HEROsMod.HeroText("Login"));
+			UIButton bCancel = new UIButton(HEROsMod.HeroText("Cancel"));
+			UIButton bRegister = new UIButton(HEROsMod.HeroText("Register"));
+			bRegister.AutoSize = false;
+			bRegister.Width = 100;
+
+			lUsername.Scale = .5f;
 			lPassword.Scale = .5f;
 
 			bLogin.Anchor = AnchorPosition.TopRight;
@@ -160,7 +157,7 @@ namespace HEROsMod.HEROsModServices
 			}
 			else
 			{
-				Main.NewText("Please fill in the Username and Password fields.");
+				Main.NewText(HEROsMod.HeroText("PleaseFillInUsernamePassword"));
 			}
 		}
 
@@ -187,7 +184,7 @@ namespace HEROsMod.HEROsModServices
 			}
 			else
 			{
-				Main.NewText("Please fill in the Username and Password fields.");
+				Main.NewText(HEROsMod.HeroText("PleaseFillInUsernamePassword"));
 			}
 		}
 

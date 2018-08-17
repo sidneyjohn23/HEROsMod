@@ -15,9 +15,9 @@ namespace HEROsMod.HEROsModServices
 
 		public PrefixEditor()
 		{
-            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/reforge")/*Main.itemTexture[24]*/);
-            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-            HotbarIcon.Tooltip = "Prefix Editor";
+			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/reforge")/*Main.itemTexture[24]*/);
+			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+			this.HotbarIcon.Tooltip = HEROsMod.HeroText("PrefixEditor");
 
             _prefixWindow = new PrefixWindow()
             {
@@ -199,7 +199,7 @@ namespace HEROsMod.HEROsModServices
 			UILabel label = (UILabel)sender;
 			Item item = (Item)label.Tag;
 			HoverText = item.Name;
-			HoverItem = item.Clone();
+			//HoverItem = item.Clone();
 		}
 
 		private void label_onLeftClick(object sender, EventArgs e)
