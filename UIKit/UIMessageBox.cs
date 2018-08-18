@@ -12,23 +12,23 @@ namespace HEROsMod.UIKit
 
 	internal class UIMessageBox : UIWindow
 	{
-		private UIMessageBoxType MessageType = UIMessageBoxType.Ok;
+		private readonly UIMessageBoxType MessageType = UIMessageBoxType.Ok;
 		private UIWrappingLabel label = new UIWrappingLabel();
 		private UIButton okButton = null;
 		private UIButton yesButton = null;
 		private UIButton noButton = null;
 
-		public event EventHandler yesClicked;
+		public event EventHandler YesClicked;
 
-		public event EventHandler noClicked;
+		public event EventHandler NoClicked;
 
 		public string Text
 		{
-			get { return label.Text; }
+			get => label.Text;
 			set
 			{
 				label.Text = value;
-                Height = label.Height + 70;
+				Height = label.Height + 70;
 				PositionButtons();
 			}
 		}
@@ -39,20 +39,26 @@ namespace HEROsMod.UIKit
             Text = "";
 		}
 
-		public UIMessageBox(string text, bool exclusiveControl = false)
+		public UIMessageBox(string text, bool ExclusiveControl = false)
 		{
 			AddButtons();
             Text = text;
-			if (exclusiveControl) UIView.exclusiveControl = this;
+			if (ExclusiveControl)
+			{
+				UIView.ExclusiveControl = this;
+			}
 		}
 
-		public UIMessageBox(string text, UIMessageBoxType messageBoxType, bool exclusiveControl = false)
+		public UIMessageBox(string text, UIMessageBoxType messageBoxType, bool ExclusiveControl = false)
 		{
             MessageType = messageBoxType;
 			AddButtons();
             Text = text;
 
-			if (exclusiveControl) UIView.exclusiveControl = this;
+			if (ExclusiveControl)
+			{
+				UIView.ExclusiveControl = this;
+			}
 		}
 
 		private void AddButtons()
@@ -69,7 +75,7 @@ namespace HEROsMod.UIKit
                     Anchor = AnchorPosition.BottomRight
                 };
                 AddChild(okButton);
-				okButton.onLeftClick += new EventHandler(okButton_onLeftClick);
+				okButton.OnLeftClick += new EventHandler(OkButton_onLeftClick);
 			}
 			else if (MessageType == UIMessageBoxType.YesNo)
 			{
@@ -79,44 +85,59 @@ namespace HEROsMod.UIKit
 				yesButton.Anchor = AnchorPosition.BottomRight;
 				AddChild(noButton);
 				AddChild(yesButton);
-				noButton.onLeftClick += noButton_onLeftClick;
-				yesButton.onLeftClick += yesButton_onLeftClick;
+				noButton.OnLeftClick += NoButton_onLeftClick;
+				yesButton.OnLeftClick += YesButton_onLeftClick;
 			}
 		}
 
-		private void yesButton_onLeftClick(object sender, EventArgs e)
+		private void YesButton_onLeftClick(object sender, EventArgs e)
 		{
-            yesClicked?.Invoke(this, EventArgs.Empty);
+            YesClicked?.Invoke(this, EventArgs.Empty);
             if (Parent != null)
 			{
-				if (UIView.exclusiveControl == this) UIView.exclusiveControl = null;
-                Parent.RemoveChild(this);
+				if (ExclusiveControl == this)
+				{
+					ExclusiveControl = null;
+				}
+
+				Parent.RemoveChild(this);
 			}
 		}
 
-		private void noButton_onLeftClick(object sender, EventArgs e)
+		private void NoButton_onLeftClick(object sender, EventArgs e)
 		{
-            noClicked?.Invoke(this, EventArgs.Empty);
+            NoClicked?.Invoke(this, EventArgs.Empty);
             if (Parent != null)
 			{
-				if (UIView.exclusiveControl == this) UIView.exclusiveControl = null;
-                Parent.RemoveChild(this);
+				if (ExclusiveControl == this)
+				{
+					ExclusiveControl = null;
+				}
+
+				Parent.RemoveChild(this);
 			}
 		}
 
-		private void okButton_onLeftClick(object sender, EventArgs e)
+		private void OkButton_onLeftClick(object sender, EventArgs e)
 		{
 			if (Parent != null)
 			{
-				if (UIView.exclusiveControl == this) UIView.exclusiveControl = null;
-                Parent.RemoveChild(this);
+				if (ExclusiveControl == this)
+				{
+					ExclusiveControl = null;
+				}
+
+				Parent.RemoveChild(this);
 			}
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			if (Parent != null)
+			{
 				CenterToParent();
+			}
+
 			base.Draw(spriteBatch);
 		}
 

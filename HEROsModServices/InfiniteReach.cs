@@ -28,10 +28,10 @@ namespace HEROsMod.HEROsModServices
 		public InfiniteReach()
 		{
 			Enabled = false;
-			this._name = "Infinite Reach";
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/infiniteReach")/*Main.itemTexture[407]*/);
-			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-			this.HotbarIcon.Tooltip = HEROsMod.HeroText("EnableInfiniteReach");
+			_name = "Infinite Reach";
+			_hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/infiniteReach")/*Main.itemTexture[407]*/);
+			_hotbarIcon.OnLeftClick += _hotbarIcon_onLeftClick;
+			HotbarIcon.Tooltip = HEROsMod.HeroText("EnableInfiniteReach");
 			Disable();
 		}
 
@@ -39,14 +39,14 @@ namespace HEROsMod.HEROsModServices
 		{
             _hotbarIcon.Opacity = 1f;
 			Enabled = true;
-			this.HotbarIcon.Tooltip = HEROsMod.HeroText("DisableInfiniteReach");
+			HotbarIcon.Tooltip = HEROsMod.HeroText("DisableInfiniteReach");
 		}
 
 		private void Disable()
 		{
             _hotbarIcon.Opacity = .5f;
 			Enabled = false;
-			this.HotbarIcon.Tooltip = HEROsMod.HeroText("EnableInfiniteReach");
+			HotbarIcon.Tooltip = HEROsMod.HeroText("EnableInfiniteReach");
 		}
 
 		private void _hotbarIcon_onLeftClick(object sender, EventArgs e)
@@ -112,10 +112,7 @@ namespace HEROsMod.HEROsModServices
 
 	public class InfiniteReachModPlayer : ModPlayer
 	{
-		public override bool Autoload(ref string name)
-		{
-			return true;
-		}
+		public override bool Autoload(ref string name) => true;
 
 		public override void ResetEffects()
 		{

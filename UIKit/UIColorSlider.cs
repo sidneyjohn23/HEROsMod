@@ -5,10 +5,7 @@ namespace HEROsMod.UIKit
 {
 	internal class UIColorSlider : UISlider
 	{
-		protected override float GetWidth()
-		{
-			return ModUtils.HueTexture.Width;
-		}
+		protected new float Width => ModUtils.HueTexture.Width;
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{

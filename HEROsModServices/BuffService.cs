@@ -23,9 +23,9 @@ namespace HEROsMod.HEROsModServices {
 
 		public BuffService()
 		{
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/buffs")/*Main.buffTexture[2]*/);
-			this.HotbarIcon.Tooltip = HEROsMod.HeroText("OpenBuffWindow");
-			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
+			_hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/buffs")/*Main.buffTexture[2]*/);
+			HotbarIcon.Tooltip = HEROsMod.HeroText("OpenBuffWindow");
+			HotbarIcon.OnLeftClick += HotbarIcon_onLeftClick;
 
             //_buffWindow = new BuffWindow();
             //this.AddUIView(_buffWindow);
@@ -95,28 +95,28 @@ namespace HEROsMod.HEROsModServices {
                 Y = tbSeconds.Y + tbSeconds.Height + Spacing,
                 Width = 300
             };
-            bAll.onLeftClick += BAll_onLeftClick;
+            bAll.OnLeftClick += BAll_onLeftClick;
 
             bBuffs = new UIButton("Buffs") {
                 X = lTitle.X + buffView.Width + Spacing,
                 Y = bAll.Y + bAll.Height + Spacing,
                 Width = 300
             };
-            bBuffs.onLeftClick += BBuffs_onLeftClick;
+            bBuffs.OnLeftClick += BBuffs_onLeftClick;
 
             bDebuffs = new UIButton("Debuffs") {
                 X = lTitle.X + buffView.Width + Spacing,
                 Y = bBuffs.Y + bBuffs.Height + Spacing,
                 Width = 300
             };
-            bDebuffs.onLeftClick += BDebuffs_onLeftClick;
+            bDebuffs.OnLeftClick += BDebuffs_onLeftClick;
 
             UIImage bClose = new UIImage(closeTexture) {
                 Y = Spacing
             };
-            bClose.onLeftClick += bClose_onLeftClick;
+            bClose.OnLeftClick += BClose_onLeftClick;
 
-            buildBuffList();
+            BuildBuffList();
             BAll_onLeftClick(bAll, new EventArgs());
 
             Width = buffView.X + buffView.Width + 2 * Spacing + bDebuffs.Width;
@@ -143,8 +143,11 @@ namespace HEROsMod.HEROsModServices {
         private void BDebuffs_onLeftClick(object sender, EventArgs e) {
             category.Clear();
             foreach (int i in buffs) {
-                if (Main.debuff[i]) category.Add(i);
-            }
+                if (Main.debuff[i])
+				{
+					category.Add(i);
+				}
+			}
             BuildImages();
             WhiteAllButtons();
             ((UIButton) sender).SetTextColor(Color.Yellow);
@@ -153,8 +156,12 @@ namespace HEROsMod.HEROsModServices {
         private void BBuffs_onLeftClick(object sender, EventArgs e) {
             category.Clear();
             foreach (int i in buffs) {
-                if (Main.debuff[i] || Main.lightPet[i] || Main.vanityPet[i] || i == 0 || BuffService.SkipBuffs.Contains(i)) continue;
-                category.Add(i);
+                if (Main.debuff[i] || Main.lightPet[i] || Main.vanityPet[i] || i == 0 || BuffService.SkipBuffs.Contains(i))
+				{
+					continue;
+				}
+
+				category.Add(i);
             }
             BuildImages();
             WhiteAllButtons();
@@ -169,11 +176,9 @@ namespace HEROsMod.HEROsModServices {
             ((UIButton) sender).SetTextColor(Color.Yellow);
         }
 
-        private void bClose_onLeftClick(object sender, EventArgs e) {
-            Visible = false;
-        }
+		private void BClose_onLeftClick(object sender, EventArgs e) => Visible = false;
 
-        private void bg_onLeftClick(object sender, EventArgs e) {
+		private void Bg_onLeftClick(object sender, EventArgs e) {
             UIView view = (UIView) sender;
             int buffType = (int) view.Tag;
 
@@ -185,7 +190,7 @@ namespace HEROsMod.HEROsModServices {
             Main.player[Main.myPlayer].AddBuff(buffType, seconds * 60);
         }
 
-        void buildBuffList() {
+        void BuildBuffList() {
             buffs.Clear();
             for (int i = 1; i < Main.debuff.Length; i++) {
                 buffs.Add(i);
@@ -202,15 +207,17 @@ namespace HEROsMod.HEROsModServices {
             buffView.ClearContent();
             foreach (int i in category) {
                 int buffType = i;
-                UIRect bg = new UIRect();
-                bg.ForegroundColor = i % 2 == 0 ? Color.Transparent : Color.Blue * .1f;
-                bg.X = Spacing;
-                bg.Y = yPos;
-                bg.Width = 300 - 20 - Spacing * 2;
-                bg.Tag = buffType;
-                string buffDescription = Lang.GetBuffDescription(buffType);
+				UIRect bg = new UIRect
+				{
+					ForegroundColor = i % 2 == 0 ? Color.Transparent : Color.Blue * .1f,
+					X = Spacing,
+					Y = yPos,
+					Width = 300 - 20 - Spacing * 2,
+					Tag = buffType
+				};
+				string buffDescription = Lang.GetBuffDescription(buffType);
                 bg.Tooltip = (buffDescription ?? "");
-                bg.onLeftClick += bg_onLeftClick;
+                bg.OnLeftClick += Bg_onLeftClick;
 
                 UIImage buffImage = new UIImage(Main.buffTexture[buffType]) {
                     X = Spacing,

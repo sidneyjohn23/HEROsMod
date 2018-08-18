@@ -10,8 +10,8 @@ namespace HEROsMod.HEROsModNetwork {
     public class Network {
         public static int NetworkVersion = 2;
         public static bool ServerUsingHEROsMod { get; set; }
-        public static NetworkMode NetworkMode { get { return ModUtils.NetworkMode; } }
-        public static bool LoggedIn { get; set; }
+		public static NetworkMode NetworkMode => ModUtils.NetworkMode;
+		public static bool LoggedIn { get; set; }
 
         public static List<Group> Groups { get; set; }
         public static Dictionary<int, HEROsModPlayer> Players2 = new Dictionary<int, HEROsModPlayer>();
@@ -28,7 +28,7 @@ namespace HEROsMod.HEROsModNetwork {
 
         public static int AuthCode;
 
-        private static Color[] chatColor = new Color[]{
+        private static Color[] ChatColor => new Color[]{
             Color.LightBlue,
             Color.LightCoral,
             Color.LightCyan,
@@ -39,9 +39,9 @@ namespace HEROsMod.HEROsModNetwork {
             Color.LightYellow
         };
 
-        private static int chatColorIndex = 0;
+        private static readonly int chatColorIndex = 0;
 
-        private static float authMessageTimer = 0f;
+        private static readonly float authMessageTimer = 0f;
         private static float freezeTimer = 0f;
         private static float sendTimeTimer = 1f;
 
@@ -66,7 +66,7 @@ namespace HEROsMod.HEROsModNetwork {
         public static void Init() {
             // Reset Values to defaults.
             Group.PermissionList.Clear();
-            foreach (var item in Group.DefaultPermissions) {
+            foreach (PermissionInfo item in Group.DefaultPermissions) {
                 Group.PermissionList.Add(item);
             }
 
@@ -129,12 +129,11 @@ namespace HEROsMod.HEROsModNetwork {
             }
         }
 
-        private static void LoginService_GroupChanged(object sender, EventArgs e) {
-            //Send group list to all HEROsMod users
-            LoginService.SendGroupList(-2);
-        }
+		private static void LoginService_GroupChanged(object sender, EventArgs e) =>
+			//Send group list to all HEROsMod users
+			LoginService.SendGroupList(-2);
 
-        public static void ResetWriter() {
+		public static void ResetWriter() {
             if (memoryStream != null) {
                 memoryStream.Close();
             }
@@ -173,8 +172,10 @@ namespace HEROsMod.HEROsModNetwork {
                         }
                         canBuild = canBuildInRegion;
                         if (!canBuild)
-                            break;
-                    }
+						{
+							break;
+						}
+					}
                 }
             }
             return canBuild;
@@ -370,7 +371,7 @@ namespace HEROsMod.HEROsModNetwork {
             Players2.Add(playerNumber, user);
             // chat message hack: SendTextToPlayer(HEROsModCheckMessage, playerNumber, Color.Red);
             ModUtils.DebugText("Get Packet");
-            var packet = HEROsMod.instance.GetPacket();
+			Terraria.ModLoader.ModPacket packet = HEROsMod.instance.GetPacket();
             ModUtils.DebugText("Write data");
             packet.Write((byte) MessageType.LoginMessage);
             packet.Write((byte) LoginService.MessageType.ServerToClientHandshake);
@@ -378,14 +379,12 @@ namespace HEROsMod.HEROsModNetwork {
             packet.Send(playerNumber);
         }
 
-        public static void ProcessClientsUsingHEROsMod(int playerNumber) {
-            GeneralMessages.TellClientsPlayerJoined(playerNumber);
-        }
+		public static void ProcessClientsUsingHEROsMod(int playerNumber) => GeneralMessages.TellClientsPlayerJoined(playerNumber);
 
 
-        public static void OnDisconnect() {
+		public static void OnDisconnect() {
             StreamWriter file = new StreamWriter("G:/terraria-chat.txt");
-            var chatLines = Main.chatLine;
+			Terraria.UI.Chat.ChatLine[] chatLines = Main.chatLine;
             for (int i = 0; i < Main.numChatLines; i++) {
                 if (chatLines[i] != null) {
                     file.WriteLine(chatLines[i].parsedText[0].Text);
@@ -438,7 +437,7 @@ namespace HEROsMod.HEROsModNetwork {
 
         public static void SendDataToServer() {
             ModUtils.DebugText("SendDataToServer " + memoryStream.ToArray());
-            var a = HEROsMod.instance.GetPacket();
+			Terraria.ModLoader.ModPacket a = HEROsMod.instance.GetPacket();
             a.Write(memoryStream.ToArray());
             a.Send();
             ResetWriter();
@@ -449,7 +448,7 @@ namespace HEROsMod.HEROsModNetwork {
             if (playerNumber == -2) {
                 SendDataToAllHEROsModUsers();
             } else {
-                var a = HEROsMod.instance.GetPacket();
+				Terraria.ModLoader.ModPacket a = HEROsMod.instance.GetPacket();
                 a.Write(memoryStream.ToArray());
                 a.Send(playerNumber);
                 ResetWriter();
@@ -459,10 +458,10 @@ namespace HEROsMod.HEROsModNetwork {
         }
 
         public static void SendDataToAllHEROsModUsers() {
-            foreach (var user in Players2) {
+            foreach (KeyValuePair<int, HEROsModPlayer> user in Players2) {
                 byte[] bytes = memoryStream.ToArray();
                 if (user.Value != null && user.Value.UsingHEROsMod) {
-                    var a = HEROsMod.instance.GetPacket();
+					Terraria.ModLoader.ModPacket a = HEROsMod.instance.GetPacket();
                     a.Write(memoryStream.ToArray());
                     a.Send(user.Key);
                     ResetWriter();
@@ -474,28 +473,42 @@ namespace HEROsMod.HEROsModNetwork {
         }
 
         public static Group GetGroupByID(int id) {
-            if (id == -1) return AdminGroup;
-            for (int i = 0; i < Groups.Count; i++) {
+            if (id == -1)
+			{
+				return AdminGroup;
+			}
+
+			for (int i = 0; i < Groups.Count; i++) {
                 if (Groups[i].ID == id)
-                    return Groups[i];
-            }
+				{
+					return Groups[i];
+				}
+			}
             return null;
         }
 
         public static Group GetGroupByName(string name) {
-            if (name == AdminGroup.Name) return AdminGroup;
-            for (int i = 0; i < Groups.Count; i++) {
+            if (name == AdminGroup.Name)
+			{
+				return AdminGroup;
+			}
+
+			for (int i = 0; i < Groups.Count; i++) {
                 if (Groups[i].Name == name)
-                    return Groups[i];
-            }
+				{
+					return Groups[i];
+				}
+			}
             return null;
         }
 
         public static Region GetRegionByID(int id) {
             for (int i = 0; i < Regions.Count; i++) {
                 if (Regions[i].ID == id)
-                    return Regions[i];
-            }
+				{
+					return Regions[i];
+				}
+			}
             return null;
         }
 
@@ -515,18 +528,23 @@ namespace HEROsMod.HEROsModNetwork {
                 if (n.type == type) {
                     n.position = position;
                     npcFound = true;
-                    if (Main.netMode == 2) NetMessage.SendData(23, -1, -1, null, i, 0f, 0f, 0f, 0);
-                    break;
+                    if (Main.netMode == 2)
+					{
+						NetMessage.SendData(23, -1, -1, null, i, 0f, 0f, 0f, 0);
+					}
+
+					break;
                 }
             }
-            if (!npcFound) NPC.NewNPC((int) position.X, (int) position.Y, type);
-        }
+            if (!npcFound)
+			{
+				NPC.NewNPC((int) position.X, (int) position.Y, type);
+			}
+		}
 
-        public static void ResetAllPlayers() {
-            Players2.Clear();
-        }
+		public static void ResetAllPlayers() => Players2.Clear();
 
-        public static void ResendPlayerTileData(HEROsModPlayer player) {
+		public static void ResendPlayerTileData(HEROsModPlayer player) {
             int sectionX = Netplay.GetSectionX((int) (player.GameInstance.position.X / 16f));
             int sectionY = Netplay.GetSectionY((int) (player.GameInstance.position.Y / 16f));
 

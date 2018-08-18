@@ -11,32 +11,24 @@ namespace HEROsMod.HEROsModServices
 
 		public event ServiceEventHandler ServiceRemoved;
 
-		private List<HEROsModService> _services;
-
 		/// <summary>
 		/// HEROsMod Services laoded into the controller
 		/// </summary>
-		public List<HEROsModService> Services
-		{
-			get { return _services; }
-		}
+		public List<HEROsModService> Services { get; }
 
 		public ServiceController()
 		{
-			_services = new List<HEROsModService>();
+			Services = new List<HEROsModService>();
 			HEROsModNetwork.LoginService.MyGroupChanged += LoginService_MyGroupChanged;
 		}
 
-		private void LoginService_MyGroupChanged(object sender, EventArgs e)
-		{
-			MyGroupChanged();
-		}
+		private void LoginService_MyGroupChanged(object sender, EventArgs e) => MyGroupChanged();
 
 		public void MyGroupChanged()
 		{
 			if (HEROsModNetwork.LoginService.MyGroup != null)
 			{
-				foreach (HEROsModService service in _services)
+				foreach (HEROsModService service in Services)
 				{
 					service.MyGroupUpdated();
 				}
@@ -50,7 +42,7 @@ namespace HEROsMod.HEROsModServices
 		/// <param name="service">Service to add</param>
 		public void AddService(HEROsModService service)
 		{
-			_services.Add(service);
+			Services.Add(service);
 			ServiceAdded?.Invoke(service);
 		}
 
@@ -61,7 +53,7 @@ namespace HEROsMod.HEROsModServices
 		public void RemoveService(HEROsModService service)
 		{
 			service.Destroy();
-			_services.Remove(service);
+			Services.Remove(service);
 			ServiceRemoved?.Invoke(service);
 		}
 
@@ -70,15 +62,12 @@ namespace HEROsMod.HEROsModServices
 		/// </summary>
 		public void RemoveAllServices()
 		{
-			while (_services.Count > 0)
+			while (Services.Count > 0)
 			{
-				RemoveService(_services[0]);
+				RemoveService(Services[0]);
 			}
 		}
 
-		internal void ServiceRemovedCall()
-		{
-			ServiceRemoved(null);
-		}
+		internal void ServiceRemovedCall() => ServiceRemoved(null);
 	}
 }

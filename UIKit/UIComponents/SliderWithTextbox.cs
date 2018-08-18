@@ -6,23 +6,20 @@ namespace HEROsMod.UIKit.UIComponents
 	{
 		public float Value
 		{
-			get { return slider.Value; }
-			set
-			{
-				slider.Value = value;
-			}
+			get => slider.Value;
+			set => slider.Value = value;
 		}
 
 		public float Min
 		{
-			get { return slider.MinValue; }
-			set { slider.MinValue = value; }
+			get => slider.MinValue;
+			set => slider.MinValue = value;
 		}
 
 		public float Max
 		{
-			get { return slider.MaxValue; }
-			set { slider.MaxValue = value; }
+			get => slider.MaxValue;
+			set => slider.MaxValue = value;
 		}
 
 		public event EventHandler ValueChanged;
@@ -36,12 +33,12 @@ namespace HEROsMod.UIKit.UIComponents
             {
                 Width = 125
             };
-            textbox.KeyPressed += textbox_KeyPressed;
-			textbox.OnLostFocus += textbox_OnLostFocus;
+            textbox.KeyPressed += Textbox_KeyPressed;
+			textbox.OnLostFocus += Textbox_OnLostFocus;
 			textbox.Numeric = true;
 			textbox.HasDecimal = true;
 			slider = new UISlider();
-			slider.valueChanged += slider_valueChanged;
+			slider.ValueChanged += Slider_valueChanged;
 
 			slider.X = textbox.X + textbox.Width + Spacing;
 			AddChild(textbox);
@@ -57,12 +54,9 @@ namespace HEROsMod.UIKit.UIComponents
             Width = slider.X + slider.Width;
 		}
 
-		private void textbox_OnLostFocus(object sender, EventArgs e)
-		{
-			textbox.Text = slider.Value.ToString();
-		}
+		private void Textbox_OnLostFocus(object sender, EventArgs e) => textbox.Text = slider.Value.ToString();
 
-		private void textbox_KeyPressed(object sender, char key)
+		private void Textbox_KeyPressed(object sender, char key)
 		{
 			if (textbox.Text.Length == 0 || textbox.Text == "-")
 			{
@@ -73,7 +67,7 @@ namespace HEROsMod.UIKit.UIComponents
             ValueChanged?.Invoke(this, EventArgs.Empty);
         }
 
-		private void slider_valueChanged(object sender, float value)
+		private void Slider_valueChanged(object sender, float value)
 		{
 			if (!textbox.HadFocus)
 			{

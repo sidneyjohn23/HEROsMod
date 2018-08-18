@@ -12,7 +12,7 @@ namespace HEROsMod.HEROsModServices
 
 		public static bool LoggedIn
 		{
-			get { return _loggedIn; }
+			get => _loggedIn;
 			set
 			{
 				_loggedIn = value;
@@ -38,10 +38,10 @@ namespace HEROsMod.HEROsModServices
 			}
             _name = "Login";
             _hotbarIcon = new UIImage(_loginTexture);
-            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+            _hotbarIcon.OnLeftClick += _hotbarIcon_onLeftClick;
 			LoginStatusChanged += Login_LoginStatusChanged;
-			this.HotbarIcon.Tooltip = HEROsMod.HeroText("Login");
-			this.HasPermissionToUse = true;
+			HotbarIcon.Tooltip = HEROsMod.HeroText("Login");
+			HasPermissionToUse = true;
 		}
 
 		private void Login_LoginStatusChanged(object sender, EventArgs e)
@@ -49,13 +49,13 @@ namespace HEROsMod.HEROsModServices
 			//ErrorLogger.Log("Login_LoginStatusChanged to "+ LoggedIn);
 			if (LoggedIn)
 			{
-				this._hotbarIcon.Texture = _logoutTexture;
-				this.HotbarIcon.Tooltip = HEROsMod.HeroText("Logout");
+				_hotbarIcon.Texture = _logoutTexture;
+				HotbarIcon.Tooltip = HEROsMod.HeroText("Logout");
 			}
 			else
 			{
-				this._hotbarIcon.Texture = _loginTexture;
-				this.HotbarIcon.Tooltip = HEROsMod.HeroText("Login");
+				_hotbarIcon.Texture = _loginTexture;
+				HotbarIcon.Tooltip = HEROsMod.HeroText("Login");
 			}
 		}
 
@@ -90,21 +90,24 @@ namespace HEROsMod.HEROsModServices
 
 		public LoginWindow()
 		{
-			UIView.exclusiveControl = this;
-
-			Width = 600;
+			ExclusiveControl = this;
+			
             Anchor = AnchorPosition.Center;
 
 			lUsername = new UILabel(HEROsMod.HeroText("Username"));
 			tbUsername = new UITextbox();
 			lPassword = new UILabel(HEROsMod.HeroText("Password"));
-			tbPassword = new UITextbox();
-			tbPassword.PasswordBox = true;
+			tbPassword = new UITextbox
+			{
+				PasswordBox = true
+			};
 			UIButton bLogin = new UIButton(HEROsMod.HeroText("Login"));
 			UIButton bCancel = new UIButton(HEROsMod.HeroText("Cancel"));
-			UIButton bRegister = new UIButton(HEROsMod.HeroText("Register"));
-			bRegister.AutoSize = false;
-			bRegister.Width = 100;
+			UIButton bRegister = new UIButton(HEROsMod.HeroText("Register"))
+			{
+				AutoSize = false,
+				Width = 100
+			};
 
 			lUsername.Scale = .5f;
 			lPassword.Scale = .5f;
@@ -127,13 +130,13 @@ namespace HEROsMod.HEROsModServices
 			bRegister.Y = bCancel.Y;
             Height = bCancel.Y + bCancel.Height + spacing;
 
-			bCancel.onLeftClick += bCancel_onLeftClick;
-			bLogin.onLeftClick += bLogin_onLeftClick;
-			bRegister.onLeftClick += bRegister_onLeftClick;
-			tbUsername.OnEnterPress += bLogin_onLeftClick;
-			tbPassword.OnEnterPress += bLogin_onLeftClick;
-			tbUsername.OnTabPress += tbUsername_OnTabPress;
-			tbPassword.OnTabPress += tbPassword_OnTabPress;
+			bCancel.OnLeftClick += BCancel_onLeftClick;
+			bLogin.OnLeftClick += BLogin_onLeftClick;
+			bRegister.OnLeftClick += BRegister_onLeftClick;
+			tbUsername.OnEnterPress += BLogin_onLeftClick;
+			tbPassword.OnEnterPress += BLogin_onLeftClick;
+			tbUsername.OnTabPress += TbUsername_OnTabPress;
+			tbPassword.OnTabPress += TbPassword_OnTabPress;
 
 			AddChild(lUsername);
 			AddChild(tbUsername);
@@ -146,7 +149,7 @@ namespace HEROsMod.HEROsModServices
 			tbUsername.Focus();
 		}
 
-		private void bRegister_onLeftClick(object sender, EventArgs e)
+		private void BRegister_onLeftClick(object sender, EventArgs e)
 		{
 			if (tbUsername.Text.Length > 0 && tbPassword.Text.Length > 0)
 			{
@@ -161,19 +164,19 @@ namespace HEROsMod.HEROsModServices
 			}
 		}
 
-		private void tbPassword_OnTabPress(object sender, EventArgs e)
+		private void TbPassword_OnTabPress(object sender, EventArgs e)
 		{
 			tbPassword.Unfocus();
 			tbUsername.Focus();
 		}
 
-		private void tbUsername_OnTabPress(object sender, EventArgs e)
+		private void TbUsername_OnTabPress(object sender, EventArgs e)
 		{
 			tbUsername.Unfocus();
 			tbPassword.Focus();
 		}
 
-		private void bLogin_onLeftClick(object sender, EventArgs e)
+		private void BLogin_onLeftClick(object sender, EventArgs e)
 		{
 			if (tbUsername.Text.Length > 0 && tbPassword.Text.Length > 0)
 			{
@@ -188,27 +191,28 @@ namespace HEROsMod.HEROsModServices
 			}
 		}
 
-		private void bCancel_onLeftClick(object sender, EventArgs e)
-		{
-            Close();
-		}
+		private void BCancel_onLeftClick(object sender, EventArgs e) => Close();
 
-		protected override float GetWidth()
-		{
-			return tbPassword.Width + lPassword.Width + spacing * 4;
-		}
+		protected new float Width => tbPassword.Width + lPassword.Width + spacing * 4;
 
 		private void Close()
 		{
-			UIView.exclusiveControl = null;
+			UIView.ExclusiveControl = null;
             Parent.RemoveChild(this);
 		}
 
 		public override void Update()
 		{
-			if (Main.gameMenu) Close();
+			if (Main.gameMenu)
+			{
+				Close();
+			}
+
 			if (Parent != null)
-                Position = new Vector2(Parent.Width / 2, Parent.Height / 2);
+			{
+				Position = new Vector2(Parent.Width / 2, Parent.Height / 2);
+			}
+
 			base.Update();
 		}
 	}

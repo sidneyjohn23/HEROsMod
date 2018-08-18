@@ -9,16 +9,16 @@ namespace HEROsMod.HEROsModServices {
             IsInHotbar = true;
             HotbarParent = hotbar;
             _name = "Hardmode Enemy Toggler";
-            _hotbarIcon = new UIImage(Main.itemTexture[1991]);
-            _hotbarIcon.Tooltip = "Toggle Hardmode Enemies";
-            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+			_hotbarIcon = new UIImage(Main.itemTexture[1991])
+			{
+				Tooltip = "Toggle Hardmode Enemies"
+			};
+			_hotbarIcon.OnLeftClick += _hotbarIcon_onLeftClick;
         }
 
-        public override void MyGroupUpdated() {
-            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ToggleHardmodeEnemies");
-        }
+		public override void MyGroupUpdated() => HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ToggleHardmodeEnemies");
 
-        void _hotbarIcon_onLeftClick(object sender, EventArgs e) {
+		void _hotbarIcon_onLeftClick(object sender, EventArgs e) {
             if (ModUtils.NetworkMode == NetworkMode.None) {
                 ToggleHardModeEnemies();
             } else {

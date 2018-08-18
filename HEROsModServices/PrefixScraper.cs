@@ -710,34 +710,19 @@ namespace HEROsMod.HEROsModServices
 			}
 		}
 
-		private static bool GeneralPrefix(Item item)
-		{
-			return item.maxStack == 1 && item.damage > 0 && item.ammo == 0 && !item.accessory;
-		}
+		private static bool GeneralPrefix(Item item) => item.maxStack == 1 && item.damage > 0 && item.ammo == 0 && !item.accessory;
 
 		//add to Terraria.Item.Prefix
-		internal static bool MeleePrefix(Item item)
-		{
-			return item.modItem != null && GeneralPrefix(item) && item.melee && !item.noUseGraphic;
-		}
+		internal static bool MeleePrefix(Item item) => item.modItem != null && GeneralPrefix(item) && item.melee && !item.noUseGraphic;
 
 		//add to Terraria.Item.Prefix
-		internal static bool WeaponPrefix(Item item)
-		{
-			return item.modItem != null && GeneralPrefix(item) && item.melee && item.noUseGraphic;
-		}
+		internal static bool WeaponPrefix(Item item) => item.modItem != null && GeneralPrefix(item) && item.melee && item.noUseGraphic;
 
 		//add to Terraria.Item.Prefix
-		internal static bool RangedPrefix(Item item)
-		{
-			return item.modItem != null && GeneralPrefix(item) && item.ranged;
-		}
+		internal static bool RangedPrefix(Item item) => item.modItem != null && GeneralPrefix(item) && item.ranged;
 
 		//add to Terraria.Item.Prefix
-		internal static bool MagicPrefix(Item item)
-		{
-			return item.modItem != null && GeneralPrefix(item) && (item.magic || item.summon);
-		}
+		internal static bool MagicPrefix(Item item) => item.modItem != null && GeneralPrefix(item) && (item.magic || item.summon);
 	}
 
 	internal class PrefixGroup

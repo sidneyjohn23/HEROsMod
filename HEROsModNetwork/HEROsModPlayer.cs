@@ -6,30 +6,14 @@ namespace HEROsMod.HEROsModNetwork
 {
     public class HEROsModPlayer
     {
-        private int _playerIndex = -1;
 
-        public int Index
-        {
-            get { return _playerIndex; }
-        }
+		public int Index { get; } = -1;
 
-        public RemoteClient ServerInstance
-        {
-            get
-            {
-                return Netplay.Clients[_playerIndex];
-            }
-        }
+		public RemoteClient ServerInstance => Netplay.Clients[Index];
 
-        public Player GameInstance
-        {
-            get
-            {
-                return Main.player[_playerIndex];
-            }
-        }
+		public Player GameInstance => Main.player[Index];
 
-        public int ID { get; set; }
+		public int ID { get; set; }
         public Group Group { get; set; }
         public bool UsingHEROsMod { get; set; }
         public string Username { get; set; }
@@ -39,7 +23,7 @@ namespace HEROsMod.HEROsModNetwork
         public HEROsModPlayer(int playerIndex)
         {
             Reset();
-            _playerIndex = playerIndex;
+            Index = playerIndex;
         }
 
         public void Reset()

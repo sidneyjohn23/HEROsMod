@@ -15,9 +15,9 @@ namespace HEROsMod.HEROsModServices
 
 		public PrefixEditor()
 		{
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/reforge")/*Main.itemTexture[24]*/);
-			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-			this.HotbarIcon.Tooltip = HEROsMod.HeroText("PrefixEditor");
+			_hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/reforge")/*Main.itemTexture[24]*/);
+			_hotbarIcon.OnLeftClick += _hotbarIcon_onLeftClick;
+			HotbarIcon.Tooltip = HEROsMod.HeroText("PrefixEditor");
 
             _prefixWindow = new PrefixWindow()
             {
@@ -37,11 +37,7 @@ namespace HEROsMod.HEROsModServices
 			}
 		}
 
-		public override void MyGroupUpdated()
-		{
-            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("PrefixEditor");
-			//base.MyGroupUpdated();
-		}
+		public override void MyGroupUpdated() => HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("PrefixEditor");//base.MyGroupUpdated();
 	}
 
 	internal class PrefixWindow : UIWindow
@@ -51,7 +47,7 @@ namespace HEROsMod.HEROsModServices
 		private int[] prefixes;
 		private List<Particle> particles;
 		private float _particleTimer;
-		private float _newParticleTime = .1f;
+		private readonly float _newParticleTime = .1f;
 		private List<Item> validPrefixes;
 
 		private static Dictionary<int, Color> rarityColors = new Dictionary<int, Color>()
@@ -79,7 +75,7 @@ namespace HEROsMod.HEROsModServices
                 X = LargeSpacing,
                 Y = LargeSpacing
             };
-            itemSlot.ItemChanged += itemSlot_ItemChanged;
+            itemSlot.ItemChanged += ItemSlot_ItemChanged;
 
             prefixList = new UIScrollView()
             {
@@ -94,7 +90,7 @@ namespace HEROsMod.HEROsModServices
 			UIImage bClsoe = new UIImage(closeTexture);
 			bClsoe.X = Width - bClsoe.Width - LargeSpacing;
 			bClsoe.Y = LargeSpacing;
-			bClsoe.onLeftClick += bClsoe_onLeftClick;
+			bClsoe.OnLeftClick += BClsoe_onLeftClick;
 
 			AddChild(itemSlot);
 			AddChild(prefixList);
@@ -131,12 +127,9 @@ namespace HEROsMod.HEROsModServices
 			}
 		}
 
-		private void bClsoe_onLeftClick(object sender, EventArgs e)
-		{
-            Visible = false;
-		}
+		private void BClsoe_onLeftClick(object sender, EventArgs e) => Visible = false;
 
-		private void itemSlot_ItemChanged(object sender, EventArgs e)
+		private void ItemSlot_ItemChanged(object sender, EventArgs e)
 		{
 			prefixes = new int[83];
 			for (int i = 0; i < 83; i++)
@@ -182,8 +175,8 @@ namespace HEROsMod.HEROsModServices
                     Y = yPos,
                     Tag = item
                 };
-                label.onLeftClick += label_onLeftClick;
-				label.onHover += label_onHover;
+                label.OnLeftClick += Label_onLeftClick;
+				label.OnHover += Label_onHover;
 				yPos += label.Height;
 				if (rarityColors.ContainsKey(item.rare))
 				{
@@ -194,7 +187,7 @@ namespace HEROsMod.HEROsModServices
 			prefixList.ContentHeight = yPos + Spacing;
 		}
 
-		private void label_onHover(object sender, EventArgs e)
+		private void Label_onHover(object sender, EventArgs e)
 		{
 			UILabel label = (UILabel)sender;
 			Item item = (Item)label.Tag;
@@ -202,7 +195,7 @@ namespace HEROsMod.HEROsModServices
 			//HoverItem = item.Clone();
 		}
 
-		private void label_onLeftClick(object sender, EventArgs e)
+		private void Label_onLeftClick(object sender, EventArgs e)
 		{
 			UILabel label = (UILabel)sender;
 			Item item = (Item)label.Tag;
@@ -224,10 +217,7 @@ namespace HEROsMod.HEROsModServices
              */
 		}
 
-		private void bReforge_onLeftClick(object sender, EventArgs e)
-		{
-			itemSlot.item.Prefix(-2);
-		}
+		private void BReforge_onLeftClick(object sender, EventArgs e) => itemSlot.item.Prefix(-2);
 	}
 
 	internal class PrefixEntry

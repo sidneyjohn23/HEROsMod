@@ -15,10 +15,8 @@ namespace HEROsMod.UIKit.UIComponents
 		internal static string HeroText(string key, string category = "ItemBrowser") => HEROsMod.HeroText($"{category}.{key}");
 
 		private ItemCollectionView _itemView;
-		private Slot _trashCan;
+		private readonly Slot _trashCan;
 		private UIScrollView _categoryView;
-		private Category _selectedCategory;
-		private Item[] _currentItems;
 		private UIImage _bCollapseCategories;
 		private UIButton _bBack;
 		private UIImage _bClose;
@@ -26,42 +24,48 @@ namespace HEROsMod.UIKit.UIComponents
 		private UIImage _spacer;
 		private UIView _sortView;
 
-        private Texture2D _collapseTexture;
-        private Texture2D _expandTexture;
-        private Texture2D _spacerTexture;
+        private readonly Texture2D _collapseTexture;
+        private readonly Texture2D _expandTexture;
+        private readonly Texture2D _spacerTexture;
 
         private float _collapsePosition = 1f;
         private bool _collapsed = false;
-        private float shownWidth;
-        private float hiddenWidth;
+        private readonly float shownWidth;
+        private readonly float hiddenWidth;
 
         public UITextbox SearchBox;
 
-        internal Category SelectedCategory {
-            get { return _selectedCategory; }
-            set {
-                if (_selectedCategory != value) {
-                    SearchBox.Text = string.Empty;
-                }
-                _selectedCategory = value;
-                if (CategoriesLoaded) {
-                    PopulateFilterView(); // mod/vanilla,
-                    PopulateSortView(); // damage, value, alpha, itemid
-                    CurrentItems = GetItems(); // takes care of filters and sorts
-                    PopulateCategoryView();
-                }
-            }
-        }
+        internal Category SelectedCategory
+		{
+			get => SelectedCategory;
+			set
+			{
+				if (SelectedCategory != value)
+				{
+					SearchBox.Text = string.Empty;
+				}
+				SelectedCategory = value;
+				if (CategoriesLoaded)
+				{
+					PopulateFilterView(); // mod/vanilla,
+					PopulateSortView(); // damage, value, alpha, itemid
+					CurrentItems = GetItems(); // takes care of filters and sorts
+					PopulateCategoryView();
+				}
+			}
+		}
 
-        private Item[] CurrentItems {
-            get { return _currentItems; }
-            set {
-                _currentItems = value;
-                _itemView.Items = _currentItems;
-            }
-        }
+		private Item[] CurrentItems
+		{
+			get => CurrentItems;
+			set
+			{
+				CurrentItems = value;
+				_itemView.Items = CurrentItems;
+			}
+		}
 
-        internal Sort SelectedSort;
+		internal Sort SelectedSort;
         internal Sort[] AvailableSorts = new Sort[0];
 
         public ItemBrowser() {
@@ -99,7 +103,7 @@ namespace HEROsMod.UIKit.UIComponents
                 Anchor = AnchorPosition.TopRight,
                 Position = new Vector2(Width - LargeSpacing, LargeSpacing)
             };
-            _bClose.onLeftClick += bClose_onLeftClick;
+            _bClose.OnLeftClick += BClose_onLeftClick;
             AddChild(_bClose);
 
             SearchBox = new UITextbox() {
@@ -107,7 +111,7 @@ namespace HEROsMod.UIKit.UIComponents
             };
             SearchBox.X = _itemView.X + _itemView.Width - SearchBox.Width;
             SearchBox.Y = _itemView.Y - SearchBox.Height - Spacing - 4;
-            SearchBox.KeyPressed += textbox_KeyPressed;
+            SearchBox.KeyPressed += Textbox_KeyPressed;
             AddChild(SearchBox);
 
             _filterView = new UIView() {
@@ -138,16 +142,18 @@ namespace HEROsMod.UIKit.UIComponents
 			//_trashCan.Y = _itemView.Y - _trashCan.Height - SmallSpacing/2;
 			//AddChild(_trashCan);
 
-			_bBack = new UIButton(Language.GetTextValue("UI.Back"));
-			_bBack.X = _categoryView.X;
+			_bBack = new UIButton(Language.GetTextValue("UI.Back"))
+			{
+				X = _categoryView.X
+			};
 			_bBack.Y = _categoryView.Y - _bBack.Height - Spacing;
-			_bBack.onLeftClick += _bViewAllItems_onLeftClick;
+			_bBack.OnLeftClick += _bViewAllItems_onLeftClick;
 			AddChild(_bBack);
 
             _bCollapseCategories = new UIImage(_collapseTexture);
             _bCollapseCategories.X = Width - _bCollapseCategories.Width - LargeSpacing;
             _bCollapseCategories.Y = _categoryView.Y - _bCollapseCategories.Height - Spacing;
-            _bCollapseCategories.onLeftClick += _bCollapseCategories_onLeftClick;
+            _bCollapseCategories.OnLeftClick += _bCollapseCategories_onLeftClick;
             AddChild(_bCollapseCategories);
 
             shownWidth = _categoryView.X + _categoryView.Width + LargeSpacing;
@@ -176,8 +182,8 @@ namespace HEROsMod.UIKit.UIComponents
         }
 
         private void WhiteAllCategoryButtons() {
-            for (int i = 1; i < _categoryView.children.Count; i++) {
-                ((UIButton) _categoryView.children[i]).SetTextColor(Color.White);
+            for (int i = 1; i < _categoryView.Children.Count; i++) {
+                ((UIButton) _categoryView.Children[i]).SetTextColor(Color.White);
             }
         }
 
@@ -187,22 +193,27 @@ namespace HEROsMod.UIKit.UIComponents
             Category[] categories = Categories;
             if (SelectedCategory != null) {
                 categories = SelectedCategory.SubCategories.ToArray();
-                if (categories.Length == 0) return;
-            }
+                if (categories.Length == 0)
+				{
+					return;
+				}
+			}
 
 			_categoryView.ClearContent();
 			float yPos = 0;
 			for (int i = 0; i < categories.Length; i++)
 			{
-				UIButton button = new UIButton(categories[i].LocalizedName);
-				button.Tag = categories[i];
-				button.AutoSize = false;
-				button.Width = 100;
+				UIButton button = new UIButton(categories[i].LocalizedName)
+				{
+					Tag = categories[i],
+					AutoSize = false,
+					Width = 100
+				};
 				int x = i % numberCategoryColumns;
 				int y = i / numberCategoryColumns;
 				button.X = Spacing + x * (button.Width + Spacing);
 				button.Y = Spacing + y * (button.Height + Spacing);
-				button.onLeftClick += button_onLeftClick;
+				button.OnLeftClick += Button_onLeftClick;
 				yPos = button.Y + button.Height + Spacing;
 				_categoryView.AddChild(button);
 			}
@@ -224,11 +235,11 @@ namespace HEROsMod.UIKit.UIComponents
 
             if (SelectedCategory != null) {
                 if (SelectedCategory.ParentCategory != null) {
-                    foreach (var item in SelectedCategory.ParentCategory.Sorts) {
+                    foreach (Sort item in SelectedCategory.ParentCategory.Sorts) {
                         sorts.Add(item);
                     }
                 }
-                foreach (var item in SelectedCategory.Sorts) {
+                foreach (Sort item in SelectedCategory.Sorts) {
                     sorts.Add(item);
                 }
             }
@@ -298,7 +309,7 @@ namespace HEROsMod.UIKit.UIComponents
             _spacer.X = _filterView.X + _filterView.Width;
         }
 
-        private void button_onLeftClick(object sender, EventArgs e) {
+        private void Button_onLeftClick(object sender, EventArgs e) {
             UIButton button = (UIButton) sender;
             WhiteAllCategoryButtons();
             button.SetTextColor(Color.Yellow);
@@ -306,9 +317,12 @@ namespace HEROsMod.UIKit.UIComponents
         }
 
         public override void Update() {
-            if (!Main.playerInventory) Visible = false;
+            if (!Main.playerInventory)
+			{
+				Visible = false;
+			}
 
-            float moveSpeed = 5f;
+			float moveSpeed = 5f;
             _categoryView.Visible = true;
             _bBack.Visible = SelectedCategory != null;
             if (_collapsed) {
@@ -320,8 +334,11 @@ namespace HEROsMod.UIKit.UIComponents
                 }
             } else {
                 _collapsePosition += ModUtils.DeltaTime * moveSpeed;
-                if (_collapsePosition > 1f) _collapsePosition = 1f;
-            }
+                if (_collapsePosition > 1f)
+				{
+					_collapsePosition = 1f;
+				}
+			}
             Width = MathHelper.SmoothStep(hiddenWidth, shownWidth, _collapsePosition);
             _categoryView.Opacity = MathHelper.SmoothStep(0, 1f, _collapsePosition);
             _bBack.X = _categoryView.X;
@@ -336,11 +353,9 @@ namespace HEROsMod.UIKit.UIComponents
             base.Update();
         }
 
-        private void bClose_onLeftClick(object sender, EventArgs e) {
-            Visible = false;
-        }
+		private void BClose_onLeftClick(object sender, EventArgs e) => Visible = false;
 
-        private void textbox_KeyPressed(object sender, char key) {
+		private void Textbox_KeyPressed(object sender, char key) {
             //if (_selectedCategory != null)
             //{
             //	_selectedCategory = null;
@@ -389,7 +404,7 @@ namespace HEROsMod.UIKit.UIComponents
 
         // Caller of Category.GetItems
         public Item[] GetItems() {
-            foreach (var item in AvailableSorts) {
+            foreach (Sort item in AvailableSorts) {
                 item.button.ForegroundColor = Color.Gray;
             }
             if (SelectedSort == null || !AvailableSorts.Contains(SelectedSort)) {
@@ -446,7 +461,7 @@ namespace HEROsMod.UIKit.UIComponents
         //}
 
         public bool PassFilters(Item item) {
-            foreach (var filter in Filters) {
+            foreach (Filter filter in Filters) {
                 if (filter.enabled && !filter.filter(item)) {
                     return false;
                 }
@@ -464,8 +479,8 @@ namespace HEROsMod.UIKit.UIComponents
         internal static void Unload() {
             //ErrorLogger.Log("Unloading Categories");
             if (CategoriesLoaded) {
-                foreach (var category in Categories) {
-                    foreach (var subCategory in category.SubCategories) {
+                foreach (Category category in Categories) {
+                    foreach (Category subCategory in category.SubCategories) {
                         subCategory.Items.Clear();
                     }
                     category.Items.Clear();
@@ -480,8 +495,10 @@ namespace HEROsMod.UIKit.UIComponents
             };
             foreach (Mod loadedMod in ModLoader.LoadedMods) {
                 if (loadedMod.Name != "ModLoader")
-                    modCategory.SubCategories.Add(new Category(loadedMod.Name, x => x.modItem != null && x.modItem.mod.Name == loadedMod.Name));
-            }
+				{
+					modCategory.SubCategories.Add(new Category(loadedMod.Name, x => x.modItem != null && x.modItem.mod.Name == loadedMod.Name));
+				}
+			}
             Item a = new Item();
             Categories = new Category[] {
                 new Category("Weapons") {
@@ -567,8 +584,8 @@ namespace HEROsMod.UIKit.UIComponents
                 new Category("Other", x=>false)
             };
 
-            foreach (var parent in Categories) {
-                foreach (var sub in parent.SubCategories) {
+            foreach (Category parent in Categories) {
+                foreach (Category sub in parent.SubCategories) {
                     sub.ParentCategory = parent;
                 }
             }
@@ -591,14 +608,14 @@ namespace HEROsMod.UIKit.UIComponents
 					Item item = new Item();
 					item.SetDefaults(i);
 					bool other = true;
-					foreach (var category in Categories)
+					foreach (Category category in Categories)
 					{
 						if (category.belongs(item))
 						{
 							other = false;
 							category.Items.Add(item);
 						}
-						foreach (var subCategory in category.SubCategories)
+						foreach (Category subCategory in category.SubCategories)
 						{
 							if (subCategory.belongs(item))
 							{
@@ -613,7 +630,7 @@ namespace HEROsMod.UIKit.UIComponents
 					}
 				}
 			}
-			foreach (var category in Categories)
+			foreach (Category category in Categories)
 			{
 				// Sort? Value, damage, Tile/Placestyle, rare.
 			}
@@ -632,22 +649,19 @@ namespace HEROsMod.UIKit.UIComponents
     internal class MyComparer : IComparer<Item> {
         internal ItemBrowser br;
 
-        public MyComparer(ItemBrowser br) {
-            this.br = br;
-        }
+		public MyComparer(ItemBrowser br) => this.br = br;
 
-        public int Compare(Item a, Item b) {
-            //if (br.SelectedSort.reversed)
-            //{
-            //	return br.SelectedSort.sort(b, a);
-            //}
-            //else
-            //{
-            //	return br.SelectedSort.sort(a, b);
-            //}
-            return br.SelectedSort.sort(a, b);
-        }
-    }
+		public int Compare(Item a, Item b) =>
+			//if (br.SelectedSort.reversed)
+			//{
+			//	return br.SelectedSort.sort(b, a);
+			//}
+			//else
+			//{
+			//	return br.SelectedSort.sort(a, b);
+			//}
+			br.SelectedSort.sort(a, b);
+	}
 
     internal class Filter {
         public Predicate<Item> filter;
@@ -657,7 +671,7 @@ namespace HEROsMod.UIKit.UIComponents
         public Filter(UIImage button, Predicate<Item> filter) {
             this.filter = filter;
             this.button = button;
-            button.onLeftClick += Button_onLeftClick;
+            button.OnLeftClick += Button_onLeftClick;
         }
 
         private void Button_onLeftClick(object sender, EventArgs e) {
@@ -675,7 +689,7 @@ namespace HEROsMod.UIKit.UIComponents
         public Sort(UIImage button, Func<Item, Item, int> sort) {
             this.sort = sort;
             this.button = button;
-            button.onLeftClick += Button_onLeftClick;
+            button.OnLeftClick += Button_onLeftClick;
         }
 
         private void Button_onLeftClick(object sender, EventArgs e) {
@@ -710,18 +724,18 @@ namespace HEROsMod.UIKit.UIComponents
 
 		public Category(string name)
 		{
-			this.Name = name;
-			this.LocalizedName = HEROsMod.HeroText($"ItemBrowser.CategoryName.{name}");
+			Name = name;
+			LocalizedName = HEROsMod.HeroText($"ItemBrowser.CategoryName.{name}");
 			Items = new List<Item>();
 			SubCategories = new List<Category>();
 			Sorts = new Sort[0];
-			this.belongs = x => false;
+			belongs = x => false;
 		}
 
 		public Category(string name, Predicate<Item> belongs, bool skipLocalization = false)
 		{
-			this.Name = name;
-			this.LocalizedName = skipLocalization ? name : HEROsMod.HeroText($"ItemBrowser.CategoryName.{name}");
+			Name = name;
+			LocalizedName = skipLocalization ? name : HEROsMod.HeroText($"ItemBrowser.CategoryName.{name}");
 			Items = new List<Item>();
 			SubCategories = new List<Category>();
 			Sorts = new Sort[0];
@@ -749,10 +763,8 @@ namespace HEROsMod.UIKit.UIComponents
             return result.ToArray();
         }
 
-        public override string ToString() {
-            return Name + " - Item Count: " + Items.Count;
-        }
-    }
+		public override string ToString() => Name + " - Item Count: " + Items.Count;
+	}
 }
 
 //[Serializable()]

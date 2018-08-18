@@ -7,10 +7,7 @@ namespace HEROsMod.UIKit
 {
 	internal class HueSlider : UISlider
 	{
-		public HueSlider()
-		{
-            Width = ModUtils.HueTexture.Width;
-		}
+		public HueSlider() => Width = ModUtils.HueTexture.Width;
 
 		public override void DrawBackground(SpriteBatch spriteBatch)
 		{
@@ -25,10 +22,7 @@ namespace HEROsMod.UIKit
 		public float Hue { get; set; }
 		public float Luminosity { get; set; }
 
-		public SaturationSlider()
-		{
-            Width = ModUtils.HueTexture.Width;
-		}
+		public SaturationSlider() => Width = ModUtils.HueTexture.Width;
 
 		public override void DrawBackground(SpriteBatch spriteBatch)
 		{
@@ -50,10 +44,7 @@ namespace HEROsMod.UIKit
 		public float Hue { get; set; }
 		public float Saturation { get; set; }
 
-		public LuminositySlider()
-		{
-            Width = ModUtils.HueTexture.Width;
-		}
+		public LuminositySlider() => Width = ModUtils.HueTexture.Width;
 
 		public override void DrawBackground(SpriteBatch spriteBatch)
 		{

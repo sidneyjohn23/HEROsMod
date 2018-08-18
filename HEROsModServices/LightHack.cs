@@ -20,26 +20,23 @@ namespace HEROsMod.HEROsModServices
 		{
 			IsInHotbar = true;
 			HotbarParent = hotbar;
-			this._name = "Light Hack";
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/lighthack"));
-			this._hotbarIcon.onLeftClick += (s, e) =>
+			_name = "Light Hack";
+			_hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/lighthack"));
+			_hotbarIcon.OnLeftClick += (s, e) =>
 			{
-				buttonLogic(true);
+				ButtonLogic(true);
 			};
-			this._hotbarIcon.onRightClick += (s, e) =>
+			_hotbarIcon.OnRightClick += (s, e) =>
 			{
-				buttonLogic(false);
+				ButtonLogic(false);
 			};
-			this.HotbarIcon.Tooltip = LightStrengthStrings[LightStrength];
+			HotbarIcon.Tooltip = LightStrengthStrings[LightStrength];
 			_hotbarIcon.Opacity = 0.5f;
 		}
 
-		public override void MyGroupUpdated()
-		{
-			this.HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("LightHack");
-		}
+		public override void MyGroupUpdated() => HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("LightHack");
 
-		public void buttonLogic(bool leftMouse)
+		public void ButtonLogic(bool leftMouse)
 		{
 			LightStrength = leftMouse ? (LightStrength + 1) % LightStrengthStrings.Length : (LightStrength + LightStrengthStrings.Length - 1) % LightStrengthStrings.Length;
 			HotbarIcon.Tooltip = LightStrengthStrings[LightStrength];

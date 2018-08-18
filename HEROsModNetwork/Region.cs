@@ -13,29 +13,29 @@ namespace HEROsMod.HEROsModNetwork
         public int Y { get; set; }
 
         public Vector2 Position
-        {
-            get { return new Vector2(X, Y); }
-            set
-            {
-                X = (int)value.X;
-                Y = (int)value.Y;
-            }
-        }
+		{
+			get => new Vector2(X, Y);
+			set
+			{
+				X = (int)value.X;
+				Y = (int)value.Y;
+			}
+		}
 
-        public int Width { get; set; }
+		public int Width { get; set; }
         public int Height { get; set; }
 
         public Vector2 Size
-        {
-            get { return new Vector2(Width, Height); }
-            set
-            {
-                Width = (int)value.X;
-                Height = (int)value.Y;
-            }
-        }
+		{
+			get => new Vector2(Width, Height);
+			set
+			{
+				Width = (int)value.X;
+				Height = (int)value.Y;
+			}
+		}
 
-        public int Owner { get; set; }
+		public int Owner { get; set; }
         public List<int> AllowedPlayersIDs { get; set; }
         public List<int> AllowedGroupsIDs { get; set; }
 
@@ -74,12 +74,9 @@ namespace HEROsMod.HEROsModNetwork
             return Main.hslToRgb(hue, 1f, .5f);
         }
 
-        public bool ContainsTile(int x, int y)
-        {
-            return x >= X && x < X + Width && y >= Y && y < Y + Height;
-        }
+		public bool ContainsTile(int x, int y) => x >= X && x < X + Width && y >= Y && y < Y + Height;
 
-        public bool AddPlayer(int playerIndex)
+		public bool AddPlayer(int playerIndex)
         {
             for (int i = 0; i < AllowedPlayersIDs.Count; i++)
             {

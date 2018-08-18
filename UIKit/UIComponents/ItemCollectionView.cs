@@ -4,22 +4,20 @@ namespace HEROsMod.UIKit.UIComponents
 {
 	internal class ItemCollectionView : UIScrollView
 	{
-		private Item[] _items;
-
 		public Item[] Items
 		{
-			get { return _items; }
+			get => Items;
 			set
 			{
-				_items = value;
+				Items = value;
 				RepopulateSlots();
 			}
 		}
 
-		private int slotSpace = 4;
-		private int slotColumns = 8;
-		private float slotSize = Slot.backgroundTexture.Width * .85f;
-		private int slotRows = 4;
+		private readonly int slotSpace = 4;
+		private readonly int slotColumns = 8;
+		private readonly float slotSize = Slot.backgroundTexture.Width * .85f;
+		private readonly int slotRows = 4;
 		private Slot[] slots = new Slot[Main.itemTexture.Length];
 
 		public ItemCollectionView()

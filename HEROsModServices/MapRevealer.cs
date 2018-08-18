@@ -17,18 +17,14 @@ namespace HEROsMod.HEROsModServices
 		{
 			IsInHotbar = true;
 			HotbarParent = hotbar;
-			this._name = "Map Revealer";
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/map")/*ModUtils.RevealMapTexture*/);
-			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-			this.HotbarIcon.Tooltip = HEROsMod.HeroText("RevealMap");
+			_name = "Map Revealer";
+			_hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/map")/*ModUtils.RevealMapTexture*/);
+			_hotbarIcon.OnLeftClick += _hotbarIcon_onLeftClick;
+			HotbarIcon.Tooltip = HEROsMod.HeroText("RevealMap");
 			instance = this;
 		}
 
-		public override void MyGroupUpdated()
-		{
-            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("RevealMap");
-			//base.MyGroupUpdated();
-		}
+		public override void MyGroupUpdated() => HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("RevealMap");//base.MyGroupUpdated();
 
 		private void _hotbarIcon_onLeftClick(object sender, EventArgs e)
 		{
@@ -52,7 +48,9 @@ namespace HEROsMod.HEROsModServices
 				for (int j = y - MapRevealSize / 2; j < y + MapRevealSize / 2; j++)
 				{
 					if (WorldGen.InWorld(i, j))
+					{
 						Main.Map.Update(i, j, 255);
+					}
 				}
 			}
 			Main.refreshMap = true;
@@ -65,7 +63,9 @@ namespace HEROsMod.HEROsModServices
 				for (int j = 0; j < Main.maxTilesY; j++)
 				{
 					if (WorldGen.InWorld(i, j))
+					{
 						Main.Map.Update(i, j, 255);
+					}
 				}
 			}
 			Main.refreshMap = true;

@@ -30,11 +30,9 @@ namespace HEROsMod
         private static FieldInfo _hueTexture;
 
         private static Texture2D _dummyTexture;
-        private static float _deltaTime;
-
-		private static Texture2D _logoTexture;
-		private static Texture2D _logoTexture2;
-		private static Texture2D _testTubeTexture;
+		private static readonly Texture2D _logoTexture;
+		private static readonly Texture2D _logoTexture2;
+		private static readonly Texture2D _testTubeTexture;
 
 		internal static Item[] previousInventoryItems;
 
@@ -62,33 +60,24 @@ namespace HEROsMod
         public static MouseState MouseState { get; set; }
         public static MouseState PreviousMouseState { get; set; }
 
-        /// <summary>
-        /// Time in seconds that has passed since the last update call.
-        /// </summary>
-        public static float DeltaTime
-        {
-            get { return _deltaTime; }
-        }
+		/// <summary>
+		/// Time in seconds that has passed since the last update call.
+		/// </summary>
+		public static float DeltaTime { get; private set; }
 
-        public static int NPCDefaultSpawnRate
-        {
-            get { return (int)_npcDefaultSpawnRate.GetValue(null); }
-            set { _npcDefaultSpawnRate.SetValue(null, value); }
-        }
+		public static int NPCDefaultSpawnRate
+		{
+			get => (int)_npcDefaultSpawnRate.GetValue(null);
+			set => _npcDefaultSpawnRate.SetValue(null, value);
+		}
 
-        public static int NPCDefaultMaxSpawns
-        {
-            get { return (int)_npcDefaultMaxSpawns.GetValue(null); }
-            set { _npcDefaultMaxSpawns.SetValue(null, value); }
-        }
+		public static int NPCDefaultMaxSpawns
+		{
+			get => (int)_npcDefaultMaxSpawns.GetValue(null);
+			set => _npcDefaultMaxSpawns.SetValue(null, value);
+		}
 
-        public static Texture2D HueTexture
-        {
-            get
-            {
-                return (Texture2D)_hueTexture.GetValue(Main.instance);
-            }
-        }
+		public static Texture2D HueTexture => (Texture2D)_hueTexture.GetValue(Main.instance);
 
 		//public static Item HoverItem
 		//{
@@ -96,20 +85,14 @@ namespace HEROsMod
 		//	set { Main.HoverItem = value; }// _hoverItem.SetValue(null, value); }
 		//}
 
-        /// <summary>
-        /// Gets or Sets if the game camera is free to move from the players position
-        /// </summary>
-        public static bool FreeCamera { get; set; }
+		/// <summary>
+		/// Gets or Sets if the game camera is free to move from the players position
+		/// </summary>
+		public static bool FreeCamera { get; set; }
 
-        public static NetworkMode NetworkMode
-        {
-            get
-            {
-                return (NetworkMode)Main.netMode;
-            }
-        }
+		public static NetworkMode NetworkMode => (NetworkMode)Main.netMode;
 
-        public static void Init()
+		public static void Init()
         {
             InitReflection();
             InterfaceVisible = true;
@@ -184,75 +167,39 @@ namespace HEROsMod
 			}
 		}
 
-        /// <summary>
-        /// Draw the head of a player on screen
-        /// </summary>
-        /// <param name="player">Player who's head is to be drawn</param>
-        /// <param name="x">X Draw Pos</param>
-        /// <param name="y">Y Draw Pos</param>
-        /// <param name="alpha">Draw Alpha</param>
-        /// <param name="scale">Draw Scale</param>
-        public static void DrawPlayerHead(Player player, float x, float y, float alpha = 1f, float scale = 1f)
-        {
-            _drawPlayerHeadMethod.Invoke(Main.instance, new object[] { player, x, y, alpha, scale });
-        }
+		/// <summary>
+		/// Draw the head of a player on screen
+		/// </summary>
+		/// <param name="player">Player who's head is to be drawn</param>
+		/// <param name="x">X Draw Pos</param>
+		/// <param name="y">Y Draw Pos</param>
+		/// <param name="alpha">Draw Alpha</param>
+		/// <param name="scale">Draw Scale</param>
+		public static void DrawPlayerHead(Player player, float x, float y, float alpha = 1f, float scale = 1f) => _drawPlayerHeadMethod.Invoke(Main.instance, new object[] { player, x, y, alpha, scale });
 
-        public static void LoadPlayers()
-        {
-            _loadPlayersMethod.Invoke(null, null);
-        }
+		public static void LoadPlayers() => _loadPlayersMethod.Invoke(null, null);
 
-        public static void StartRain()
-        {
-            _startRainMethod.Invoke(null, null);
-        }
+		public static void StartRain() => _startRainMethod.Invoke(null, null);
 
-        public static void StopRain()
-        {
-            _stopRainMethod.Invoke(null, null);
-        }
+		public static void StopRain() => _stopRainMethod.Invoke(null, null);
 
-        public static void StartSandstorm()
-        {
-            _startSandstormMethod.Invoke(null, null);
-        }
+		public static void StartSandstorm() => _startSandstormMethod.Invoke(null, null);
 
-        public static void StopSandstorm()
-        {
-            _stopSandstormMethod.Invoke(null, null);
-        }
+		public static void StopSandstorm() => _stopSandstormMethod.Invoke(null, null);
 
-        public static void LoadNPC(int i)
-        {
-            Main.instance.LoadNPC(i);
-        }
+		public static void LoadNPC(int i) => Main.instance.LoadNPC(i);
 
-        public static void LoadProjectile(int i)
-        {
-            Main.instance.LoadProjectile(i);
-        }
+		public static void LoadProjectile(int i) => Main.instance.LoadProjectile(i);
 
-        public static void LoadTiles(int i)
-        {
-            Main.instance.LoadTiles(i);
-        }
+		public static void LoadTiles(int i) => Main.instance.LoadTiles(i);
 
-        public static void MouseText(string cursorText, int rare = 0, byte diff = 0)
-        {
-            _mouseTextMethod.Invoke(Main.instance, new object[] { cursorText, rare, diff });
-        }
+		public static void MouseText(string cursorText, int rare = 0, byte diff = 0) => _mouseTextMethod.Invoke(Main.instance, new object[] { cursorText, rare, diff });
 
-        public static void InvasionWarning()
-        {
-            _invasionWarningMethod.Invoke(null, null);
-        }
+		public static void InvasionWarning() => _invasionWarningMethod.Invoke(null, null);
 
-        public static void Sort()
-        {
-            _itemSortingSortMethod.Invoke(null, null);
-        }
+		public static void Sort() => _itemSortingSortMethod.Invoke(null, null);
 
-        public static void MoveToPosition(Vector2 newPos)
+		public static void MoveToPosition(Vector2 newPos)
         {
             Player player = Main.player[Main.myPlayer];
             player.position = newPos;
@@ -260,74 +207,44 @@ namespace HEROsMod
             player.fallStart = (int)(player.position.Y / 16f);
         }
 
-        /// <summary>
-        /// Set the Delta Time
-        /// </summary>
-        /// <param name="gameTime">Games current Game Time</param>
-        public static void SetDeltaTime(/*GameTime gameTime*/)
-        {
-            _deltaTime = 1f / 60f;
-        }
+		/// <summary>
+		/// Set the Delta Time
+		/// </summary>
+		/// <param name="gameTime">Games current Game Time</param>
+		public static void SetDeltaTime(/*GameTime gameTime*/) => DeltaTime = 1f / 60f;
 
-        public static void SetDeltaTime(float deltaTime)
-        {
-            _deltaTime = deltaTime;
-        }
+		public static void SetDeltaTime(float deltaTime) => DeltaTime = deltaTime;
 
-        public static bool StringStartsWith(string str, string startStr)
+		public static bool StringStartsWith(string str, string startStr)
         {
             if (str.Length >= startStr.Length)
             {
-                if (str.Substring(0, startStr.Length) == startStr) return true;
-            }
+                if (str.Substring(0, startStr.Length) == startStr)
+				{
+					return true;
+				}
+			}
             return false;
         }
 
-        public static string GetEndOfString(string str, string startStr)
-        {
-            return str.Substring(startStr.Length, str.Length - startStr.Length);
-        }
+		public static string GetEndOfString(string str, string startStr) => str.Substring(startStr.Length, str.Length - startStr.Length);
 
-        public static Vector2 CursorPosition
-        {
-            get
-            {
-                return new Vector2(Main.mouseX, Main.mouseY);
-            }
-        }
+		public static Vector2 CursorPosition => new Vector2(Main.mouseX, Main.mouseY);
 
-        public static Vector2 CursorWorldCoords
-        {
-            get
-            {
-                return CursorPosition + Main.screenPosition;
-            }
-        }
+		public static Vector2 CursorWorldCoords => CursorPosition + Main.screenPosition;
 
-        public static Vector2 CursorTileCoords
-        {
-            get
-            {
-                return GetTileCoordsFromWorldCoords(CursorWorldCoords);
-            }
-        }
+		public static Vector2 CursorTileCoords => GetTileCoordsFromWorldCoords(CursorWorldCoords);
 
-        //public static Vector2 GetCursorWorldCoords()
-        //{
-        //    return new Vector2((int)Main.screenPosition.X + Main.mouseX, (int)Main.screenPosition.Y + Main.mouseY);
-        //}
+		//public static Vector2 GetCursorWorldCoords()
+		//{
+		//    return new Vector2((int)Main.screenPosition.X + Main.mouseX, (int)Main.screenPosition.Y + Main.mouseY);
+		//}
 
-        public static Vector2 GetTileCoordsFromWorldCoords(Vector2 worldCoords)
-        {
-            return new Vector2((int)worldCoords.X / 16, (int)worldCoords.Y / 16);
-        }
+		public static Vector2 GetTileCoordsFromWorldCoords(Vector2 worldCoords) => new Vector2((int)worldCoords.X / 16, (int)worldCoords.Y / 16);
 
-        public static Vector2 GetWorldCoordsFromTileCoords(Vector2 tileCoords)
-        {
-            return new Vector2((int)tileCoords.X * 16, (int)tileCoords.Y * 16);
-        }
+		public static Vector2 GetWorldCoordsFromTileCoords(Vector2 tileCoords) => new Vector2((int)tileCoords.X * 16, (int)tileCoords.Y * 16);
 
-        public static void DrawBorderedRect(SpriteBatch spriteBatch, Color color, Color borderColor, Vector2 position, Vector2 size, int borderWidth)
+		public static void DrawBorderedRect(SpriteBatch spriteBatch, Color color, Color borderColor, Vector2 position, Vector2 size, int borderWidth)
         {
             size *= 16;
             Vector2 pos = GetWorldCoordsFromTileCoords(position) - Main.screenPosition;
@@ -404,15 +321,19 @@ namespace HEROsMod
 
         public static Color GetItemColor(Item item)
         {
-            if (rarityColors.ContainsKey(item.rare)) return rarityColors[item.rare];
-            return Color.White;
+            if (rarityColors.ContainsKey(item.rare))
+			{
+				return rarityColors[item.rare];
+			}
+
+			return Color.White;
         }
 
-        private static bool debug = false;
+        private static bool Debug => false;
 
         public static void DebugText(string message)
         {
-            if (debug)
+            if (Debug)
             {
                 string header = "HERO's Mod: ";
                 if (Main.dedServ)

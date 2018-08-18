@@ -14,20 +14,14 @@ namespace HEROsMod.HEROsModServices
 		/// </summary>
 		protected string _name;
 
-		public string Name
-		{
-			get { return _name; }
-		}
+		public string Name => _name;
 
 		/// <summary>
 		/// Icon that gets used if the service is added to the ServiceHotbar
 		/// </summary>
 		protected UIImage _hotbarIcon;
 
-		public UIImage HotbarIcon
-		{
-			get { return _hotbarIcon; }
-		}
+		public UIImage HotbarIcon => _hotbarIcon;
 
 		public bool IsInHotbar { get; set; }
 		public UIHotbar HotbarParent { get; set; }
@@ -63,10 +57,7 @@ namespace HEROsMod.HEROsModServices
 		/// <summary>
 		/// This method must be called before the Service is desposed.
 		/// </summary>
-		public virtual void Destroy()
-		{
-			RemoveAllUIViews();
-		}
+		public virtual void Destroy() => RemoveAllUIViews();
 
 		/// <summary>
 		/// Add a UIView that belongs to this Service

@@ -29,14 +29,10 @@ namespace HEROsMod.UIKit.UIComponents
 		{
             Scale = .85f;
 			this.item = item.Clone();
-            onHover += Slot2_onHover;
+            OnHover += Slot2_onHover;
 		}
 
-		private void Slot2_onHover(object sender, EventArgs e)
-		{
-			HoverText = item.Name;
-			//HoverItem = item.Clone();
-		}
+		private void Slot2_onHover(object sender, EventArgs e) => HoverText = item.Name;//HoverItem = item.Clone();
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{

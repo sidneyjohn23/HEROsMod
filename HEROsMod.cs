@@ -68,12 +68,8 @@ namespace HEROsMod
 			}
 		}
 
-		internal static string HeroText(string key)
-		{
-			return translations[$"Mods.HEROsMod.{key}"].GetTranslation(Language.ActiveCulture);
-			// This isn't good until after load....
-			// return Language.GetTextValue($"Mods.HEROsMod.{category}.{key}");
-		}
+		internal static string HeroText(string key) => translations[$"Mods.HEROsMod.{key}"].GetTranslation(Language.ActiveCulture);
+		// This isn't good until after load....// return Language.GetTextValue($"Mods.HEROsMod.{category}.{key}");
 
 		// Clear EVERYthing, mod is unloaded.
 		public override void Unload()
@@ -101,7 +97,7 @@ namespace HEROsMod
 				{
 					if (ServiceController.Services != null)
 					{
-						foreach (var service in ServiceController.Services)
+						foreach (HEROsModService service in ServiceController.Services)
 						{
 							service.Unload();
 						}
@@ -119,7 +115,7 @@ namespace HEROsMod
 			}
 			extensionMenuService = null;
 			miscOptions = null;
-			_hotbar = null;
+			ServiceHotbar = null;
 			ServiceController = null;
 			TimeWeatherControlHotbar.Unload();
 			ModUtils.previousInventoryItems = null;
@@ -132,7 +128,7 @@ namespace HEROsMod
             ModUtils.DebugText("Post Setup Content");
             if (!Main.dedServ)
             {
-                foreach (var service in ServiceController.Services)
+                foreach (HEROsModService service in ServiceController.Services)
                 {
                     service.PostSetupContent();
                 }
@@ -177,22 +173,13 @@ namespace HEROsMod
             }
         }
 
-        public override void HotKeyPressed(string name)
-        {
-            KeybindController.HotKeyPressed(name);
-        }
+		public override void HotKeyPressed(string name) => KeybindController.HotKeyPressed(name);
 
-        public override void UpdateMusic(ref int music)
-        {
-            CheckIfGameEnteredOrLeft();
-        }
+		public override void UpdateMusic(ref int music) => CheckIfGameEnteredOrLeft();
 
-        public override void HandlePacket(BinaryReader reader, int whoAmI)
-        {
-            Network.HEROsModMessaged(reader, whoAmI);
-        }
+		public override void HandlePacket(BinaryReader reader, int whoAmI) => Network.HEROsModMessaged(reader, whoAmI);
 
-        public override bool HijackGetData(ref byte messageType, ref BinaryReader reader, int playerNumber)
+		public override bool HijackGetData(ref byte messageType, ref BinaryReader reader, int playerNumber)
         {
             //ModUtils.DebugText("Data: " + messageType);
             if (Network.CheckIncomingDataForHEROsModMessage(ref messageType, ref reader, playerNumber))
@@ -266,14 +253,9 @@ namespace HEROsMod
         public static ServiceController ServiceController;
 
         public static RenderTarget2D RenderTarget { get; set; }
+		public static ServiceHotbar ServiceHotbar { get; private set; }
 
-        private static ServiceHotbar _hotbar;
-        public static ServiceHotbar ServiceHotbar
-        {
-            get { return _hotbar; }
-        }
-
-        public static void Init()
+		public static void Init()
         {
             ModUtils.DebugText("Mod Init");
             ModUtils.Init();
@@ -281,10 +263,10 @@ namespace HEROsMod
 
             if (!Main.dedServ)
             {
-                UIView.exclusiveControl = null;
+                UIView.ExclusiveControl = null;
                 InventoryManager.SetKeyBindings();
                 ServiceController = new ServiceController();
-                _hotbar = new ServiceHotbar();
+                ServiceHotbar = new ServiceHotbar();
                 SelectionTool.Init();
                 
                 UIColorPicker colorPicker = new UIColorPicker()
@@ -352,7 +334,7 @@ namespace HEROsMod
                 ModUtils.Update();
                 //HEROsModVideo.Services.MobHUD.MobInfo.Update();
                 //Update all services in the ServiceController
-                foreach (var service in ServiceController.Services)
+                foreach (HEROsModService service in ServiceController.Services)
                 {
                     service.Update();
                 }
@@ -404,7 +386,7 @@ namespace HEROsMod
         public static void Draw(SpriteBatch spriteBatch)
         {
             MasterView.DrawMaster(spriteBatch);
-            foreach (var service in ServiceController.Services)
+            foreach (HEROsModService service in ServiceController.Services)
             {
                 service.Draw(spriteBatch);
             }
@@ -429,8 +411,11 @@ namespace HEROsMod
                 HEROsModVideo.Services.MobHUD.MobInfo.Draw(spriteBatch);
                 SelectionTool.Draw(spriteBatch);
                 if (RegionService.RegionsVisible)
-                    RegionService.DrawRegions(spriteBatch);
-                CheckTileModificationTool.DrawBoxOnCursor(spriteBatch);
+				{
+					RegionService.DrawRegions(spriteBatch);
+				}
+
+				CheckTileModificationTool.DrawBoxOnCursor(spriteBatch);
             }
         }
 

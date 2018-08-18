@@ -10,7 +10,7 @@ namespace HEROsMod.HEROsModVideo.Services.MobHUD
 	{
 		public NPC NPCTarget { get; set; }
 		private Vector2 _targetPosition = Vector2.Zero;
-		private float _radius = 10f;
+		private readonly float _radius = 10f;
 		private float _time = 0f;
 		private float _timeAdvanceSpeed = MathHelper.Pi / 20;
 
@@ -100,9 +100,9 @@ namespace HEROsMod.HEROsModVideo.Services.MobHUD
 			Damping = 3.9f;
 			SpringStiffness = 30;
 			Mass = 0.5f;
-			var delta = _worldPos - desiredPosition;
-			var force = -SpringStiffness * delta - Damping * _velocity;
-			var acceleration = force / Mass;
+			Vector2 delta = _worldPos - desiredPosition;
+			Vector2 force = -SpringStiffness * delta - Damping * _velocity;
+			Vector2 acceleration = force / Mass;
 			_velocity += acceleration * elapsedSeconds;
             _worldPos += _velocity * elapsedSeconds;
 		}

@@ -19,9 +19,9 @@ namespace HEROsMod.HEROsModServices
 
 			IsHotbar = true;
 
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/extensions"));
-			this.HotbarIcon.Tooltip = HEROsMod.HeroText("ExtensionTools");
-			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
+			_hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/extensions"));
+			HotbarIcon.Tooltip = HEROsMod.HeroText("ExtensionTools");
+			HotbarIcon.OnLeftClick += HotbarIcon_onLeftClick;
 
             _extensionMenuHotbar = new ExtensionMenuWindow()
             {
@@ -36,20 +36,20 @@ namespace HEROsMod.HEROsModServices
 		private void HotbarIcon_onLeftClick(object sender, EventArgs e)
 		{
 			bool childAvailable = false;
-			foreach (var item in genericServices)
+			foreach (GenericExtensionService item in genericServices)
 			{
 				childAvailable |= item.HasPermissionToUse;
 			}
 			if (childAvailable)
 			{
-				if (_extensionMenuHotbar.selected)
+				if (_extensionMenuHotbar.Selected)
 				{
-					_extensionMenuHotbar.selected = false;
+					_extensionMenuHotbar.Selected = false;
 					_extensionMenuHotbar.Hide();
 				}
 				else
 				{
-					_extensionMenuHotbar.selected = true;
+					_extensionMenuHotbar.Selected = true;
 					_extensionMenuHotbar.Show();
 				}
 			}
@@ -62,7 +62,7 @@ namespace HEROsMod.HEROsModServices
 		public override void MyGroupUpdated()
 		{
 			bool childAvailable = false;
-			foreach (var item in genericServices)
+			foreach (GenericExtensionService item in genericServices)
 			{
 				item.MyGroupUpdated();
 				childAvailable |= item.HasPermissionToUse;
@@ -74,10 +74,7 @@ namespace HEROsMod.HEROsModServices
 			}
 		}
 
-		internal void AddGeneric(GenericExtensionService genericService)
-		{
-			genericServices.Add(genericService);
-		}
+		internal void AddGeneric(GenericExtensionService genericService) => genericServices.Add(genericService);
 	}
 
 	internal class ExtensionMenuWindow : UIHotbar
@@ -85,37 +82,37 @@ namespace HEROsMod.HEROsModServices
 		public ExtensionMenuWindow()
 		{
             buttonView = new UIView();
-			base.Visible = false;
+			Visible = false;
 
 			base.Height = 55f;
             buttonView.Height = base.Height;
-			base.Anchor = AnchorPosition.Top;
+			Anchor = AnchorPosition.Top;
             AddChild(buttonView);
-			base.Position = new Vector2(Position.X, hiddenPosition);
-			base.CenterXAxisToParentCenter();
+			Position = new Vector2(Position.X, HiddenPosition);
+			CenterXAxisToParentCenter();
 			float num = spacing;
-			for (int i = 0; i < buttonView.children.Count; i++)
+			for (int i = 0; i < buttonView.Children.Count; i++)
 			{
-                buttonView.children[i].Anchor = AnchorPosition.Left;
-                buttonView.children[i].Position = new Vector2(num, 0f);
-                buttonView.children[i].CenterYAxisToParentCenter();
-                buttonView.children[i].Visible = true;
-				num += buttonView.children[i].Width + spacing;
+                buttonView.Children[i].Anchor = AnchorPosition.Left;
+                buttonView.Children[i].Position = new Vector2(num, 0f);
+                buttonView.Children[i].CenterYAxisToParentCenter();
+                buttonView.Children[i].Visible = true;
+				num += buttonView.Children[i].Width + spacing;
 			}
             Resize();
 		}
 
-		public override void test()
+		public override void Test()
 		{
-			base.CenterXAxisToParentCenter();
+			CenterXAxisToParentCenter();
 			float num = spacing;
-			for (int i = 0; i < buttonView.children.Count; i++)
+			for (int i = 0; i < buttonView.Children.Count; i++)
 			{
-                buttonView.children[i].Anchor = AnchorPosition.Left;
-                buttonView.children[i].Position = new Vector2(num, 0f);
-                buttonView.children[i].CenterYAxisToParentCenter();
-                buttonView.children[i].Visible = true;
-				num += buttonView.children[i].Width + spacing;
+                buttonView.Children[i].Anchor = AnchorPosition.Left;
+                buttonView.Children[i].Position = new Vector2(num, 0f);
+                buttonView.Children[i].CenterYAxisToParentCenter();
+                buttonView.Children[i].Visible = true;
+				num += buttonView.Children[i].Width + spacing;
 			}
             Resize();
 		}
@@ -129,16 +126,16 @@ namespace HEROsMod.HEROsModServices
 		public void Resize()
 		{
 			float num = spacing;
-			for (int i = 0; i < buttonView.children.Count; i++)
+			for (int i = 0; i < buttonView.Children.Count; i++)
 			{
-				if (buttonView.children[i].Visible)
+				if (buttonView.Children[i].Visible)
 				{
-                    buttonView.children[i].X = num;
-					num += buttonView.children[i].Width + spacing;
+                    buttonView.Children[i].X = num;
+					num += buttonView.Children[i].Width + spacing;
 				}
 			}
-			base.Width = num;
-            buttonView.Width = base.Width;
+			Width = num;
+            buttonView.Width = Width;
 		}
 	}
 }

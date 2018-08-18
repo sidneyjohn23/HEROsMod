@@ -27,27 +27,27 @@ namespace HEROsMod.HEROsModServices
 		{
 			IsInHotbar = true;
 			HotbarParent = hotbar;
-            //MultiplayerOnly = true;
-            _name = "Gravestones Toggler";
+			//MultiplayerOnly = true;
+			_name = "Gravestones Toggler";
 			ModUtils.LoadProjectile(43);
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/gravestone")/*Main.projectileTexture[43]*/);
-			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-			this.HotbarIcon.Tooltip = HEROsMod.HeroText("DisableGravestones");
-			this._hotbarIcon.Opacity = 1f;
-			HEROsModNetwork.GeneralMessages.GravestonesToggleByServer += GeneralMessages_GravestonesToggleByServer;
+			_hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/gravestone")/*Main.projectileTexture[43]*/);
+			_hotbarIcon.OnLeftClick += _hotbarIcon_onLeftClick;
+			HotbarIcon.Tooltip = HEROsMod.HeroText("DisableGravestones");
+			_hotbarIcon.Opacity = 1f;
+			GeneralMessages.GravestonesToggleByServer += GeneralMessages_GravestonesToggleByServer;
 		}
 
 		private void GeneralMessages_GravestonesToggleByServer(bool gravestonesCanSpawn)
 		{
 			if (gravestonesCanSpawn)
 			{
-				this._hotbarIcon.Opacity = 1f;
-				this.HotbarIcon.Tooltip = HEROsMod.HeroText("DisableGravestones");
+				_hotbarIcon.Opacity = 1f;
+				HotbarIcon.Tooltip = HEROsMod.HeroText("DisableGravestones");
 			}
 			else
 			{
-				this._hotbarIcon.Opacity = .5f;
-				this.HotbarIcon.Tooltip = HEROsMod.HeroText("EnableGravestones");
+				_hotbarIcon.Opacity = .5f;
+				HotbarIcon.Tooltip = HEROsMod.HeroText("EnableGravestones");
 			}
 			Network.GravestonesAllowed = gravestonesCanSpawn;
 		}
@@ -56,23 +56,16 @@ namespace HEROsMod.HEROsModServices
 		{
 			if (ModUtils.NetworkMode != NetworkMode.None)
 			{
-                GeneralMessages.RequestToggleGravestones();
+				GeneralMessages.RequestToggleGravestones();
 			}
 			else
 			{
-				if (Network.GravestonesAllowed)
-					Main.NewText(HEROsMod.HeroText("YouHaveDisabledGravestones"));
-				else
-					Main.NewText(HEROsMod.HeroText("YouHaveEnabledGravestones"));
+				Main.NewText(HEROsMod.HeroText(Network.GravestonesAllowed ? "YouHaveDisabledGravestones" : "YouHaveEnabledGravestones"));
 				GeneralMessages_GravestonesToggleByServer(!Network.GravestonesAllowed);
 			}
 		}
 
-		public override void MyGroupUpdated()
-		{
-            HasPermissionToUse = LoginService.MyGroup.HasPermission("ToggleGravestones");
-			//base.MyGroupUpdated();
-		}
+		public override void MyGroupUpdated() => HasPermissionToUse = LoginService.MyGroup.HasPermission("ToggleGravestones");//base.MyGroupUpdated();
 	}
 
 	internal class GraveStoneGlobalProjectile : GlobalProjectile

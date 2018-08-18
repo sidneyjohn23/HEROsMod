@@ -15,10 +15,10 @@ namespace HEROsMod.HEROsModServices
 		public PlayerList()
 		{
 			MultiplayerOnly = true;
-			this._name = "Player List";
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/connectedPlayers"));
-			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-			this.HotbarIcon.Tooltip = HEROsMod.HeroText("ViewConnectedPlayers");
+			_name = "Player List";
+			_hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/connectedPlayers"));
+			_hotbarIcon.OnLeftClick += _hotbarIcon_onLeftClick;
+			HotbarIcon.Tooltip = HEROsMod.HeroText("ViewConnectedPlayers");
 		}
 
 		private void _hotbarIcon_onLeftClick(object sender, EventArgs e)
@@ -35,19 +35,18 @@ namespace HEROsMod.HEROsModServices
 			}
 		}
 
-		private void PlayerWindowClosed(object sender, EventArgs e)
-		{
-			playersWindow = null;
-		}
+		private void PlayerWindowClosed(object sender, EventArgs e) => playersWindow = null;
 
 		public override void MyGroupUpdated()
 		{
 			// TODO! This prevents snoop, since IsAdmin might not be true.
-			this.HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.IsAdmin;
+			HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.IsAdmin;
 			if (!HasPermissionToUse)
 			{
 				if (playersWindow != null)
+				{
 					playersWindow.Close();
+				}
 			}
 		}
 
@@ -78,11 +77,12 @@ namespace HEROsMod.HEROsModServices
 			Anchor = AnchorPosition.Center;
 			CenterToParent();
 			UILabel title = new UILabel(HEROsMod.HeroText("ConnectedPlayers"));
-			UIImage bClose = new UIImage(closeTexture);
-
-			bClose.Anchor = AnchorPosition.TopRight;
-			bClose.X = Width - spacing;
-			bClose.Y = spacing;
+			UIImage bClose = new UIImage(closeTexture)
+			{
+				Anchor = AnchorPosition.TopRight,
+				X = Width - spacing,
+				Y = spacing
+			};
 			title.Scale = .6f;
 			title.X = spacing;
 			title.Y = spacing;
@@ -95,18 +95,19 @@ namespace HEROsMod.HEROsModServices
 			AddChild(scrollView);
 			AddChild(title);
 			AddChild(bClose);
-			bClose.onLeftClick += bClose_onLeftClick;
+			bClose.OnLeftClick += BClose_onLeftClick;
 			UpdateList();
 		}
 
-		private void bClose_onLeftClick(object sender, EventArgs e)
-		{
-			Close();
-		}
+		private void BClose_onLeftClick(object sender, EventArgs e) => Close();
 
 		public override void Update()
 		{
-			if (Main.gameMenu) Visible = false;
+			if (Main.gameMenu)
+			{
+				Visible = false;
+			}
+
 			base.Update();
 		}
 
@@ -132,7 +133,7 @@ namespace HEROsMod.HEROsModServices
                         X = playerHead.X + playerHead.Width + 8,
                         Y = playerHead.Y + playerHead.Width / 2 + 8
                     };
-                    label.onLeftClick += label_onLeftClick;
+                    label.OnLeftClick += Label_onLeftClick;
 					label.Tag = i;
 
 					scrollView.AddChild(playerHead);
@@ -142,11 +143,13 @@ namespace HEROsMod.HEROsModServices
 
             if (HEROsModNetwork.LoginService.MyGroup.IsAdmin)
 			{
-				UILabel lOfflinePlayers = new UILabel(HEROsMod.HeroText("OfflineUsers"));
-				lOfflinePlayers.Scale = .6f;
-				lOfflinePlayers.X = Spacing;
-				lOfflinePlayers.Y = yPos + Spacing;
-				lOfflinePlayers.ForegroundColor = Microsoft.Xna.Framework.Color.Yellow;
+				UILabel lOfflinePlayers = new UILabel(HEROsMod.HeroText("OfflineUsers"))
+				{
+					Scale = .6f,
+					X = Spacing,
+					Y = yPos + Spacing,
+					ForegroundColor = Microsoft.Xna.Framework.Color.Yellow
+				};
 				yPos = lOfflinePlayers.Y + lOfflinePlayers.Height;
 				scrollView.AddChild(lOfflinePlayers);
                 ModUtils.DebugText("Length: " + HEROsModNetwork.Network.Players2.Count);
@@ -174,7 +177,7 @@ namespace HEROsMod.HEROsModServices
                         ForegroundColor = new Microsoft.Xna.Framework.Color(200, 200, 200)
                     };
                     yPos += lUser.Height;
-					lUser.onLeftClick += lUser_onLeftClick;
+					lUser.OnLeftClick += LUser_onLeftClick;
 					lUser.Tag = user.ID;
 					scrollView.AddChild(lUser);
 				}
@@ -183,7 +186,7 @@ namespace HEROsMod.HEROsModServices
 			scrollView.ContentHeight = yPos + spacing;
         }
 
-		private void lUser_onLeftClick(object sender, EventArgs e)
+		private void LUser_onLeftClick(object sender, EventArgs e)
 		{
 			UILabel label = (UILabel)sender;
 			int userID = (int)label.Tag;
@@ -191,7 +194,7 @@ namespace HEROsMod.HEROsModServices
 			OpenPlayerInfo(userID, true);
 		}
 
-		private void label_onLeftClick(object sender, EventArgs e)
+		private void Label_onLeftClick(object sender, EventArgs e)
 		{
 			UILabel label = (UILabel)sender;
 			int playerIndex = (int)label.Tag;
@@ -225,8 +228,11 @@ namespace HEROsMod.HEROsModServices
 		{
 			ClosePlayerInfo();
 			if (Parent != null)
-                Parent.RemoveChild(this);
-            Closed?.Invoke(this, EventArgs.Empty);
+			{
+				Parent.RemoveChild(this);
+			}
+
+			Closed?.Invoke(this, EventArgs.Empty);
         }
 	}
 
@@ -239,12 +245,15 @@ namespace HEROsMod.HEROsModServices
 		private UIDropdown dropdown;
 
 		private HEROsModNetwork.HEROsModPlayer player;
-		private int playerIndex;
+		private readonly int playerIndex;
 
 		public PlayerInfo(int playerIndex, bool offlineUser)
 		{
 			if (!offlineUser)
-                player = HEROsModNetwork.Network.Players2[playerIndex];
+			{
+				player = HEROsModNetwork.Network.Players2[playerIndex];
+			}
+
 			this.playerIndex = playerIndex;
             UpdateWhenOutOfBounds = true;
 			Width = 350;
@@ -289,7 +298,7 @@ namespace HEROsMod.HEROsModServices
 					}
 				}
 			}
-			dropdown.selectedChanged += dropdown_selectedChanged;
+			dropdown.SelectedChanged += Dropdown_selectedChanged;
 
 			bClose.Y = spacing;
 			lGroup.Scale = .5f;
@@ -303,7 +312,11 @@ namespace HEROsMod.HEROsModServices
 			{
 				label.Text = "Logged in as " + player.Username;
 			}
-			else label.Text = "Not Logged In";
+			else
+			{
+				label.Text = "Not Logged In";
+			}
+
 			label.X = spacing;
 			label.Y = dropdown.Y + dropdown.Height + spacing;
 			label.Scale = .35f;
@@ -331,9 +344,21 @@ namespace HEROsMod.HEROsModServices
 			HEROsModNetwork.Group myGroup = HEROsModNetwork.LoginService.MyGroup;
 			if (!offlineUser)
 			{
-				if (myGroup.HasPermission("TeleportToPlayers")) AddChild(bTeleport);
-				if (myGroup.HasPermission("Ban")) AddChild(bBan);
-				if (myGroup.HasPermission("Kick")) AddChild(bKick);
+				if (myGroup.HasPermission("TeleportToPlayers"))
+				{
+					AddChild(bTeleport);
+				}
+
+				if (myGroup.HasPermission("Ban"))
+				{
+					AddChild(bBan);
+				}
+
+				if (myGroup.HasPermission("Kick"))
+				{
+					AddChild(bKick);
+				}
+
 				if (myGroup.HasPermission("Snoop"))
 				{
 					snoopWindow.SetPlayer(Main.player[playerIndex], playerIndex);
@@ -355,36 +380,36 @@ namespace HEROsMod.HEROsModServices
 			bKick.Tag = Main.player[playerIndex].name;
 
 			bClose.X = Width - bClose.Width - spacing;
-			bKick.onLeftClick += bKick_onLeftClick;
-			bBan.onLeftClick += bBan_onLeftClick;
-			bClose.onLeftClick += bClose_onLeftClick;
-			bTeleport.onLeftClick += bTeleport_onLeftClick;
-			bRestore.onLeftClick += bRestore_onLeftClick;
+			bKick.OnLeftClick += BKick_onLeftClick;
+			bBan.OnLeftClick += BBan_onLeftClick;
+			bClose.OnLeftClick += BClose_onLeftClick;
+			bTeleport.OnLeftClick += BTeleport_onLeftClick;
+			bRestore.OnLeftClick += BRestore_onLeftClick;
 		}
 
-		private void bRestore_onLeftClick(object sender, EventArgs e)
+		private void BRestore_onLeftClick(object sender, EventArgs e)
 		{
 			if (player != null)
 			{
-				HEROsModNetwork.GeneralMessages.RequestRestoreTiles(playerIndex, true);
+				GeneralMessages.RequestRestoreTiles(playerIndex, true);
 			}
 			else
 			{
-				HEROsModNetwork.GeneralMessages.RequestRestoreTiles(playerIndex, false);
+				GeneralMessages.RequestRestoreTiles(playerIndex, false);
 			}
 		}
 
-		private void bBan_onLeftClick(object sender, EventArgs e)
+		private void BBan_onLeftClick(object sender, EventArgs e)
 		{
 			//ServerTools.SendTextToServer(Messages.banPlayer + name);
 			UIButton button = (UIButton)sender;
 			string tag = (string)button.Tag;
 			ModUtils.DebugText("Ban tag " + tag);
 
-			HEROsModNetwork.GeneralMessages.RequestBanPlayer(tag);
+			GeneralMessages.RequestBanPlayer(tag);
 		}
 
-		private void bTeleport_onLeftClick(object sender, EventArgs e)
+		private void BTeleport_onLeftClick(object sender, EventArgs e)
 		{
 			if (HEROsModNetwork.LoginService.MyGroup.HasPermission("TeleportToPlayers"))
 			{
@@ -392,12 +417,9 @@ namespace HEROsMod.HEROsModServices
 			}
 		}
 
-		private void bClose_onLeftClick(object sender, EventArgs e)
-		{
-            Parent.RemoveChild(this);
-		}
+		private void BClose_onLeftClick(object sender, EventArgs e) => Parent.RemoveChild(this);
 
-		private void dropdown_selectedChanged(object sender, EventArgs e)
+		private void Dropdown_selectedChanged(object sender, EventArgs e)
 		{
 			if (player == null)
 			{
@@ -412,12 +434,12 @@ namespace HEROsMod.HEROsModServices
 			}
 		}
 
-		private void bKick_onLeftClick(object sender, EventArgs e)
+		private void BKick_onLeftClick(object sender, EventArgs e)
 		{
 			UIButton button = (UIButton)sender;
 			string tag = (string)button.Tag;
 			ModUtils.DebugText("Kick tag " + tag);
-			HEROsModNetwork.GeneralMessages.RequestKickPlayer(tag);
+			GeneralMessages.RequestKickPlayer(tag);
 			//ServerTools.SendTextToServer(Messages.kickPlayer + tag);
 			//TODO
 		}
@@ -444,8 +466,10 @@ namespace HEROsMod.HEROsModServices
 			//itemsView.Y = spacing;
 			for (int i = 0; i < 50; i++)
 			{
-				Slot slot = new Slot(0, false);
-				slot.functionalSlot = true;
+				Slot slot = new Slot(0, false)
+				{
+					functionalSlot = true
+				};
 				int index = i;
 				slot.ItemChanged += (a, b) => ItemSlot_ItemChanged(slot, index);
 				slot.X = 8 + i % 10 * slot.Width;
@@ -453,13 +477,15 @@ namespace HEROsMod.HEROsModServices
 
 				itemsView.AddChild(slot);
 			}
-			Width = itemsView.GetLastChild().X + itemsView.GetLastChild().Width + 8;
-			float yPos = itemsView.GetLastChild().Y + itemsView.GetLastChild().Height + 10;
+			Width = itemsView.Children.Last().X + itemsView.Children.Last().Width + 8;
+			float yPos = itemsView.Children.Last().Y + itemsView.Children.Last().Height + 10;
 			for (int i = 50; i < 58; i++)
 			{
 				int index = i - 50;
-				Slot slot = new Slot(0, false);
-				slot.functionalSlot = true;
+				Slot slot = new Slot(0, false)
+				{
+					functionalSlot = true
+				};
 				int idx = i;
 				slot.ItemChanged += (a, b) => ItemSlot_ItemChanged(slot, idx);
 				slot.Scale = .6f;
@@ -467,17 +493,21 @@ namespace HEROsMod.HEROsModServices
 				slot.Y = yPos + index / 2 * slot.Height;
 				itemsView.AddChild(slot);
 			}
-			Slot mouseSlot = new Slot(0, false);
-			mouseSlot.functionalSlot = true;
+			Slot mouseSlot = new Slot(0, false)
+			{
+				functionalSlot = true
+			};
 			mouseSlot.ItemChanged += (a, b) => ItemSlot_ItemChanged(mouseSlot, 58);
-			mouseSlot.X = itemsView.GetLastChild().X + itemsView.GetLastChild().Width + 4;
-			mouseSlot.Y = itemsView.GetLastChild().Y + itemsView.GetLastChild().Height - mouseSlot.Height;
+			mouseSlot.X = itemsView.Children.Last().X + itemsView.Children.Last().Width + 4;
+			mouseSlot.Y = itemsView.Children.Last().Y + itemsView.Children.Last().Height - mouseSlot.Height;
 			itemsView.AddChild(mouseSlot);
 			float xPos = mouseSlot.X + mouseSlot.Width + 4;
 			for (int i = 0; i < 16; i++)
 			{
-				Slot slot = new Slot(0, false);
-				slot.functionalSlot = true;
+				Slot slot = new Slot(0, false)
+				{
+					functionalSlot = true
+				};
 				int index = i;
 				slot.ItemChanged += (a, b) => ItemSlot_ItemChanged(slot, index, true);
 				slot.Scale = .7f;
@@ -486,6 +516,7 @@ namespace HEROsMod.HEROsModServices
 				itemsView.AddChild(slot);
 			}
 			AddChild(itemsView);
+
 			Height = mouseSlot.Y + mouseSlot.Height + 8;
 
 			itemsView.Width = Width;
@@ -500,10 +531,10 @@ namespace HEROsMod.HEROsModServices
             };
             itemsView.AddChild(label);
 
-            itemsView.children[18].onLeftClick += a;
+            itemsView.Children[18].OnLeftClick += A;
 		}
 
-        private void a(object sender, EventArgs e) {
+        private void A(object sender, EventArgs e) {
             player.inventory[18] = player.inventory[19].Clone();
             int plr = playerIndex;
             //for (int i = 0; i < 59; i++) {
@@ -527,12 +558,12 @@ namespace HEROsMod.HEROsModServices
 			{
 				for (int i = 0; i < 59; i++)
 				{
-					Slot slot = (Slot)itemsView.children[i];
+					Slot slot = (Slot)itemsView.Children[i];
 					slot.item = player.inventory[i].Clone();
 				}
 				for (int i = 0; i < 16; i++)
 				{
-					Slot slot = (Slot)itemsView.children[i + 59];
+					Slot slot = (Slot)itemsView.Children[i + 59];
 					slot.item = player.armor[i].Clone();
 				}
 			}
@@ -547,7 +578,7 @@ namespace HEROsMod.HEROsModServices
 
 		internal static void RequestSyncItemNonOwner(Player player, Item item, int index)
 		{
-			var packet = HEROsMod.instance.GetPacket();
+			Terraria.ModLoader.ModPacket packet = HEROsMod.instance.GetPacket();
 			packet.Write((byte)Network.MessageType.GeneralMessage);
 			packet.Write((byte)GeneralMessages.MessageType.SyncItemNonOwner);
 			packet.Write((byte)player.whoAmI);
@@ -560,13 +591,13 @@ namespace HEROsMod.HEROsModServices
 		{
 			if (Main.netMode == Terraria.ID.NetmodeID.Server)
 			{
-				if (Network.Players[playerNumber].Group.HasPermission("Snoop"))
+				if (Network.Players2[playerNumber].Group.HasPermission("Snoop"))
 				{
 					byte player = reader.ReadByte();
 					int inventoryindex = reader.ReadByte();
 					Item item = Terraria.ModLoader.IO.ItemIO.Receive(reader, true);
 
-					var packet = HEROsMod.instance.GetPacket();
+					Terraria.ModLoader.ModPacket packet = HEROsMod.instance.GetPacket();
 					packet.Write((byte)Network.MessageType.GeneralMessage);
 					packet.Write((byte)GeneralMessages.MessageType.SyncItemNonOwner);
 					packet.Write((byte)player);
@@ -584,9 +615,13 @@ namespace HEROsMod.HEROsModServices
 				if (player == Main.myPlayer)
 				{
 					if (inventoryindex < 59)
+					{
 						Main.LocalPlayer.inventory[inventoryindex] = item;
+					}
 					else
+					{
 						Main.LocalPlayer.armor[inventoryindex - 59] = item;
+					}
 					// send 5 or just let clientClone take care of it?
 				}
 				else

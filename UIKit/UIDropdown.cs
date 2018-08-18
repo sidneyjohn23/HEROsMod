@@ -15,7 +15,7 @@ namespace HEROsMod.UIKit
 
 		public int SelectedItem
 		{
-			get { return selectedItem; }
+			get => selectedItem;
 			set
 			{
 				selectedItem = value;
@@ -25,12 +25,12 @@ namespace HEROsMod.UIKit
 
 		private List<string> items = new List<string>();
 		private UILabel selectedLabel = new UILabel("");
-		public int ItemCount { get { return items.Count; } }
-		public string Text { get { return selectedLabel.Text; } }
+		public int ItemCount => items.Count;
+		public string Text => selectedLabel.Text;
 
-		public event EventHandler selectedChanged;
+		public event EventHandler SelectedChanged;
 
-		public bool ItemsVisible { get { return itemsWindow.Visible; } }
+		public bool ItemsVisible => itemsWindow.Visible;
 
 		public UIDropdown()
 		{
@@ -42,17 +42,14 @@ namespace HEROsMod.UIKit
 			selectedLabel.TextOutline = false;
 			itemsWindow.UpdateWhenOutOfBounds = true;
 			itemsWindow.BackgroundColor = new Color(81, 91, 184);
-            onLeftClick += UIDropdown_onLeftClick;
+            OnLeftClick += UIDropdown_onLeftClick;
 			AddChild(selectedLabel);
 			AddChild(itemsWindow);
 			itemsWindow.Visible = false;
-			selectedChanged += UIDropdown_selectedChanged;
+			SelectedChanged += UIDropdown_selectedChanged;
 		}
 
-		private void UIDropdown_selectedChanged(object sender, EventArgs e)
-		{
-			MouseLeftButton = false;
-		}
+		private void UIDropdown_selectedChanged(object sender, EventArgs e) => MouseLeftButton = false;
 
 		private void UIDropdown_onLeftClick(object sender, EventArgs e)
 		{
@@ -62,8 +59,14 @@ namespace HEROsMod.UIKit
 
 		private void ToggleShowingItems()
 		{
-			if (itemsShown) HideItems();
-			else ShowItems();
+			if (itemsShown)
+			{
+				HideItems();
+			}
+			else
+			{
+				ShowItems();
+			}
 		}
 
 		private void ShowItems()
@@ -81,7 +84,11 @@ namespace HEROsMod.UIKit
 		public void AddItem(string item)
 		{
 			items.Add(item);
-			if (itemsWindow.ChildCount == 0) selectedLabel.Text = item;
+			if (itemsWindow.ChildCount == 0)
+			{
+				selectedLabel.Text = item;
+			}
+
 			UILabel label = new UILabel(item);
 			UIRect bg = new UIRect();
 			label.Scale = .4f;
@@ -90,35 +97,32 @@ namespace HEROsMod.UIKit
 			bg.Y = Height + ((label.Height) * itemsWindow.ChildCount);
 			label.Tag = itemsWindow.ChildCount;
 			bg.Tag = label.Tag;
-			label.onLeftClick += label_onLeftClick;
-			bg.onLeftClick += label_onLeftClick;
+			label.OnLeftClick += Label_onLeftClick;
+			bg.OnLeftClick += Label_onLeftClick;
 			bg.Width = itemsWindow.Width - 6;
 			bg.Height = label.Height;
 			bg.ForegroundColor = Color.White * 0f;
-			bg.onMouseEnter += bg_onMouseEnter;
-			bg.onMouseLeave += bg_onMouseLeave;
+			bg.OnMouseEnter += Bg_onMouseEnter;
+			bg.OnMouseLeave += Bg_onMouseLeave;
 
 			itemsWindow.Height = bg.Y + bg.Height + 8;
 			bg.AddChild(label);
 			itemsWindow.AddChild(bg);
 		}
 
-		private void bg_onMouseLeave(object sender, EventArgs e)
+		private void Bg_onMouseLeave(object sender, EventArgs e)
 		{
 			UIRect rect = (UIRect)sender;
 			rect.ForegroundColor = Color.White * 0f;
 		}
 
-		private void bg_onMouseEnter(object sender, EventArgs e)
+		private void Bg_onMouseEnter(object sender, EventArgs e)
 		{
 			UIRect rect = (UIRect)sender;
 			rect.ForegroundColor = Color.Black * .1f;
 		}
 
-		public string GetItem(int index)
-		{
-			return items[index];
-		}
+		public string GetItem(int index) => items[index];
 
 		public void ClearItems()
 		{
@@ -128,7 +132,7 @@ namespace HEROsMod.UIKit
 			items.Clear();
 		}
 
-		private void label_onLeftClick(object sender, EventArgs e)
+		private void Label_onLeftClick(object sender, EventArgs e)
 		{
             MoveToFront();
 			UIView label = (UIView)sender;
@@ -137,30 +141,35 @@ namespace HEROsMod.UIKit
 			if (tag != selectedItem)
 			{
 				selectedItem = tag;
-                selectedChanged?.Invoke(this, new EventArgs());
+                SelectedChanged?.Invoke(this, new EventArgs());
             }
 			HideItems();
-			UIView.MouseLeftButton = false;
+			MouseLeftButton = false;
 		}
 
-		private float width = 0;
-
-		protected override float GetWidth()
+		protected new float Width
 		{
-			return width;
+			get => Width;
+			set
+			{
+				Width = value;
+				itemsWindow.Width = value;
+			}
 		}
 
-		protected override void SetWidth(float width)
+		protected new float Height
 		{
-			this.width = width;
-			itemsWindow.Width = width;
-		}
-
-		protected override float GetHeight()
-		{
-			if (itemsWindow.Visible)
-				return itemsWindow.Height;
-			else return UIButton.buttonBackground.Height;
+			get
+			{
+				if (itemsWindow.Visible)
+				{
+					return itemsWindow.Height;
+				}
+				else
+				{
+					return UIButton.buttonBackground.Height;
+				}
+			}
 		}
 
 		public override void Update()
@@ -183,8 +192,14 @@ namespace HEROsMod.UIKit
 			pos.X += fillWidth;
 			spriteBatch.Draw(UIButton.buttonBackground, pos, null, BackgroundColor, 0f, Origin, 1f, SpriteEffects.FlipHorizontally, 0f);
 			if (itemsWindow.Visible)
+			{
 				spriteBatch.Draw(capUp, new Vector2(DrawPosition.X + Width - capUp.Width, DrawPosition.Y), Color.White);
-			else spriteBatch.Draw(capDown, new Vector2(DrawPosition.X + Width - capUp.Width, DrawPosition.Y), Color.White);
+			}
+			else
+			{
+				spriteBatch.Draw(capDown, new Vector2(DrawPosition.X + Width - capUp.Width, DrawPosition.Y), Color.White);
+			}
+
 			selectedLabel.Draw(spriteBatch);
 		}
 	}

@@ -10,38 +10,23 @@ namespace HEROsMod.UIKit
 		private List<UILabel> labels = new List<UILabel>();
 		private List<string> items = new List<string>();
 		public bool SelectableItems = true;
-		private int selectedIndex = -1;
-		public int SelectedIndex { get { return selectedIndex; } }
+		public int SelectedIndex { get; private set; } = -1;
 
-		public string[] Items
+		public string[] Items => items.ToArray();
+
+		public UIListView() => Width = 200;
+
+		protected new float Height
 		{
-			get { return items.ToArray(); }
-		}
-
-		private float width = 200;
-
-		public UIListView()
-		{
-		}
-
-		protected override float GetWidth()
-		{
-			return width;
-		}
-
-		protected override void SetWidth(float width)
-		{
-			this.width = width;
-		}
-
-		protected override float GetHeight()
-		{
-			float height = 0;
-			if (labels.Count > 0)
+			get
 			{
-				height = labels[labels.Count - 1].Position.Y + labels[labels.Count - 1].Height;
+				float height = 0;
+				if (labels.Count > 0)
+				{
+					height = labels[labels.Count - 1].Position.Y + labels[labels.Count - 1].Height;
+				}
+				return height;
 			}
-			return height;
 		}
 
 		public void AddItem(string text)
@@ -50,7 +35,7 @@ namespace HEROsMod.UIKit
             {
                 Tag = labels.Count
             };
-            label.onLeftClick += label_onLeftClick;
+            label.OnLeftClick += Label_onLeftClick;
 			label.Scale = .5f;
 			label.Position = new Vector2(0, Height);
 			items.Add(text);
@@ -65,19 +50,19 @@ namespace HEROsMod.UIKit
 			items.Clear();
 		}
 
-		private void label_onLeftClick(object sender, EventArgs e)
+		private void Label_onLeftClick(object sender, EventArgs e)
 		{
 			UILabel label = (UILabel)sender;
-			selectedIndex = (int)label.Tag;
+			SelectedIndex = (int)label.Tag;
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			if (SelectableItems)
 			{
-				if (selectedIndex > -1)
+				if (SelectedIndex > -1)
 				{
-					UILabel label = labels[selectedIndex];
+					UILabel label = labels[SelectedIndex];
 					Vector2 pos = label.DrawPosition;
 					spriteBatch.Draw(ModUtils.DummyTexture, new Rectangle((int)pos.X, (int)pos.Y, (int)Width, (int)label.Height), Color.Pink);
 				}

@@ -7,11 +7,11 @@ namespace HEROsMod.HEROsModServices
 {
 	internal class GenericExtensionService : HEROsModService
 	{
-		private Texture2D texture;
-		private Action buttonClickedAction;
-		private Action<bool> groupUpdated;
-		private Func<string> tooltip;
-		private string permissionName;
+		private readonly Texture2D texture;
+		private readonly Action buttonClickedAction;
+		private readonly Action<bool> groupUpdated;
+		private readonly Func<string> tooltip;
+		private readonly string permissionName;
 
 		//public GenericExtensionService(UIHotbar hotbar)
 		//{
@@ -41,8 +41,8 @@ namespace HEROsMod.HEROsModServices
             {
                 Tooltip = "Set Spawn Point"
             };
-            HotbarIcon.onLeftClick += new EventHandler(button_onLeftClick);
-			HotbarIcon.onHover += new EventHandler(button_onHover);
+            HotbarIcon.OnLeftClick += new EventHandler(Button_onLeftClick);
+			HotbarIcon.OnHover += new EventHandler(Button_onHover);
 		}
 
 		public override void MyGroupUpdated()
@@ -51,14 +51,8 @@ namespace HEROsMod.HEROsModServices
 			groupUpdated(HasPermissionToUse);
 		}
 
-		private void button_onLeftClick(object sender, EventArgs e)
-		{
-			buttonClickedAction();
-		}
+		private void Button_onLeftClick(object sender, EventArgs e) => buttonClickedAction();
 
-		private void button_onHover(object sender, EventArgs e)
-		{
-			HotbarIcon.Tooltip = tooltip();
-		}
+		private void Button_onHover(object sender, EventArgs e) => HotbarIcon.Tooltip = tooltip();
 	}
 }

@@ -6,314 +6,335 @@ using System.Linq;
 using Terraria;
 using Terraria.Localization;
 
-namespace HEROsMod.HEROsModNetwork {
-    internal class GeneralMessages {
-        public delegate void TimePausedOrResumedEvent(bool timePaused);
+namespace HEROsMod.HEROsModNetwork
+{
+	internal class GeneralMessages
+	{
+		public delegate void TimePausedOrResumedEvent(bool timePaused);
 
-        public static event TimePausedOrResumedEvent TimePausedOrResumedByServer;
+		public static event TimePausedOrResumedEvent TimePausedOrResumedByServer;
 
-        public delegate void EnemiesToggleEvent(bool enemiesCanSpawn);
+		public delegate void EnemiesToggleEvent(bool enemiesCanSpawn);
 
-        public static event EnemiesToggleEvent EnemiesToggledByServer;
+		public static event EnemiesToggleEvent EnemiesToggledByServer;
 
-        public delegate void GravestoneToggleEvent(bool gravestonesCanSpawn);
+		public delegate void GravestoneToggleEvent(bool gravestonesCanSpawn);
 
-        public static event GravestoneToggleEvent GravestonesToggleByServer;
+		public static event GravestoneToggleEvent GravestonesToggleByServer;
 
-        public delegate void ItemBannerToggleEvent(bool itemsbanned);
+		public delegate void ItemBannerToggleEvent(bool itemsbanned);
 
-        public static event ItemBannerToggleEvent ItemBannerToggleByServer;
+		public static event ItemBannerToggleEvent ItemBannerToggleByServer;
 
-        public delegate void PlayerEvent(HEROsModPlayer player);
+		public delegate void PlayerEvent(HEROsModPlayer player);
 
-        public static event PlayerEvent PlayerJoined;
+		public static event PlayerEvent PlayerJoined;
 
-        public static event PlayerEvent PlayerLeft;
+		public static event PlayerEvent PlayerLeft;
 
-        public static event EventHandler RegionsUpdated;
+		public static event EventHandler RegionsUpdated;
 
-        private static BinaryWriter Writer {
-            get { return Network.writer; }
-        }
+		private static BinaryWriter Writer => Network.writer;
 
-        public static void ProcessData(ref BinaryReader reader, int playerNumber) {
-            MessageType msgType = (MessageType) reader.ReadByte();
-            ModUtils.DebugText("GeneralMessage: " + msgType);
-            switch (msgType) {
-                case MessageType.UsingHEROsMod:
-                    ProcessPlayerUsingHEROsMod(playerNumber);
-                    break;
+		public static void ProcessData(ref BinaryReader reader, int playerNumber)
+		{
+			MessageType msgType = (MessageType)reader.ReadByte();
+			ModUtils.DebugText("GeneralMessage: " + msgType);
+			switch (msgType)
+			{
+				case MessageType.UsingHEROsMod:
+					ProcessPlayerUsingHEROsMod(playerNumber);
+					break;
 
-                case MessageType.RequestTimeChange:
-                    ProcessTimeChangeRequest(ref reader, playerNumber);
-                    break;
+				case MessageType.RequestTimeChange:
+					ProcessTimeChangeRequest(ref reader, playerNumber);
+					break;
 
-                case MessageType.TimePausedOrResumed:
-                    ProcessTimePausedOrChanged(ref reader);
-                    break;
+				case MessageType.TimePausedOrResumed:
+					ProcessTimePausedOrChanged(ref reader);
+					break;
 
-                case MessageType.RequestClearGroundItems:
-                    ProcessClearGroundItemsRequest(playerNumber);
-                    break;
+				case MessageType.RequestClearGroundItems:
+					ProcessClearGroundItemsRequest(playerNumber);
+					break;
 
-                case MessageType.RequestToggleEnemies:
-                    ProcessToggleEnemiesRequest(playerNumber);
-                    break;
+				case MessageType.RequestToggleEnemies:
+					ProcessToggleEnemiesRequest(playerNumber);
+					break;
 
-                case MessageType.EnemiesToggled:
-                    ProcessEnemiesToggled(ref reader);
-                    break;
+				case MessageType.EnemiesToggled:
+					ProcessEnemiesToggled(ref reader);
+					break;
 
-                case MessageType.RequestSpawnTownNPC:
-                    ProcessSpawnTownNPCRequest(ref reader, playerNumber);
-                    break;
+				case MessageType.RequestSpawnTownNPC:
+					ProcessSpawnTownNPCRequest(ref reader, playerNumber);
+					break;
 
-                case MessageType.RequestStartRain:
-                    ProcessStartRainRequest(playerNumber);
-                    break;
+				case MessageType.RequestStartRain:
+					ProcessStartRainRequest(playerNumber);
+					break;
 
-                case MessageType.RequestStopRain:
-                    ProcessStopRainRequest(playerNumber);
-                    break;
+				case MessageType.RequestStopRain:
+					ProcessStopRainRequest(playerNumber);
+					break;
 
-                case MessageType.RequestForcedSundial:
-                    ProcessForcedSundialRequest(playerNumber);
-                    break;
+				case MessageType.RequestForcedSundial:
+					ProcessForcedSundialRequest(playerNumber);
+					break;
 
-                case MessageType.WaypointList:
-                    ProcessWaypointList(ref reader);
-                    break;
+				case MessageType.WaypointList:
+					ProcessWaypointList(ref reader);
+					break;
 
-                case MessageType.RequestAddWaypoint:
-                    ProcessAddWaypointRequest(ref reader, playerNumber);
-                    break;
+				case MessageType.RequestAddWaypoint:
+					ProcessAddWaypointRequest(ref reader, playerNumber);
+					break;
 
-                case MessageType.RequestRemoveWaypoint:
-                    ProcessRemoveWaypointReqeust(ref reader, playerNumber);
-                    break;
+				case MessageType.RequestRemoveWaypoint:
+					ProcessRemoveWaypointReqeust(ref reader, playerNumber);
+					break;
 
-                case MessageType.PlayerJoined:
-                    ProcessPlayerJoined(ref reader);
-                    break;
+				case MessageType.PlayerJoined:
+					ProcessPlayerJoined(ref reader);
+					break;
 
-                case MessageType.PlayerLeft:
-                    ProcessPlayerLeft(ref reader);
-                    break;
+				case MessageType.PlayerLeft:
+					ProcessPlayerLeft(ref reader);
+					break;
 
-                case MessageType.RegionList:
-                    ProcessRegionList(ref reader);
-                    break;
+				case MessageType.RegionList:
+					ProcessRegionList(ref reader);
+					break;
 
-                case MessageType.CurrentToggles:
-                    ProcessCurrentToggles(ref reader);
-                    break;
+				case MessageType.CurrentToggles:
+					ProcessCurrentToggles(ref reader);
+					break;
 
-                case MessageType.RequestCreateRegion:
-                    ProcessCreateRegionRequest(ref reader, playerNumber);
-                    break;
+				case MessageType.RequestCreateRegion:
+					ProcessCreateRegionRequest(ref reader, playerNumber);
+					break;
 
-                case MessageType.RequestRemoveRegion:
-                    ProcessRemoveRegionRequest(ref reader, playerNumber);
-                    break;
+				case MessageType.RequestRemoveRegion:
+					ProcessRemoveRegionRequest(ref reader, playerNumber);
+					break;
 
-                case MessageType.RequestRegisteredUsers:
-                    ProcessRegisteredUsersRequest(playerNumber);
-                    break;
+				case MessageType.RequestRegisteredUsers:
+					ProcessRegisteredUsersRequest(playerNumber);
+					break;
 
-                case MessageType.RegisteredUsers:
-                    ProcessRegisteredUsersList(ref reader);
-                    break;
+				case MessageType.RegisteredUsers:
+					ProcessRegisteredUsersList(ref reader);
+					break;
 
-                case MessageType.RequestAddPlayerToRegion:
-                    ProcessAddPlayerToRegionRequest(ref reader, playerNumber);
-                    break;
+				case MessageType.RequestAddPlayerToRegion:
+					ProcessAddPlayerToRegionRequest(ref reader, playerNumber);
+					break;
 
-                case MessageType.RequestRemovePlayerFromRegion:
-                    ProcessRemovePlayerFromRegionRequest(ref reader, playerNumber);
-                    break;
+				case MessageType.RequestRemovePlayerFromRegion:
+					ProcessRemovePlayerFromRegionRequest(ref reader, playerNumber);
+					break;
 
-                case MessageType.RequestAddGroupToRegion:
-                    ProcessAddGroupToRegionRequest(ref reader, playerNumber);
-                    break;
+				case MessageType.RequestAddGroupToRegion:
+					ProcessAddGroupToRegionRequest(ref reader, playerNumber);
+					break;
 
-                case MessageType.RequestRemoveGroupFromRegion:
-                    ProcessRemoveGroupFromRegionRequest(ref reader, playerNumber);
-                    break;
+				case MessageType.RequestRemoveGroupFromRegion:
+					ProcessRemoveGroupFromRegionRequest(ref reader, playerNumber);
+					break;
 
-                case MessageType.RequestRestoreTiles:
-                    ProcessRestoreTilesRequest(ref reader, playerNumber);
-                    break;
+				case MessageType.RequestRestoreTiles:
+					ProcessRestoreTilesRequest(ref reader, playerNumber);
+					break;
 
-                case MessageType.RequestSetSpawnPoint:
-                    ProcessSetSpawnPointRequest(playerNumber);
-                    break;
+				case MessageType.RequestSetSpawnPoint:
+					ProcessSetSpawnPointRequest(playerNumber);
+					break;
 
-                case MessageType.RequestToggleGravestones:
-                    ProcessToggleGravestonesRequest(playerNumber);
-                    break;
+				case MessageType.RequestToggleGravestones:
+					ProcessToggleGravestonesRequest(playerNumber);
+					break;
 
-                case MessageType.GravestonesToggled:
-                    ProcessGravestonesToggled(ref reader);
-                    break;
+				case MessageType.GravestonesToggled:
+					ProcessGravestonesToggled(ref reader);
+					break;
 
-                case MessageType.RequestChangeRegionColor:
-                    ProcessChangeRegionColorRequest(ref reader, playerNumber);
-                    break;
+				case MessageType.RequestChangeRegionColor:
+					ProcessChangeRegionColorRequest(ref reader, playerNumber);
+					break;
 
-                case MessageType.RequestGodMode:
-                    ProcessGodModeRequest(playerNumber);
-                    break;
+				case MessageType.RequestGodMode:
+					ProcessGodModeRequest(playerNumber);
+					break;
 
-                case MessageType.AllowGodMode:
-                    ProcessGodMode();
-                    break;
+				case MessageType.AllowGodMode:
+					ProcessGodMode();
+					break;
 
-                case MessageType.RequestTileModificationCheck:
-                    ProcessTileModificationCheckRequest(ref reader, playerNumber);
-                    break;
+				case MessageType.RequestTileModificationCheck:
+					ProcessTileModificationCheckRequest(ref reader, playerNumber);
+					break;
 
-                case MessageType.RequestSpawnNPC:
-                    ProcessSpawnNPCRequest(ref reader, playerNumber);
-                    break;
+				case MessageType.RequestSpawnNPC:
+					ProcessSpawnNPCRequest(ref reader, playerNumber);
+					break;
 
-                case MessageType.RequestStartEvent:
-                    ProcessStartEventRequest(ref reader, playerNumber);
-                    break;
+				case MessageType.RequestStartEvent:
+					ProcessStartEventRequest(ref reader, playerNumber);
+					break;
 
-                case MessageType.RequestStopEvents:
-                    ProcessStopEventsRequest(playerNumber);
-                    break;
+				case MessageType.RequestStopEvents:
+					ProcessStopEventsRequest(playerNumber);
+					break;
 
-                case MessageType.RequestToggleBannedItems:
-                    ProcessToggleBannedItemsRequest(playerNumber);
-                    break;
+				case MessageType.RequestToggleBannedItems:
+					ProcessToggleBannedItemsRequest(playerNumber);
+					break;
 
-                case MessageType.BannedItemsToggled:
-                    ProcessBannedItemsToggled(ref reader);
-                    break;
+				case MessageType.BannedItemsToggled:
+					ProcessBannedItemsToggled(ref reader);
+					break;
 
-                case MessageType.RequestBanPlayer:
-                    ProcessRequestBanPlayer(ref reader, playerNumber);
-                    break;
+				case MessageType.RequestBanPlayer:
+					ProcessRequestBanPlayer(ref reader, playerNumber);
+					break;
 
-                case MessageType.RequestKickPlayer:
-                    ProcessRequestKickPlayer(ref reader, playerNumber);
-                    break;
+				case MessageType.RequestKickPlayer:
+					ProcessRequestKickPlayer(ref reader, playerNumber);
+					break;
 
-                case MessageType.RequestTeleport:
-                    ProcessRequestTeleport(ref reader, playerNumber);
-                    break;
+				case MessageType.RequestTeleport:
+					ProcessRequestTeleport(ref reader, playerNumber);
+					break;
 
-                case MessageType.ServerPlayerLeft:
-                    ProcessHeLeft(playerNumber);
-                    break;
+				case MessageType.ServerPlayerLeft:
+					ProcessHeLeft(playerNumber);
+					break;
 
 
-                case MessageType.RequestToggleHardmodeEnemies:
-                    ProcessToggleHardmodeEnemiesRequest(playerNumber);
-                    break;
+				case MessageType.RequestToggleHardmodeEnemies:
+					ProcessToggleHardmodeEnemiesRequest(playerNumber);
+					break;
 
-                case MessageType.PurifyWorld:
-                    ProcessPurifyWorldRequest(playerNumber);
-                    break;
+				case MessageType.PurifyWorld:
+					ProcessPurifyWorldRequest(playerNumber);
+					break;
 
 				case MessageType.SyncItemNonOwner:
 					HEROsModServices.SnoopWindow.ProcessSyncItemNonOwner(ref reader, playerNumber);
 					break;
 			}
-        }
+		}
 
 
-        private static void WriteHeader(MessageType msgType) {
-            Network.ResetWriter();
-            Writer.Write((byte) Network.MessageType.GeneralMessage);
-            Writer.Write((byte) msgType);
-        }
+		private static void WriteHeader(MessageType msgType)
+		{
+			Network.ResetWriter();
+			Writer.Write((byte)Network.MessageType.GeneralMessage);
+			Writer.Write((byte)msgType);
+		}
 
-        #region Kick Player
-        public static void RequestKickPlayer(string playername) {
-            WriteHeader(MessageType.RequestKickPlayer);
-            Writer.Write(playername);
-            Network.SendDataToServer();
-        }
+		#region Kick Player
+		public static void RequestKickPlayer(string playername)
+		{
+			WriteHeader(MessageType.RequestKickPlayer);
+			Writer.Write(playername);
+			Network.SendDataToServer();
+		}
 
-        private static void ProcessRequestKickPlayer(ref BinaryReader reader, int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("Kick")) {
-                string playerToKick = reader.ReadString();
-                ModUtils.DebugText("Server Kick request received: " + playerToKick);
-                for (int j = 0; j < 255; j++) {
-                    if (Main.player[j].active && Main.player[j].name.ToLower() == playerToKick) {
-                        NetMessage.SendData(2, j, -1, NetworkText.FromKey("CLI.KickMessage", new object[0]), 0, 0f, 0f, 0f, 0, 0, 0);
-                    }
-                }
-            }
-        }
-        #endregion
+		private static void ProcessRequestKickPlayer(ref BinaryReader reader, int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("Kick"))
+			{
+				string playerToKick = reader.ReadString();
+				ModUtils.DebugText("Server Kick request received: " + playerToKick);
+				for (int j = 0; j < 255; j++)
+				{
+					if (Main.player[j].active && Main.player[j].name.ToLower() == playerToKick)
+					{
+						NetMessage.SendData(2, j, -1, NetworkText.FromKey("CLI.KickMessage", new object[0]), 0, 0f, 0f, 0f, 0, 0, 0);
+					}
+				}
+			}
+		}
+		#endregion
 
-        #region Ban Player
-        public static void RequestBanPlayer(string playername) {
-            WriteHeader(MessageType.RequestBanPlayer);
-            Writer.Write(playername);
-            Network.SendDataToServer();
-        }
+		#region Ban Player
+		public static void RequestBanPlayer(string playername)
+		{
+			WriteHeader(MessageType.RequestBanPlayer);
+			Writer.Write(playername);
+			Network.SendDataToServer();
+		}
 
-        private static void ProcessRequestBanPlayer(ref BinaryReader reader, int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("Ban")) {
-                string playertoban = reader.ReadString();
-                ModUtils.DebugText("Server Ban request received: " + playertoban);
-                for (int k = 0; k < 255; k++) {
-                    if (Main.player[k].active && Main.player[k].name.ToLower() == playertoban) {
-                        Netplay.AddBan(k);
-                        NetMessage.SendData(2, k, -1, NetworkText.FromKey("CLI.BanMessage", new object[0]), 0, 0f, 0f, 0f, 0, 0, 0);
-                    }
-                }
-            }
-        }
-        #endregion
+		private static void ProcessRequestBanPlayer(ref BinaryReader reader, int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("Ban"))
+			{
+				string playertoban = reader.ReadString();
+				ModUtils.DebugText("Server Ban request received: " + playertoban);
+				for (int k = 0; k < 255; k++)
+				{
+					if (Main.player[k].active && Main.player[k].name.ToLower() == playertoban)
+					{
+						Netplay.AddBan(k);
+						NetMessage.SendData(2, k, -1, NetworkText.FromKey("CLI.BanMessage", new object[0]), 0, 0f, 0f, 0f, 0, 0, 0);
+					}
+				}
+			}
+		}
+		#endregion
 
-        #region Using HERO's Mod
-        public static void TellServerImUsingHEROsMod() {
-            WriteHeader(MessageType.UsingHEROsMod);
-            Network.SendDataToServer();
-        }
+		#region Using HERO's Mod
+		public static void TellServerImUsingHEROsMod()
+		{
+			WriteHeader(MessageType.UsingHEROsMod);
+			Network.SendDataToServer();
+		}
 
-        private static void ProcessPlayerUsingHEROsMod(int playerNumber) {
-            if (Network.NetworkMode == NetworkMode.Server) {
-                ModUtils.DebugText("ProcessPlayerUsingHEROsMod: " + playerNumber);
-                Network.Players2[playerNumber].UsingHEROsMod = true;
-                Network.ProcessClientsUsingHEROsMod(playerNumber);
-                LoginService.SendGroupList(playerNumber);
-                LoginService.SendPlayerPermissions(playerNumber);
-                SendWaypointListToPlayer(playerNumber);
-                SendRegionListToPlayer(playerNumber);
-                SendCurrentTogglesToPlayer(playerNumber);
+		private static void ProcessPlayerUsingHEROsMod(int playerNumber)
+		{
+			if (Network.NetworkMode == NetworkMode.Server)
+			{
+				ModUtils.DebugText("ProcessPlayerUsingHEROsMod: " + playerNumber);
+				Network.Players2[playerNumber].UsingHEROsMod = true;
+				Network.ProcessClientsUsingHEROsMod(playerNumber);
+				LoginService.SendGroupList(playerNumber);
+				LoginService.SendPlayerPermissions(playerNumber);
+				SendWaypointListToPlayer(playerNumber);
+				SendRegionListToPlayer(playerNumber);
+				SendCurrentTogglesToPlayer(playerNumber);
 				Network.SendTextToPlayer(HEROsMod.HeroText("LoginInstructions"), playerNumber, Color.Red);
-            }
-        }
-        #endregion
+			}
+		}
+		#endregion
 
-        #region Time Change
-        public static void RequestTimeChange(TimeChangeType tct) {
-            WriteHeader(MessageType.RequestTimeChange);
-            Writer.Write((byte) tct);
-            Network.SendDataToServer();
-        }
+		#region Time Change
+		public static void RequestTimeChange(TimeChangeType tct)
+		{
+			WriteHeader(MessageType.RequestTimeChange);
+			Writer.Write((byte)tct);
+			Network.SendDataToServer();
+		}
 
-        public static void RequestTimeChange(TimeChangeType tct, double time, bool daytime) {
-            WriteHeader(MessageType.RequestTimeChange);
-            Writer.Write((byte) tct);
-            Writer.Write(time);
-            Writer.Write(daytime);
-            Network.SendDataToServer();
-        }
+		public static void RequestTimeChange(TimeChangeType tct, double time, bool daytime)
+		{
+			WriteHeader(MessageType.RequestTimeChange);
+			Writer.Write((byte)tct);
+			Writer.Write(time);
+			Writer.Write(daytime);
+			Network.SendDataToServer();
+		}
 
-        private static void ProcessTimeChangeRequest(ref BinaryReader reader, int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("ChangeTimeWeather")) {
-                TimeChangeType tct = (TimeChangeType) reader.ReadByte();
-                switch (tct) {
-                    case TimeChangeType.SetToNoon:
-                        Main.dayTime = true;
-                        Main.time = 27000.0;
+		private static void ProcessTimeChangeRequest(ref BinaryReader reader, int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("ChangeTimeWeather"))
+			{
+				TimeChangeType tct = (TimeChangeType)reader.ReadByte();
+				switch (tct)
+				{
+					case TimeChangeType.SetToNoon:
+						Main.dayTime = true;
+						Main.time = 27000.0;
 						Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("TimeChangedNoonBy"), Main.player[playerNumber].name));
 						break;
 
@@ -329,47 +350,53 @@ namespace HEROsMod.HEROsModNetwork {
 						Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("TimeChangedNightBy"), Main.player[playerNumber].name));
 						break;
 
-                    case TimeChangeType.Pause:
-                        HEROsModServices.TimeWeatherChanger.TimePaused = !HEROsModServices.TimeWeatherChanger.TimePaused;
-                        if (HEROsModServices.TimeWeatherChanger.TimePaused) {
-                            HEROsModServices.TimeWeatherChanger.PausedTime = Main.time;
+					case TimeChangeType.Pause:
+						HEROsModServices.TimeWeatherChanger.TimePaused = !HEROsModServices.TimeWeatherChanger.TimePaused;
+						if (HEROsModServices.TimeWeatherChanger.TimePaused)
+						{
+							HEROsModServices.TimeWeatherChanger.PausedTime = Main.time;
 							Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("TimePausedBy"), Main.player[playerNumber].name));
-						} else {
+						}
+						else
+						{
 							Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("TimeResumedBy"), Main.player[playerNumber].name));
 						}
-                        TimePausedOrResumed();
-                        break;
+						TimePausedOrResumed();
+						break;
 
-                    case TimeChangeType.SpecificTime:
-                        double time = reader.ReadDouble();
-                        bool daytime = reader.ReadBoolean();
-                        Main.dayTime = daytime;
-                        Main.time = time;
-                        break;
-                }
-                NetMessage.SendData(7, -1, -1, null, 0, 0f, 0f, 0f, 0);
-            }
-        }
-        #endregion
+					case TimeChangeType.SpecificTime:
+						double time = reader.ReadDouble();
+						bool daytime = reader.ReadBoolean();
+						Main.dayTime = daytime;
+						Main.time = time;
+						break;
+				}
+				NetMessage.SendData(7, -1, -1, null, 0, 0f, 0f, 0f, 0);
+			}
+		}
+		#endregion
 
-        #region Time Pause
-        private static void TimePausedOrResumed() {
-            WriteHeader(MessageType.TimePausedOrResumed);
-            Writer.Write(HEROsModServices.TimeWeatherChanger.TimePaused);
-            Network.SendDataToAllHEROsModUsers();
-        }
+		#region Time Pause
+		private static void TimePausedOrResumed()
+		{
+			WriteHeader(MessageType.TimePausedOrResumed);
+			Writer.Write(HEROsModServices.TimeWeatherChanger.TimePaused);
+			Network.SendDataToAllHEROsModUsers();
+		}
 
-        private static void ProcessTimePausedOrChanged(ref BinaryReader reader) {
-            bool timePaused = reader.ReadBoolean();
-            TimePausedOrResumedByServer?.Invoke(timePaused);
-        }
-        #endregion
+		private static void ProcessTimePausedOrChanged(ref BinaryReader reader)
+		{
+			bool timePaused = reader.ReadBoolean();
+			TimePausedOrResumedByServer?.Invoke(timePaused);
+		}
+		#endregion
 
-        #region Clear Ground Items
-        public static void RequestClearGroundItems() {
-            WriteHeader(MessageType.RequestClearGroundItems);
-            Network.SendDataToServer();
-        }
+		#region Clear Ground Items
+		public static void RequestClearGroundItems()
+		{
+			WriteHeader(MessageType.RequestClearGroundItems);
+			Network.SendDataToServer();
+		}
 
 		private static void ProcessClearGroundItemsRequest(int playerNumber)
 		{
@@ -379,12 +406,14 @@ namespace HEROsMod.HEROsModNetwork {
 				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("ItemsClearedBy"), Main.player[playerNumber].name));
 			}
 		}
+		#endregion
 
-        #region Toggle Enemies
-        public static void RequestToggleEnemies() {
-            WriteHeader(MessageType.RequestToggleEnemies);
-            Network.SendDataToServer();
-        }
+		#region Toggle Enemies
+		public static void RequestToggleEnemies()
+		{
+			WriteHeader(MessageType.RequestToggleEnemies);
+			Network.SendDataToServer();
+		}
 
 		private static void ProcessToggleEnemiesRequest(int playerNumber)
 		{
@@ -403,39 +432,49 @@ namespace HEROsMod.HEROsModNetwork {
 			}
 		}
 
-        private static void EnemiesToggled() {
-            WriteHeader(MessageType.EnemiesToggled);
-            Writer.Write(HEROsModServices.EnemyToggler.EnemiesAllowed);
-            Network.SendDataToAllHEROsModUsers();
-        }
+		private static void EnemiesToggled()
+		{
+			WriteHeader(MessageType.EnemiesToggled);
+			Writer.Write(HEROsModServices.EnemyToggler.EnemiesAllowed);
+			Network.SendDataToAllHEROsModUsers();
+		}
 
-        private static void ProcessEnemiesToggled(ref BinaryReader reader) {
-            if (Network.NetworkMode == NetworkMode.Server) return;
-            bool enemiesCanSpawn = reader.ReadBoolean();
-            EnemiesToggledByServer?.Invoke(enemiesCanSpawn);
-        }
-        #endregion
+		private static void ProcessEnemiesToggled(ref BinaryReader reader)
+		{
+			if (Network.NetworkMode == NetworkMode.Server)
+			{
+				return;
+			}
 
-        #region Spawn Town NPC
-        public static void RequestSpawnTownNPC(int npcID) {
-            WriteHeader(MessageType.RequestSpawnTownNPC);
-            Writer.Write(npcID);
-            Network.SendDataToServer();
-        }
+			bool enemiesCanSpawn = reader.ReadBoolean();
+			EnemiesToggledByServer?.Invoke(enemiesCanSpawn);
+		}
+		#endregion
 
-        private static void ProcessSpawnTownNPCRequest(ref BinaryReader reader, int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("SpawnNPCs")) {
-                int npcId = reader.ReadInt32();
-                Network.SpawnNPC(npcId, Main.player[playerNumber].position);
-            }
-        }
-        #endregion
+		#region Spawn Town NPC
+		public static void RequestSpawnTownNPC(int npcID)
+		{
+			WriteHeader(MessageType.RequestSpawnTownNPC);
+			Writer.Write(npcID);
+			Network.SendDataToServer();
+		}
 
-        #region Start/Stop Rain
-        public static void RequestStartRain() {
-            WriteHeader(MessageType.RequestStartRain);
-            Network.SendDataToServer();
-        }
+		private static void ProcessSpawnTownNPCRequest(ref BinaryReader reader, int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("SpawnNPCs"))
+			{
+				int npcId = reader.ReadInt32();
+				Network.SpawnNPC(npcId, Main.player[playerNumber].position);
+			}
+		}
+		#endregion
+
+		#region Start/Stop Rain
+		public static void RequestStartRain()
+		{
+			WriteHeader(MessageType.RequestStartRain);
+			Network.SendDataToServer();
+		}
 
 		private static void ProcessStartRainRequest(int playerNumber)
 		{
@@ -446,10 +485,11 @@ namespace HEROsMod.HEROsModNetwork {
 			}
 		}
 
-        public static void RequestStopRain() {
-            WriteHeader(MessageType.RequestStopRain);
-            Network.SendDataToServer();
-        }
+		public static void RequestStopRain()
+		{
+			WriteHeader(MessageType.RequestStopRain);
+			Network.SendDataToServer();
+		}
 
 		private static void ProcessStopRainRequest(int playerNumber)
 		{
@@ -459,12 +499,14 @@ namespace HEROsMod.HEROsModNetwork {
 				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("RainTurnedOffBy"), Main.player[playerNumber].name));
 			}
 		}
+		#endregion
 
-        #region Start/Stop Sandstorm
-        public static void RequestStartSandstorm() {
-            WriteHeader(MessageType.RequestStartSandstorm);
-            Network.SendDataToServer();
-        }
+		#region Start/Stop Sandstorm
+		public static void RequestStartSandstorm()
+		{
+			WriteHeader(MessageType.RequestStartSandstorm);
+			Network.SendDataToServer();
+		}
 
 		private static void ProcessStartSandstormRequest(int playerNumber)
 		{
@@ -475,10 +517,11 @@ namespace HEROsMod.HEROsModNetwork {
 			}
 		}
 
-        public static void RequestStopSandstorm() {
-            WriteHeader(MessageType.RequestStopSandstorm);
-            Network.SendDataToServer();
-        }
+		public static void RequestStopSandstorm()
+		{
+			WriteHeader(MessageType.RequestStopSandstorm);
+			Network.SendDataToServer();
+		}
 
 		private static void ProcessStopSandstormRequest(int playerNumber)
 		{
@@ -488,12 +531,14 @@ namespace HEROsMod.HEROsModNetwork {
 				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("SandstormTurnedOffBy"), Main.player[playerNumber].name));
 			}
 		}
+		#endregion
 
-        #region Forced Sundial
-        public static void RequestForcedSundial() {
-            WriteHeader(MessageType.RequestForcedSundial);
-            Network.SendDataToServer();
-        }
+		#region Forced Sundial
+		public static void RequestForcedSundial()
+		{
+			WriteHeader(MessageType.RequestForcedSundial);
+			Network.SendDataToServer();
+		}
 
 		private static void ProcessForcedSundialRequest(int playerNumber)
 		{
@@ -505,39 +550,46 @@ namespace HEROsMod.HEROsModNetwork {
 				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("ForcedEnchangedSundialBy"), Main.player[playerNumber].name));
 			}
 		}
+		#endregion
 
-        #region Waypoint List; Add/Remove Waypoint
-        public static void SendWaypointListToPlayer(int playerNumber) {
-            WriteHeader(MessageType.WaypointList);
+		#region Waypoint List; Add/Remove Waypoint
+		public static void SendWaypointListToPlayer(int playerNumber)
+		{
+			WriteHeader(MessageType.WaypointList);
 
-            List<HEROsModServices.Waypoint> points = HEROsModServices.Waypoints.points;
-            Writer.Write(points.Count);
-            for (int i = 0; i < points.Count; i++) {
-                Writer.Write(points[i].name);
-                Writer.Write(points[i].position.X);
-                Writer.Write(points[i].position.Y);
-            }
-            Network.SendDataToPlayer(playerNumber);
-        }
+			List<HEROsModServices.Waypoint> points = HEROsModServices.Waypoints.points;
+			Writer.Write(points.Count);
+			for (int i = 0; i < points.Count; i++)
+			{
+				Writer.Write(points[i].name);
+				Writer.Write(points[i].position.X);
+				Writer.Write(points[i].position.Y);
+			}
+			Network.SendDataToPlayer(playerNumber);
+		}
 
-        private static void ProcessWaypointList(ref BinaryReader reader) {
-            if (Network.NetworkMode == NetworkMode.Client) {
-                HEROsModServices.Waypoints.ClearPoints();
-                int numOfPoints = reader.ReadInt32();
-                for (int i = 0; i < numOfPoints; i++) {
-                    string name = reader.ReadString();
-                    Vector2 position = new Vector2(reader.ReadSingle(), reader.ReadSingle());
-                    HEROsModServices.Waypoints.AddWaypoint(name, position);
-                }
-            }
-        }
+		private static void ProcessWaypointList(ref BinaryReader reader)
+		{
+			if (Network.NetworkMode == NetworkMode.Client)
+			{
+				HEROsModServices.Waypoints.ClearPoints();
+				int numOfPoints = reader.ReadInt32();
+				for (int i = 0; i < numOfPoints; i++)
+				{
+					string name = reader.ReadString();
+					Vector2 position = new Vector2(reader.ReadSingle(), reader.ReadSingle());
+					HEROsModServices.Waypoints.AddWaypoint(name, position);
+				}
+			}
+		}
 
-        public static void RequestAddWaypoint(string name, Vector2 position) {
-            WriteHeader(MessageType.RequestAddWaypoint);
-            Writer.Write(name);
-            Writer.WriteVector2(position);
-            Network.SendDataToServer();
-        }
+		public static void RequestAddWaypoint(string name, Vector2 position)
+		{
+			WriteHeader(MessageType.RequestAddWaypoint);
+			Writer.Write(name);
+			Writer.WriteVector2(position);
+			Network.SendDataToServer();
+		}
 
 		private static void ProcessAddWaypointRequest(ref BinaryReader reader, int playerNumber)
 		{
@@ -556,347 +608,450 @@ namespace HEROsMod.HEROsModNetwork {
 			}
 		}
 
-        public static void RequestRemoveWaypoint(int waypointIndex) {
-            WriteHeader(MessageType.RequestRemoveWaypoint);
-            Writer.Write(waypointIndex);
-            Network.SendDataToServer();
-        }
+		public static void RequestRemoveWaypoint(int waypointIndex)
+		{
+			WriteHeader(MessageType.RequestRemoveWaypoint);
+			Writer.Write(waypointIndex);
+			Network.SendDataToServer();
+		}
 
-        private static void ProcessRemoveWaypointReqeust(ref BinaryReader reader, int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("EditWaypoints")) {
-                ModUtils.DebugText("ProcessRemoveWaypointReqeust: " + playerNumber);
-                List<HEROsModServices.Waypoint> points = HEROsModServices.Waypoints.points;
-                int waypointIndex = reader.ReadInt32();
-                if (waypointIndex >= 0 && waypointIndex < points.Count) {
-                    HEROsModServices.Waypoints.RemoveWaypoint(waypointIndex);
-                    SendWaypointListToPlayer(-2);
-                }
-            }
-        }
-        #endregion
+		private static void ProcessRemoveWaypointReqeust(ref BinaryReader reader, int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("EditWaypoints"))
+			{
+				ModUtils.DebugText("ProcessRemoveWaypointReqeust: " + playerNumber);
+				List<HEROsModServices.Waypoint> points = HEROsModServices.Waypoints.points;
+				int waypointIndex = reader.ReadInt32();
+				if (waypointIndex >= 0 && waypointIndex < points.Count)
+				{
+					HEROsModServices.Waypoints.RemoveWaypoint(waypointIndex);
+					SendWaypointListToPlayer(-2);
+				}
+			}
+		}
+		#endregion
 
-        #region Player Joined/Left
-        public static void TellClientsPlayerJoined(int playerIndex) {
-            WriteHeader(MessageType.PlayerJoined);
-            Writer.Write(playerIndex);
-            Network.SendDataToAllHEROsModUsers();
-        }
+		#region Player Joined/Left
+		public static void TellClientsPlayerJoined(int playerIndex)
+		{
+			WriteHeader(MessageType.PlayerJoined);
+			Writer.Write(playerIndex);
+			Network.SendDataToAllHEROsModUsers();
+		}
 
-        private static void ProcessPlayerJoined(ref BinaryReader reader) {
-            if (Network.NetworkMode == NetworkMode.Server) return;
-            int playerIndex = reader.ReadInt32();
-            Network.Players2.Add(playerIndex, new HEROsModPlayer(playerIndex));
-        }
+		private static void ProcessPlayerJoined(ref BinaryReader reader)
+		{
+			if (Network.NetworkMode == NetworkMode.Server)
+			{
+				return;
+			}
 
-        public static void TellServerILeft() {
-            WriteHeader(MessageType.ServerPlayerLeft);
-            Network.SendDataToServer();
-        }
+			int playerIndex = reader.ReadInt32();
+			Network.Players2.Add(playerIndex, new HEROsModPlayer(playerIndex));
+		}
 
-        private static void ProcessHeLeft(int playerIndex) {
-            if (Network.NetworkMode == NetworkMode.Server) {
-                Network.Players2.Remove(playerIndex);
-            }
-        }
+		public static void TellServerILeft()
+		{
+			WriteHeader(MessageType.ServerPlayerLeft);
+			Network.SendDataToServer();
+		}
 
-        public static void TellClientsPlayerLeft(int playerIndex) {
-            foreach (var item in Network.Players2.Values) {
-                if (item.Index != playerIndex) {
-                    WriteHeader(MessageType.PlayerLeft);
-                    Writer.Write(playerIndex);
-                    Network.SendDataToPlayer(item.Index);
-                }
-            }
-        }
+		private static void ProcessHeLeft(int playerIndex)
+		{
+			if (Network.NetworkMode == NetworkMode.Server)
+			{
+				Network.Players2.Remove(playerIndex);
+			}
+		}
 
-        private static void ProcessPlayerLeft(ref BinaryReader reader) {
-            if (Network.NetworkMode == NetworkMode.Server) return;
-            int playerIndex = reader.ReadInt32();
-            Network.Players2.Remove(playerIndex);
-        }
-        #endregion
+		public static void TellClientsPlayerLeft(int playerIndex)
+		{
+			foreach (HEROsModPlayer item in Network.Players2.Values)
+			{
+				if (item.Index != playerIndex)
+				{
+					WriteHeader(MessageType.PlayerLeft);
+					Writer.Write(playerIndex);
+					Network.SendDataToPlayer(item.Index);
+				}
+			}
+		}
 
-        #region Toggles
-        public static void SendCurrentTogglesToPlayer(int playerNumber) {
-            WriteHeader(MessageType.CurrentToggles);
+		private static void ProcessPlayerLeft(ref BinaryReader reader)
+		{
+			if (Network.NetworkMode == NetworkMode.Server)
+			{
+				return;
+			}
 
-            Writer.Write(HEROsModServices.EnemyToggler.EnemiesAllowed);
-            Writer.Write(HEROsModServices.TimeWeatherChanger.TimePaused);
-            Writer.Write(Network.GravestonesAllowed);
-            Writer.Write(HEROsModServices.ItemBanner.ItemsBanned);
+			int playerIndex = reader.ReadInt32();
+			Network.Players2.Remove(playerIndex);
+		}
+		#endregion
 
-            Network.SendDataToPlayer(playerNumber);
-        }
+		#region Toggles
+		public static void SendCurrentTogglesToPlayer(int playerNumber)
+		{
+			WriteHeader(MessageType.CurrentToggles);
 
-        // TODO, singleplayer
-        private static void ProcessCurrentToggles(ref BinaryReader reader) {
-            if (Network.NetworkMode == NetworkMode.Server) return;
-            bool enemiesAllowed = reader.ReadBoolean();
-            EnemiesToggledByServer?.Invoke(enemiesAllowed);
+			Writer.Write(HEROsModServices.EnemyToggler.EnemiesAllowed);
+			Writer.Write(HEROsModServices.TimeWeatherChanger.TimePaused);
+			Writer.Write(Network.GravestonesAllowed);
+			Writer.Write(HEROsModServices.ItemBanner.ItemsBanned);
 
-            bool timePaused = reader.ReadBoolean();
-            TimePausedOrResumedByServer?.Invoke(timePaused);
+			Network.SendDataToPlayer(playerNumber);
+		}
 
-            bool gravestonesAllowed = reader.ReadBoolean();
-            GravestonesToggleByServer?.Invoke(gravestonesAllowed);
+		// TODO, singleplayer
+		private static void ProcessCurrentToggles(ref BinaryReader reader)
+		{
+			if (Network.NetworkMode == NetworkMode.Server)
+			{
+				return;
+			}
 
-            bool itemsBanned = reader.ReadBoolean();
-            ItemBannerToggleByServer?.Invoke(itemsBanned);
-        }
+			bool enemiesAllowed = reader.ReadBoolean();
+			EnemiesToggledByServer?.Invoke(enemiesAllowed);
 
-        internal static void ProcessCurrentTogglesSP(bool enemiesAllowed, bool gravestonesAllowed, bool itemsBanned, bool timePaused) {
-            EnemiesToggledByServer?.Invoke(enemiesAllowed);
-            GravestonesToggleByServer?.Invoke(gravestonesAllowed);
-            ItemBannerToggleByServer?.Invoke(itemsBanned);
-            TimePausedOrResumedByServer?.Invoke(timePaused);
-        }
-        #endregion
+			bool timePaused = reader.ReadBoolean();
+			TimePausedOrResumedByServer?.Invoke(timePaused);
 
-        #region Region List/Create/Delete Region
-        public static void SendRegionListToAllPlayers() {
-            SendRegionListToPlayer(-2);
-        }
+			bool gravestonesAllowed = reader.ReadBoolean();
+			GravestonesToggleByServer?.Invoke(gravestonesAllowed);
 
-        public static void SendRegionListToPlayer(int playerNumber) {
-            WriteHeader(MessageType.RegionList);
-            Writer.Write(Network.Regions.Count);
-            for (int i = 0; i < Network.Regions.Count; i++) {
-                Writer.Write(Network.Regions[i].Export());
-            }
-            Network.SendDataToPlayer(playerNumber);
-        }
+			bool itemsBanned = reader.ReadBoolean();
+			ItemBannerToggleByServer?.Invoke(itemsBanned);
+		}
 
-        private static void ProcessRegionList(ref BinaryReader reader) {
-            if (Network.NetworkMode == NetworkMode.Server) return;
-            Network.Regions.Clear();
+		internal static void ProcessCurrentTogglesSP(bool enemiesAllowed, bool gravestonesAllowed, bool itemsBanned, bool timePaused)
+		{
+			EnemiesToggledByServer?.Invoke(enemiesAllowed);
+			GravestonesToggleByServer?.Invoke(gravestonesAllowed);
+			ItemBannerToggleByServer?.Invoke(itemsBanned);
+			TimePausedOrResumedByServer?.Invoke(timePaused);
+		}
+		#endregion
 
-            int numberOfRegions = reader.ReadInt32();
-            for (int i = 0; i < numberOfRegions; i++) {
-                Network.Regions.Add(Region.GetRegionFromBinaryReader(ref reader));
-            }
-            RegionsUpdated?.Invoke(null, EventArgs.Empty);
-        }
+		#region Region List/Create/Delete Region
+		public static void SendRegionListToAllPlayers() => SendRegionListToPlayer(-2);
 
-        public static void RequestCreateRegion(Region region) {
-            WriteHeader(MessageType.RequestCreateRegion);
-            Writer.Write(region.Export());
-            Network.SendDataToServer();
-        }
+		public static void SendRegionListToPlayer(int playerNumber)
+		{
+			WriteHeader(MessageType.RegionList);
+			Writer.Write(Network.Regions.Count);
+			for (int i = 0; i < Network.Regions.Count; i++)
+			{
+				Writer.Write(Network.Regions[i].Export());
+			}
+			Network.SendDataToPlayer(playerNumber);
+		}
 
-        private static void ProcessCreateRegionRequest(ref BinaryReader reader, int playerNumber) {
-            Region region = Region.GetRegionFromBinaryReader(ref reader);
-            int a = Network.RegisteredUsers.First(x => x.Username == Network.Players2[playerNumber].Username).ID;
-            region.AllowedPlayersIDs.Add(a);
-            DatabaseController.AddRegion(ref region, ref a);
-            Network.Regions.Add(region);
+		private static void ProcessRegionList(ref BinaryReader reader)
+		{
+			if (Network.NetworkMode == NetworkMode.Server)
+			{
+				return;
+			}
 
-            SendRegionListToAllPlayers();
+			Network.Regions.Clear();
+
+			int numberOfRegions = reader.ReadInt32();
+			for (int i = 0; i < numberOfRegions; i++)
+			{
+				Network.Regions.Add(Region.GetRegionFromBinaryReader(ref reader));
+			}
+			RegionsUpdated?.Invoke(null, EventArgs.Empty);
+		}
+
+		public static void RequestCreateRegion(Region region)
+		{
+			WriteHeader(MessageType.RequestCreateRegion);
+			Writer.Write(region.Export());
+			Network.SendDataToServer();
+		}
+
+		private static void ProcessCreateRegionRequest(ref BinaryReader reader, int playerNumber)
+		{
+			Region region = Region.GetRegionFromBinaryReader(ref reader);
+			int a = Network.RegisteredUsers.First(x => x.Username == Network.Players2[playerNumber].Username).ID;
+			region.AllowedPlayersIDs.Add(a);
+			DatabaseController.AddRegion(ref region, ref a);
+			Network.Regions.Add(region);
+
+			SendRegionListToAllPlayers();
 			Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("RegionCreatedBy"), region.Name, Network.Players2[playerNumber].ServerInstance.Name));
 		}
 
-        public static void RequestRemoveRegion(Region region) {
-            WriteHeader(MessageType.RequestRemoveRegion);
-            Writer.Write(region.ID);
-            Network.SendDataToServer();
-        }
+		public static void RequestRemoveRegion(Region region)
+		{
+			WriteHeader(MessageType.RequestRemoveRegion);
+			Writer.Write(region.ID);
+			Network.SendDataToServer();
+		}
 
-        private static void ProcessRemoveRegionRequest(ref BinaryReader reader, int playerNumber) {
-            if (Network.Players2[playerNumber].Group.IsAdmin) {
-                int regionID = reader.ReadInt32();
-                Region region = Network.GetRegionByID(regionID);
-                if (region != null) {
-                    DatabaseController.RemoveRegion(region);
-                    Network.Regions.Remove(region);
-                    SendRegionListToAllPlayers();
-                }
-            }
-        }
-        #endregion
+		private static void ProcessRemoveRegionRequest(ref BinaryReader reader, int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.IsAdmin)
+			{
+				int regionID = reader.ReadInt32();
+				Region region = Network.GetRegionByID(regionID);
+				if (region != null)
+				{
+					DatabaseController.RemoveRegion(region);
+					Network.Regions.Remove(region);
+					SendRegionListToAllPlayers();
+				}
+			}
+		}
+		#endregion
 
-        #region Registered Users List
-        public static void RequestRegisteredUsers() {
-            WriteHeader(MessageType.RequestRegisteredUsers);
-            Network.SendDataToServer();
-        }
+		#region Registered Users List
+		public static void RequestRegisteredUsers()
+		{
+			WriteHeader(MessageType.RequestRegisteredUsers);
+			Network.SendDataToServer();
+		}
 
-        private static void ProcessRegisteredUsersRequest(int playerNumber) {
-            if (Network.Players2[playerNumber].Group.IsAdmin) {
-                SendRegisteredUsersToPlayer(playerNumber);
-            }
-        }
+		private static void ProcessRegisteredUsersRequest(int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.IsAdmin)
+			{
+				SendRegisteredUsersToPlayer(playerNumber);
+			}
+		}
 
-        public static void SendRegisteredUsersToPlayer(int playerNumber) {
-            WriteHeader(MessageType.RegisteredUsers);
-            UserWithID[] players = DatabaseController.GetRegisteredUsers();
-            if (players.Length == 0) return;
-            Writer.Write(players.Length);
+		public static void SendRegisteredUsersToPlayer(int playerNumber)
+		{
+			WriteHeader(MessageType.RegisteredUsers);
+			UserWithID[] players = DatabaseController.GetRegisteredUsers();
+			if (players.Length == 0)
+			{
+				return;
+			}
 
-            for (int i = 0; i < players.Length; i++) {
-                Writer.Write(players[i].Username);
-                Writer.Write(players[i].ID);
-                Writer.Write(players[i].groupID);
-            }
+			Writer.Write(players.Length);
 
-            Network.SendDataToPlayer(playerNumber);
-        }
+			for (int i = 0; i < players.Length; i++)
+			{
+				Writer.Write(players[i].Username);
+				Writer.Write(players[i].ID);
+				Writer.Write(players[i].groupID);
+			}
 
-        private static void ProcessRegisteredUsersList(ref BinaryReader reader) {
-            if (Network.NetworkMode == NetworkMode.Server) return;
-            Network.RegisteredUsers.Clear();
-            int numberOfUsers = reader.ReadInt32();
+			Network.SendDataToPlayer(playerNumber);
+		}
 
-            for (int i = 0; i < numberOfUsers; i++) {
-                UserWithID user = new UserWithID() {
-                    Username = reader.ReadString(),
-                    ID = reader.ReadInt32(),
-                    groupID = reader.ReadInt32()
-                };
-                Network.RegisteredUsers.Add(user);
-            }
-        }
-        #endregion
+		private static void ProcessRegisteredUsersList(ref BinaryReader reader)
+		{
+			if (Network.NetworkMode == NetworkMode.Server)
+			{
+				return;
+			}
 
-        #region Regions Add/Remove Users/Groups
-        public static void RequestAddPlayerToRegion(Region region, int playerID) {
-            WriteHeader(MessageType.RequestAddPlayerToRegion);
-            Writer.Write(region.ID);
-            Writer.Write(playerID);
-            Network.SendDataToServer();
-        }
+			Network.RegisteredUsers.Clear();
+			int numberOfUsers = reader.ReadInt32();
 
-        private static void ProcessAddPlayerToRegionRequest(ref BinaryReader reader, int playerNumber) {
-                Region region = Network.GetRegionByID(reader.ReadInt32());
-            if (region == null) return;
-            if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID) {
-                int playerID = reader.ReadInt32();
-                if (region.AddPlayer(playerID)) {
-                    DatabaseController.WriteRegionPermissions(region);
-                    SendRegionListToAllPlayers();
-                }
-            }
-        }
+			for (int i = 0; i < numberOfUsers; i++)
+			{
+				UserWithID user = new UserWithID()
+				{
+					Username = reader.ReadString(),
+					ID = reader.ReadInt32(),
+					groupID = reader.ReadInt32()
+				};
+				Network.RegisteredUsers.Add(user);
+			}
+		}
+		#endregion
 
-        public static void RequestRemovePlayerFromRegion(Region region, int playerID) {
-            WriteHeader(MessageType.RequestRemovePlayerFromRegion);
-            Writer.Write(region.ID);
-            Writer.Write(playerID);
-            Network.SendDataToServer();
-        }
+		#region Regions Add/Remove Users/Groups
+		public static void RequestAddPlayerToRegion(Region region, int playerID)
+		{
+			WriteHeader(MessageType.RequestAddPlayerToRegion);
+			Writer.Write(region.ID);
+			Writer.Write(playerID);
+			Network.SendDataToServer();
+		}
 
-        private static void ProcessRemovePlayerFromRegionRequest(ref BinaryReader reader, int playerNumber) {
-                Region region = Network.GetRegionByID(reader.ReadInt32());
-            if (region == null) return;
-            if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID) {
-                int playerID = reader.ReadInt32();
-                if (region.RemovePlayer(playerID)) {
-                    DatabaseController.WriteRegionPermissions(region);
-                    SendRegionListToAllPlayers();
-                }
-            }
-        }
+		private static void ProcessAddPlayerToRegionRequest(ref BinaryReader reader, int playerNumber)
+		{
+			Region region = Network.GetRegionByID(reader.ReadInt32());
+			if (region == null)
+			{
+				return;
+			}
 
-        public static void RequestAddGroupToRegion(Region region, int groupID) {
-            WriteHeader(MessageType.RequestAddGroupToRegion);
-            Writer.Write(region.ID);
-            Writer.Write(groupID);
-            Network.SendDataToServer();
-        }
+			if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID)
+			{
+				int playerID = reader.ReadInt32();
+				if (region.AddPlayer(playerID))
+				{
+					DatabaseController.WriteRegionPermissions(region);
+					SendRegionListToAllPlayers();
+				}
+			}
+		}
 
-        private static void ProcessAddGroupToRegionRequest(ref BinaryReader reader, int playerNumber) {
-                Region region = Network.GetRegionByID(reader.ReadInt32());
-                if (region == null) return;
-                if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID) {
-                    int groupID = reader.ReadInt32();
-                if (region.AddGroup(groupID)) {
-                    DatabaseController.WriteRegionPermissions(region);
-                    SendRegionListToAllPlayers();
-                }
-            }
-        }
+		public static void RequestRemovePlayerFromRegion(Region region, int playerID)
+		{
+			WriteHeader(MessageType.RequestRemovePlayerFromRegion);
+			Writer.Write(region.ID);
+			Writer.Write(playerID);
+			Network.SendDataToServer();
+		}
 
-        public static void RequestRemoveGroupFromRegion(Region region, int groupID) {
-            WriteHeader(MessageType.RequestRemoveGroupFromRegion);
-            Writer.Write(region.ID);
-            Writer.Write(groupID);
-            Network.SendDataToServer();
-        }
+		private static void ProcessRemovePlayerFromRegionRequest(ref BinaryReader reader, int playerNumber)
+		{
+			Region region = Network.GetRegionByID(reader.ReadInt32());
+			if (region == null)
+			{
+				return;
+			}
 
-        private static void ProcessRemoveGroupFromRegionRequest(ref BinaryReader reader, int playerNumber) {
-                Region region = Network.GetRegionByID(reader.ReadInt32());
-                if (region == null) return;
-            if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID) {
-                int groupID = reader.ReadInt32();
-                if (region.RemoveGroup(groupID)) {
-                    DatabaseController.WriteRegionPermissions(region);
-                    SendRegionListToAllPlayers();
-                }
-            }
-        }
+			if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID)
+			{
+				int playerID = reader.ReadInt32();
+				if (region.RemovePlayer(playerID))
+				{
+					DatabaseController.WriteRegionPermissions(region);
+					SendRegionListToAllPlayers();
+				}
+			}
+		}
 
-        public static void RequestToChangeColorOfRegion(Region region, Color color) {
-            WriteHeader(MessageType.RequestChangeRegionColor);
-            Writer.Write(region.ID);
-            Writer.WriteRGB(color);
-            Network.SendDataToServer();
-        }
+		public static void RequestAddGroupToRegion(Region region, int groupID)
+		{
+			WriteHeader(MessageType.RequestAddGroupToRegion);
+			Writer.Write(region.ID);
+			Writer.Write(groupID);
+			Network.SendDataToServer();
+		}
 
-        private static void ProcessChangeRegionColorRequest(ref BinaryReader reader, int playerNumber) {
-                Region region = Network.GetRegionByID(reader.ReadInt32());
-                if (region == null) return;
-            if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID) {
-                Color color = reader.ReadRGB();
+		private static void ProcessAddGroupToRegionRequest(ref BinaryReader reader, int playerNumber)
+		{
+			Region region = Network.GetRegionByID(reader.ReadInt32());
+			if (region == null)
+			{
+				return;
+			}
 
-                region.Color = color;
-                DatabaseController.WriteRegionColor(region);
-                SendRegionListToAllPlayers();
-            }
-        }
-        #endregion
+			if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID)
+			{
+				int groupID = reader.ReadInt32();
+				if (region.AddGroup(groupID))
+				{
+					DatabaseController.WriteRegionPermissions(region);
+					SendRegionListToAllPlayers();
+				}
+			}
+		}
 
-        #region Restore Tiles
-        public static void RequestRestoreTiles(int playerID, bool onlinePlayer) {
-            WriteHeader(MessageType.RequestRestoreTiles);
+		public static void RequestRemoveGroupFromRegion(Region region, int groupID)
+		{
+			WriteHeader(MessageType.RequestRemoveGroupFromRegion);
+			Writer.Write(region.ID);
+			Writer.Write(groupID);
+			Network.SendDataToServer();
+		}
 
-            Writer.Write(playerID);
-            Writer.Write(onlinePlayer);
-            Network.SendDataToServer();
-        }
+		private static void ProcessRemoveGroupFromRegionRequest(ref BinaryReader reader, int playerNumber)
+		{
+			Region region = Network.GetRegionByID(reader.ReadInt32());
+			if (region == null)
+			{
+				return;
+			}
 
-        private static void ProcessRestoreTilesRequest(ref BinaryReader reader, int playerNumber) {
-            if (Network.Players2[playerNumber].Group.IsAdmin) {
-                int playerID = reader.ReadInt32();
-                bool onlinePlayer = reader.ReadBoolean();
-                if (onlinePlayer) {
-                    playerID = Network.Players2[playerID].ID;
-                }
-                TileChangeController.RestoreTileChangesMadeByPlayer(playerID);
-            }
-        }
-        #endregion
+			if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID)
+			{
+				int groupID = reader.ReadInt32();
+				if (region.RemoveGroup(groupID))
+				{
+					DatabaseController.WriteRegionPermissions(region);
+					SendRegionListToAllPlayers();
+				}
+			}
+		}
 
-        #region Set Spawnpoint
-        public static void RequestSetSpawnPoint() {
-            WriteHeader(MessageType.RequestSetSpawnPoint);
-            Network.SendDataToServer();
-        }
+		public static void RequestToChangeColorOfRegion(Region region, Color color)
+		{
+			WriteHeader(MessageType.RequestChangeRegionColor);
+			Writer.Write(region.ID);
+			Writer.WriteRGB(color);
+			Network.SendDataToServer();
+		}
 
-        private static void ProcessSetSpawnPointRequest(int playerNumber) {
-            if (Network.Players2[playerNumber].Group.IsAdmin) {
-                Player player = Main.player[playerNumber];
+		private static void ProcessChangeRegionColorRequest(ref BinaryReader reader, int playerNumber)
+		{
+			Region region = Network.GetRegionByID(reader.ReadInt32());
+			if (region == null)
+			{
+				return;
+			}
 
-                Main.spawnTileX = (int) (player.position.X - 8 + player.width / 2) / 16;
-                Main.spawnTileY = (int) (player.position.Y + player.height) / 16;
+			if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID)
+			{
+				Color color = reader.ReadRGB();
+
+				region.Color = color;
+				DatabaseController.WriteRegionColor(region);
+				SendRegionListToAllPlayers();
+			}
+		}
+		#endregion
+
+		#region Restore Tiles
+		public static void RequestRestoreTiles(int playerID, bool onlinePlayer)
+		{
+			WriteHeader(MessageType.RequestRestoreTiles);
+
+			Writer.Write(playerID);
+			Writer.Write(onlinePlayer);
+			Network.SendDataToServer();
+		}
+
+		private static void ProcessRestoreTilesRequest(ref BinaryReader reader, int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.IsAdmin)
+			{
+				int playerID = reader.ReadInt32();
+				bool onlinePlayer = reader.ReadBoolean();
+				if (onlinePlayer)
+				{
+					playerID = Network.Players2[playerID].ID;
+				}
+				TileChangeController.RestoreTileChangesMadeByPlayer(playerID);
+			}
+		}
+		#endregion
+
+		#region Set Spawnpoint
+		public static void RequestSetSpawnPoint()
+		{
+			WriteHeader(MessageType.RequestSetSpawnPoint);
+			Network.SendDataToServer();
+		}
+
+		private static void ProcessSetSpawnPointRequest(int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.IsAdmin)
+			{
+				Player player = Main.player[playerNumber];
+
+				Main.spawnTileX = (int)(player.position.X - 8 + player.width / 2) / 16;
+				Main.spawnTileY = (int)(player.position.Y + player.height) / 16;
 
 				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("SpawnPointSetToBy"), Main.spawnTileX, Main.spawnTileY, player.name));
 			}
-        }
-        #endregion
+		}
+		#endregion
 
-        #region Toggle Gravestones
-        public static void RequestToggleGravestones() {
-            WriteHeader(MessageType.RequestToggleGravestones);
-            Network.SendDataToServer();
-        }
+		#region Toggle Gravestones
+		public static void RequestToggleGravestones()
+		{
+			WriteHeader(MessageType.RequestToggleGravestones);
+			Network.SendDataToServer();
+		}
 
 		private static void ProcessToggleGravestonesRequest(int playerNumber)
 		{
@@ -915,56 +1070,75 @@ namespace HEROsMod.HEROsModNetwork {
 			}
 		}
 
-        private static void GravestonesToggled() {
-            WriteHeader(MessageType.GravestonesToggled);
-            Writer.Write(Network.GravestonesAllowed);
-            Network.SendDataToAllHEROsModUsers();
-        }
+		private static void GravestonesToggled()
+		{
+			WriteHeader(MessageType.GravestonesToggled);
+			Writer.Write(Network.GravestonesAllowed);
+			Network.SendDataToAllHEROsModUsers();
+		}
 
-        private static void ProcessGravestonesToggled(ref BinaryReader reader) {
-            if (Network.NetworkMode == NetworkMode.Server) return;
-            bool gravestonesAllowed = reader.ReadBoolean();
-            GravestonesToggleByServer?.Invoke(gravestonesAllowed);
-        }
-        #endregion
+		private static void ProcessGravestonesToggled(ref BinaryReader reader)
+		{
+			if (Network.NetworkMode == NetworkMode.Server)
+			{
+				return;
+			}
 
-        #region God Mode
-        public static void RequestGodMode() {
-            WriteHeader(MessageType.RequestGodMode);
-            Network.SendDataToServer();
-        }
+			bool gravestonesAllowed = reader.ReadBoolean();
+			GravestonesToggleByServer?.Invoke(gravestonesAllowed);
+		}
+		#endregion
 
-        private static void ProcessGodModeRequest(int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("GodMode")) {
-                AllowGodMode(playerNumber);
-            }
-        }
+		#region God Mode
+		public static void RequestGodMode()
+		{
+			WriteHeader(MessageType.RequestGodMode);
+			Network.SendDataToServer();
+		}
 
-        private static void AllowGodMode(int playerNumber) {
-            WriteHeader(MessageType.AllowGodMode);
-            Network.SendDataToPlayer(playerNumber);
-        }
+		private static void ProcessGodModeRequest(int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("GodMode"))
+			{
+				AllowGodMode(playerNumber);
+			}
+		}
 
-        private static void ProcessGodMode() {
-            if (Network.NetworkMode == NetworkMode.Server) return;
-            if (!HEROsModServices.GodModeService.Enabled) {
-                HEROsModServices.GodModeService.Enabled = true;
-            }
-        }
-        #endregion
+		private static void AllowGodMode(int playerNumber)
+		{
+			WriteHeader(MessageType.AllowGodMode);
+			Network.SendDataToPlayer(playerNumber);
+		}
 
-        #region Tile Modification Check
-        public static void RequestTileModificationCheck(Vector2 tileCoords) {
-            WriteHeader(MessageType.RequestTileModificationCheck);
-            Writer.Write((int) tileCoords.X);
-            Writer.Write((int) tileCoords.Y);
-            Network.SendDataToServer();
-        }
+		private static void ProcessGodMode()
+		{
+			if (Network.NetworkMode == NetworkMode.Server)
+			{
+				return;
+			}
 
-        private static void ProcessTileModificationCheckRequest(ref BinaryReader reader, int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("CheckTiles")) {
-                int x = reader.ReadInt32();
-                int y = reader.ReadInt32();
+			if (!HEROsModServices.GodModeService.Enabled)
+			{
+				HEROsModServices.GodModeService.Enabled = true;
+			}
+		}
+		#endregion
+
+		#region Tile Modification Check
+		public static void RequestTileModificationCheck(Vector2 tileCoords)
+		{
+			WriteHeader(MessageType.RequestTileModificationCheck);
+			Writer.Write((int)tileCoords.X);
+			Writer.Write((int)tileCoords.Y);
+			Network.SendDataToServer();
+		}
+
+		private static void ProcessTileModificationCheckRequest(ref BinaryReader reader, int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("CheckTiles"))
+			{
+				int x = reader.ReadInt32();
+				int y = reader.ReadInt32();
 
 				if (x >= 0 && y >= 0 && x < Main.maxTilesX && y < Main.maxTilesY)
 				{
@@ -1000,66 +1174,78 @@ namespace HEROsMod.HEROsModNetwork {
 		#endregion
 
 		#region Spawn NPC
-		public static void RequestSpawnNPC(int npcType) {
-            WriteHeader(MessageType.RequestSpawnNPC);
-            Writer.Write(npcType);
-            Network.SendDataToServer();
-        }
+		public static void RequestSpawnNPC(int npcType)
+		{
+			WriteHeader(MessageType.RequestSpawnNPC);
+			Writer.Write(npcType);
+			Network.SendDataToServer();
+		}
 
-        private static void ProcessSpawnNPCRequest(ref BinaryReader reader, int playerNumber) {
-            HEROsModPlayer player = Network.Players2[playerNumber];
-            if (player.Group.HasPermission("SpawnNPCs")) {
-                int npcType = reader.ReadInt32();
-                NPC newNPC = new NPC();
-                newNPC.SetDefaults(npcType);
+		private static void ProcessSpawnNPCRequest(ref BinaryReader reader, int playerNumber)
+		{
+			HEROsModPlayer player = Network.Players2[playerNumber];
+			if (player.Group.HasPermission("SpawnNPCs"))
+			{
+				int npcType = reader.ReadInt32();
+				NPC newNPC = new NPC();
+				newNPC.SetDefaults(npcType);
 
-                if (newNPC.townNPC || HEROsModServices.NPCStats.boundNPC.Contains(npcType)) {
-                    for (int i = 0; i < Main.npc.Length; i++) {
-                        NPC npc = Main.npc[i];
-                        if (npc.type == newNPC.type) {
-                            npc.Teleport(player.GameInstance.position, 1);
-                            return;
-                        }
-                    }
-                }
-                NPC.NewNPC((int) player.GameInstance.position.X, (int) player.GameInstance.position.Y, npcType);
-            }
-        }
-        #endregion
+				if (newNPC.townNPC || HEROsModServices.NPCStats.boundNPC.Contains(npcType))
+				{
+					for (int i = 0; i < Main.npc.Length; i++)
+					{
+						NPC npc = Main.npc[i];
+						if (npc.type == newNPC.type)
+						{
+							npc.Teleport(player.GameInstance.position, 1);
+							return;
+						}
+					}
+				}
+				NPC.NewNPC((int)player.GameInstance.position.X, (int)player.GameInstance.position.Y, npcType);
+			}
+		}
+		#endregion
 
-        #region Invasion Events
-        public static void RequestStartEvent(HEROsModServices.Events e) {
-            WriteHeader(MessageType.RequestStartEvent);
-            Writer.Write((byte) e);
-            Network.SendDataToServer();
-        }
+		#region Invasion Events
+		public static void RequestStartEvent(HEROsModServices.Events e)
+		{
+			WriteHeader(MessageType.RequestStartEvent);
+			Writer.Write((byte)e);
+			Network.SendDataToServer();
+		}
 
-        private static void ProcessStartEventRequest(ref BinaryReader reader, int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("StartEvents")) {
-                HEROsModServices.Events e = (HEROsModServices.Events) reader.ReadByte();
-                HEROsModServices.InvasionService.StartEvent(e);
-            }
-        }
+		private static void ProcessStartEventRequest(ref BinaryReader reader, int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("StartEvents"))
+			{
+				HEROsModServices.Events e = (HEROsModServices.Events)reader.ReadByte();
+				HEROsModServices.InvasionService.StartEvent(e);
+			}
+		}
 
-        public static void RequestStopEvents() {
-            WriteHeader(MessageType.RequestStopEvents);
-            Network.SendDataToServer();
-        }
+		public static void RequestStopEvents()
+		{
+			WriteHeader(MessageType.RequestStopEvents);
+			Network.SendDataToServer();
+		}
 
 		private static void ProcessStopEventsRequest(int playerNumber)
 		{
 			if (Network.Players2[playerNumber].Group.HasPermission("StartEvents"))
 			{
 				HEROsModServices.InvasionService.StopAllEvents();
-				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("EventsStoppedBy"), Network.Players[playerNumber].GameInstance.name));
+				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("EventsStoppedBy"), Network.Players2[playerNumber].GameInstance.name));
 			}
 		}
+		#endregion
 
-        #region Toggle Banned Items
-        public static void RequestToggleBannedItems() {
-            WriteHeader(MessageType.RequestToggleBannedItems);
-            Network.SendDataToServer();
-        }
+		#region Toggle Banned Items
+		public static void RequestToggleBannedItems()
+		{
+			WriteHeader(MessageType.RequestToggleBannedItems);
+			Network.SendDataToServer();
+		}
 
 		private static void ProcessToggleBannedItemsRequest(int playerNumber)
 		{
@@ -1078,136 +1264,158 @@ namespace HEROsMod.HEROsModNetwork {
 			}
 		}
 
-        private static void BannedItemsToggled() {
-            WriteHeader(MessageType.BannedItemsToggled);
-            Writer.Write(HEROsModServices.ItemBanner.ItemsBanned);
-            Network.SendDataToAllHEROsModUsers();
-        }
+		private static void BannedItemsToggled()
+		{
+			WriteHeader(MessageType.BannedItemsToggled);
+			Writer.Write(HEROsModServices.ItemBanner.ItemsBanned);
+			Network.SendDataToAllHEROsModUsers();
+		}
 
-        private static void ProcessBannedItemsToggled(ref BinaryReader reader) {
-            if (Network.NetworkMode == NetworkMode.Server) return;
-            bool gravestonesAllowed = reader.ReadBoolean();
-            ItemBannerToggleByServer?.Invoke(gravestonesAllowed);
-        }
-        #endregion
+		private static void ProcessBannedItemsToggled(ref BinaryReader reader)
+		{
+			if (Network.NetworkMode == NetworkMode.Server)
+			{
+				return;
+			}
 
-        #region Teleport
-        public static void RequestTeleport(Vector2 destination) {
-            WriteHeader(MessageType.RequestTeleport);
-            Writer.WriteVector2(destination);
-            Network.SendDataToServer();
-        }
-        private static void ProcessRequestTeleport(ref BinaryReader reader, int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("Teleport")) {
-                Vector2 destination = reader.ReadVector2();
-                Main.player[playerNumber].Teleport(destination, 1, 0);
-                RemoteClient.CheckSection(playerNumber, destination, 1);
-                NetMessage.SendData(65, -1, -1, null, 0, playerNumber, destination.X, destination.Y, 1, 0, 0);
-            }
-        }
-        #endregion
+			bool gravestonesAllowed = reader.ReadBoolean();
+			ItemBannerToggleByServer?.Invoke(gravestonesAllowed);
+		}
+		#endregion
 
-        #region Toggle Hardmode Enemies
+		#region Teleport
+		public static void RequestTeleport(Vector2 destination)
+		{
+			WriteHeader(MessageType.RequestTeleport);
+			Writer.WriteVector2(destination);
+			Network.SendDataToServer();
+		}
+		private static void ProcessRequestTeleport(ref BinaryReader reader, int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("Teleport"))
+			{
+				Vector2 destination = reader.ReadVector2();
+				Main.player[playerNumber].Teleport(destination, 1, 0);
+				RemoteClient.CheckSection(playerNumber, destination, 1);
+				NetMessage.SendData(65, -1, -1, null, 0, playerNumber, destination.X, destination.Y, 1, 0, 0);
+			}
+		}
+		#endregion
 
-        public static void RequestToggleHardmodeEnemies() {
-            WriteHeader(MessageType.RequestToggleHardmodeEnemies);
-            Network.SendDataToServer();
-        }
+		#region Toggle Hardmode Enemies
 
-
-        private static void ProcessToggleHardmodeEnemiesRequest(int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("ToggleHardmodeEnemies")) {
-                HEROsModServices.HardmodeEnemyToggler.ToggleHardModeEnemies();
-                if (Main.hardMode) {
-                    Network.SendTextToAllPlayers("Hardmode enemies enabled by " + Network.Players2[playerNumber].GameInstance.name);
-                } else {
-                    Network.SendTextToAllPlayers("Hardmode enemies disabled by " + Network.Players2[playerNumber].GameInstance.name);
-                }
-            }
-        }
-
-        #endregion
-
-        #region Purify World
-
-        public static void RequestPurifyWorld() {
-            WriteHeader(MessageType.PurifyWorld);
-            Network.SendDataToServer();
-        }
+		public static void RequestToggleHardmodeEnemies()
+		{
+			WriteHeader(MessageType.RequestToggleHardmodeEnemies);
+			Network.SendDataToServer();
+		}
 
 
-        private static void ProcessPurifyWorldRequest(int playerNumber) {
-            if (Network.Players2[playerNumber].Group.HasPermission("PurifyWorld")) {
-                Network.SendTextToAllPlayers("Please wait, the world is going to be purified, this may take a few moments to minutes...", Color.Crimson);
-                HEROsModServices.WorldPurifier.PurifyWorld();
-                for (int i = 0; i < Main.player.Length; i++) {
-                    if (Main.player[i].active) {
-                        Network.ResendPlayerAllTileData(Network.Players2[i]);
-                    }
-                }
-                Network.SendTextToAllPlayers("Purifying the world complete!", Color.Crimson);
-            }
-        }
+		private static void ProcessToggleHardmodeEnemiesRequest(int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("ToggleHardmodeEnemies"))
+			{
+				HEROsModServices.HardmodeEnemyToggler.ToggleHardModeEnemies();
+				if (Main.hardMode)
+				{
+					Network.SendTextToAllPlayers("Hardmode enemies enabled by " + Network.Players2[playerNumber].GameInstance.name);
+				}
+				else
+				{
+					Network.SendTextToAllPlayers("Hardmode enemies disabled by " + Network.Players2[playerNumber].GameInstance.name);
+				}
+			}
+		}
 
-        #endregion
+		#endregion
 
-        private enum MessageType : byte {
-            UsingHEROsMod,
-            RequestTimeChange,
-            TimePausedOrResumed,
-            RequestClearGroundItems,
-            RequestToggleEnemies,
-            EnemiesToggled,
-            RequestSpawnTownNPC,
-            RequestStartRain,
-            RequestStopRain,
-            RequestStartSandstorm,
-            RequestStopSandstorm,
-            WaypointList,
-            RequestAddWaypoint,
-            RequestRemoveWaypoint,
-            PlayerJoined,
-            PlayerLeft,
-            RegionList,
-            RequestCreateRegion,
-            RequestRemoveRegion,
-            RequestRegisteredUsers,
-            RegisteredUsers,
-            RequestAddPlayerToRegion,
-            RequestRemovePlayerFromRegion,
-            RequestAddGroupToRegion,
-            RequestChangeRegionColor,
-            RequestRemoveGroupFromRegion,
-            RequestRestoreTiles,
-            RequestSetSpawnPoint,
-            RequestToggleGravestones,
-            GravestonesToggled,
-            RequestToggleHardmodeEnemies,
-            RequestGodMode,
-            AllowGodMode,
-            RequestTileModificationCheck,
-            RequestSpawnNPC,
-            RequestStartEvent,
-            RequestStopEvents,
-            RequestToggleBannedItems,
-            BannedItemsToggled,
-            RequestKickPlayer,
-            RequestBanPlayer,
-            RequestTeleport,
-            RequestForcedSundial,
-            CurrentToggles,
+		#region Purify World
+
+		public static void RequestPurifyWorld()
+		{
+			WriteHeader(MessageType.PurifyWorld);
+			Network.SendDataToServer();
+		}
+
+
+		private static void ProcessPurifyWorldRequest(int playerNumber)
+		{
+			if (Network.Players2[playerNumber].Group.HasPermission("PurifyWorld"))
+			{
+				Network.SendTextToAllPlayers("Please wait, the world is going to be purified, this may take a few moments to minutes...", Color.Crimson);
+				HEROsModServices.WorldPurifier.PurifyWorld();
+				for (int i = 0; i < Main.player.Length; i++)
+				{
+					if (Main.player[i].active)
+					{
+						Network.ResendPlayerAllTileData(Network.Players2[i]);
+					}
+				}
+				Network.SendTextToAllPlayers("Purifying the world complete!", Color.Crimson);
+			}
+		}
+
+		#endregion
+
+		internal enum MessageType : byte
+		{
+			UsingHEROsMod,
+			RequestTimeChange,
+			TimePausedOrResumed,
+			RequestClearGroundItems,
+			RequestToggleEnemies,
+			EnemiesToggled,
+			RequestSpawnTownNPC,
+			RequestStartRain,
+			RequestStopRain,
+			RequestStartSandstorm,
+			RequestStopSandstorm,
+			WaypointList,
+			RequestAddWaypoint,
+			RequestRemoveWaypoint,
+			PlayerJoined,
+			PlayerLeft,
+			RegionList,
+			RequestCreateRegion,
+			RequestRemoveRegion,
+			RequestRegisteredUsers,
+			RegisteredUsers,
+			RequestAddPlayerToRegion,
+			RequestRemovePlayerFromRegion,
+			RequestAddGroupToRegion,
+			RequestChangeRegionColor,
+			RequestRemoveGroupFromRegion,
+			RequestRestoreTiles,
+			RequestSetSpawnPoint,
+			RequestToggleGravestones,
+			GravestonesToggled,
+			RequestToggleHardmodeEnemies,
+			RequestGodMode,
+			AllowGodMode,
+			RequestTileModificationCheck,
+			RequestSpawnNPC,
+			RequestStartEvent,
+			RequestStopEvents,
+			RequestToggleBannedItems,
+			BannedItemsToggled,
+			RequestKickPlayer,
+			RequestBanPlayer,
+			RequestTeleport,
+			RequestForcedSundial,
+			CurrentToggles,
 			SyncItemNonOwner,
 			ServerPlayerJoined,
-            ServerPlayerLeft,
-            PurifyWorld
-        }
+			ServerPlayerLeft,
+			PurifyWorld
+		}
 
-        public enum TimeChangeType {
-            SetToNoon,
-            SetToNight,
-            SetToMidnight,
-            Pause,
-            SpecificTime
-        }
-    }
+		public enum TimeChangeType
+		{
+			SetToNoon,
+			SetToNight,
+			SetToMidnight,
+			Pause,
+			SpecificTime
+		}
+	}
 }

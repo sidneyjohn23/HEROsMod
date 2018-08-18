@@ -9,16 +9,9 @@ namespace HEROsMod.HEROsModServices
 		// TODO, is this how I want to do this?
 		public static Teleporter instance;
 
-		public Teleporter()
-		{
-			instance = this;
-		}
+		public Teleporter() => instance = this;
 
-		public override void MyGroupUpdated()
-		{
-            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("Teleport");
-			//base.MyGroupUpdated();
-		}
+		public override void MyGroupUpdated() => HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("Teleport");//base.MyGroupUpdated();
 
 		public void PostDrawFullScreenMap()
 		{
@@ -45,10 +38,23 @@ namespace HEROsMod.HEROsModServices
 
 					Player player = Main.player[Main.myPlayer];
 					cursorWorldPosition.Y -= player.height;
-					if (cursorWorldPosition.X < 0) cursorWorldPosition.X = 0;
-					else if (cursorWorldPosition.X + player.width > mapWidth) cursorWorldPosition.X = mapWidth - player.width;
-					if (cursorWorldPosition.Y < 0) cursorWorldPosition.Y = 0;
-					else if (cursorWorldPosition.Y + player.height > mapHeight) cursorWorldPosition.Y = mapHeight - player.height;
+					if (cursorWorldPosition.X < 0)
+					{
+						cursorWorldPosition.X = 0;
+					}
+					else if (cursorWorldPosition.X + player.width > mapWidth)
+					{
+						cursorWorldPosition.X = mapWidth - player.width;
+					}
+
+					if (cursorWorldPosition.Y < 0)
+					{
+						cursorWorldPosition.Y = 0;
+					}
+					else if (cursorWorldPosition.Y + player.height > mapHeight)
+					{
+						cursorWorldPosition.Y = mapHeight - player.height;
+					}
 
 					if (Main.netMode == 0) // single
 					{

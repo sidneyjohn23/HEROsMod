@@ -24,25 +24,25 @@ namespace HEROsMod.UIKit
 		internal static Texture2D closeTexture;
 
 		//statics
-		public static UIView exclusiveControl = null;
+		public static UIView ExclusiveControl { get; set; } = null;
 
-		public static bool GameMouseOverwritten = false;
-		protected static int MouseX { get { return Main.mouseX; } }
-		protected static int MouseY { get { return Main.mouseY; } }
+		public static bool GameMouseOverwritten { get; set; } = false;
+		protected static int MouseX => Main.mouseX;
+		protected static int MouseY => Main.mouseY;
 		protected static bool MouseLeftButton = false;
 		protected static bool MousePrevLeftButton = false;
 		protected static bool MouseRightButton = false;
 		protected static bool MousePrevRightButton = false;
-		public static int ScrollAmount = 0;
+		public static int ScrollAmount { get; set; } = 0;
 
-		public static string HoverText = "";
+		public static string HoverText { get; set; } = "";
 		//public static Item HoverItem = new Item();
-		protected static readonly Item EmptyItem = new Item();
-		public static bool HoverOverridden = false;
+		protected static Item EmptyItem => new Item();
+		public static bool HoverOverridden { get; set; } = false;
 
-		public static float SmallSpacing = 4f;
-		public static float Spacing = 8f;
-		public static float LargeSpacing = 16f;
+		public static float SmallSpacing => 4f;
+		public static float Spacing => 8f;
+		public static float LargeSpacing => 16f;
 
 		/*
         protected static bool mouseLeftButton { get { return Main.mouseLeft; } }
@@ -50,70 +50,59 @@ namespace HEROsMod.UIKit
         protected static bool mouseRightButton { get { return Main.mouseRight; } }
         protected static bool mousePrevRightButton { get { return !Main.mouseRightRelease; } }
         */
-		protected static Texture2D dummyTexture { get { return ModUtils.DummyTexture; } }
-		protected static GraphicsDevice graphics { get { return Main.graphics.GraphicsDevice; } }
-
-		//public bool centerOrigin = false;
-
-		//Position and Size Vars
-		private Vector2 _position = Vector2.Zero;
+		protected static Texture2D DummyTexture => ModUtils.DummyTexture;
+		protected static GraphicsDevice Graphics => Main.graphics.GraphicsDevice;
 
 		public Vector2 Position
 		{
-			get { return _position; }
-			set { _position = value; }
+			get => new Vector2(X, Y);
+			set
+			{
+				X = value.X;
+				Y = value.Y;
+			}
 		}
 
 		public float X
 		{
-			get { return _position.X; }
-			set { _position.X = value; }
-		}
+			get;
+			set;
+		} = 0;
 
 		public float Y
 		{
-			get { return _position.Y; }
-			set { _position.Y = value; }
-		}
+			get;
+			set;
+		} = 0;
 
-		public Vector2 DrawPosition
-		{
-			get
-			{
-				if (Parent != null)
-				{
-					return Parent.DrawPosition + Position + Offset - Parent.Origin;
-				}
-				else return Position + offset;
-			}
-		}
+		public Vector2 DrawPosition => Position + Offset + (Parent != null ? Parent.DrawPosition - Parent.Origin : Vector2.Zero);
 
-		public float Width { get { return GetWidth(); } set { SetWidth(value); } }
-		public float Height { get { return GetHeight(); } set { SetHeight(value); } }
+		public float Width { get; set; }
+		public float Height { get; set; }
 
 		//C
 		protected bool mouseForChildrenHandled = false;
 
-		public List<UIView> children = new List<UIView>();
+		public List<UIView> Children { get; } = new List<UIView>();
 		private List<UIView> childrenToRemove = new List<UIView>();
 		public UIView Parent { get; set; }
 
 		//Mouse Events
 		public delegate void ClickEventHandler(object sender, byte button);
 
-		public event EventHandler onHover;
+		public event EventHandler OnHover;
 
-		public event EventHandler onLeftClick;
+		public event EventHandler OnLeftClick;
 
-		public event EventHandler onRightClick;
+		public event EventHandler OnRightClick;
 
-		public event EventHandler onMouseEnter;
+		public event EventHandler OnMouseEnter;
 
-		public event EventHandler onMouseLeave;
+		public event EventHandler OnMouseLeave;
 
-		public event ClickEventHandler onMouseDown;
+		public event ClickEventHandler OnMouseDown;
 
-		public event ClickEventHandler onMouseUp;
+		public event ClickEventHandler OnMouseUp;
 
 		private static bool mouseUpHandled = false;
 		private static bool mouseDownHandled = false;
@@ -124,117 +113,46 @@ namespace HEROsMod.UIKit
 		//Mouse Variables
 		private bool mousePreviouslyIn = false;
 
-		public bool MouseInside { get { return IsMouseInside(); } }
+		public bool MouseInside => IsMouseInside();
 
-		public int ChildCount { get { return children.Count; } }
+		public int ChildCount => Children.Count;
 
-		private Color foregroundColor = Color.White;
-		private Color backgroundColor = Color.White;
-
-		public Color ForegroundColor
-		{
-			get { return foregroundColor; }
-			set { foregroundColor = value; }
-		}
-
-		public Color BackgroundColor
-		{
-			get { return backgroundColor; }
-			set { backgroundColor = value; }
-		}
-
-		private AnchorPosition anchor = AnchorPosition.TopLeft;
-
-		public AnchorPosition Anchor
-		{
-			get { return anchor; }
-			set { anchor = value; }
-		}
-
-		public Vector2 Origin
-		{
-			get
-			{
-				return GetOrigin();
-			}
-		}
-
-		private Vector2 offset = Vector2.Zero;
-
-		public Vector2 Offset
-		{
-			get { return offset; }
-			set { offset = value; }
-		}
-
-		private float scale = 1f;
-
-		public float Scale
-		{
-			get { return scale; }
-			set { scale = value; }
-		}
-
-		private float opacity = 1f;
-
+		public Color ForegroundColor { get; set; } = Color.White;
+		public Color BackgroundColor { get; set; } = Color.White;
+		public AnchorPosition Anchor { get; set; } = AnchorPosition.TopLeft;
+		public Vector2 Origin => GetOrigin();
+		public Vector2 Offset { get; set; } = Vector2.Zero;
+		public float Scale { get; set; } = 1f;
 		public float Opacity
 		{
-			get
-			{
-				if (Parent != null)
-				{
-					return opacity * Parent.Opacity;
-				}
-				return opacity;
-			}
-			set { opacity = value; }
+			get => Opacity * (Parent != null ? Parent.Opacity : 1);
+			set => Opacity = value;
 		}
 
-		private bool _visible = true;
+		public bool Visible { get; set; } = true;
 
-		public bool Visible
-		{
-			get { return _visible; }
-			set { _visible = value; }
-		}
-
-		private bool _overridesMouse = true;
-
-		public bool OverridesMouse
-		{
-			get { return _overridesMouse; }
-			set { _overridesMouse = value; }
-		}
-
-		private string _tooltip = "";
+		public bool OverridesMouse { get; set; } = true;
 
 		public string Tooltip
 		{
-			get { return _tooltip; }
+			get => Tooltip;
 			set
 			{
-				if (value.Length > 0 && _tooltip.Length == 0)
+				if (value.Length > 0 && Tooltip.Length == 0)
 				{
 					//add event
-					onHover += DisplayTooltip;
+					OnHover += DisplayTooltip;
 				}
-				else if (value.Length == 0 && _tooltip.Length > 0)
+				else if (value.Length == 0 && Tooltip.Length > 0)
 				{
 					//remove event
-					onHover -= DisplayTooltip;
+					OnHover -= DisplayTooltip;
 				}
-				_tooltip = value;
+				Tooltip = value;
 			}
 		}
 
-		private bool _updateWhenOutOfBounds = false;
-
-		public bool UpdateWhenOutOfBounds
-		{
-			get { return _updateWhenOutOfBounds; }
-			set { _updateWhenOutOfBounds = value; }
-		}
-
+		public bool UpdateWhenOutOfBounds { get; set; } = false;
 		public object Tag { get; set; }
 
 		public virtual void Update()
@@ -248,18 +166,21 @@ namespace HEROsMod.UIKit
 			mouseForChildrenHandled = false;
 			if (Visible)
 			{
-				for (int i = 0; i < children.Count; i++)
+				for (int i = 0; i < Children.Count; i++)
 				{
-					UIView child = children[children.Count - 1 - i];
-					if (child.UpdateWhenOutOfBounds || child.InParent()) children[children.Count - 1 - i].Update();
+					UIView child = Children[Children.Count - 1 - i];
+					if (child.UpdateWhenOutOfBounds || child.InParent())
+					{
+						Children[Children.Count - 1 - i].Update();
+					}
 				}
 				while (childrenToRemove.Count > 0)
 				{
-					children.Remove(childrenToRemove[0]);
+					Children.Remove(childrenToRemove[0]);
 					childrenToRemove.RemoveAt(0);
 				}
 
-				if ((exclusiveControl == null && Parent == null) || this == exclusiveControl)
+				if ((ExclusiveControl == null && Parent == null) || this == ExclusiveControl)
 				{
 					HandleMouseInput();
 				}
@@ -272,10 +193,7 @@ namespace HEROsMod.UIKit
              */
 		}
 
-		private void DisplayTooltip(object sender, EventArgs e)
-		{
-			HoverText = ((UIView)sender).Tooltip;
-		}
+		private void DisplayTooltip(object sender, EventArgs e) => HoverText = ((UIView)sender).Tooltip;
 
 		public static void OverWriteGameMouseInput()
 		{
@@ -298,9 +216,9 @@ namespace HEROsMod.UIKit
 
 		private void HandleMouseInput()
 		{
-			for (int i = 0; i < children.Count; i++)
+			for (int i = 0; i < Children.Count; i++)
 			{
-				UIView child = children[children.Count - 1 - i];
+				UIView child = Children[Children.Count - 1 - i];
 				if (child.Visible)
 				{
 					if (child.Parent == null || child.UpdateWhenOutOfBounds || child.mousePreviouslyIn || (child.InParent() && (child.Parent.MouseInside || child.Parent.UpdateWhenOutOfBounds) && !child.Parent.mouseForChildrenHandled))
@@ -312,61 +230,64 @@ namespace HEROsMod.UIKit
 
 			if (OverridesMouse && MouseInside)
 			{
-				if (onMouseLeave != null)
+				if (OnMouseLeave != null)
 				{
 				}
 				if (Parent != null)
 				{
 					Parent.mouseForChildrenHandled = true;
-					if (OverridesMouse) OverWriteGameMouseInput();
+					if (OverridesMouse)
+					{
+						OverWriteGameMouseInput();
+					}
 				}
-				onHover?.Invoke(this, new EventArgs());
+				OnHover?.Invoke(this, new EventArgs());
 				if (!mousePreviouslyIn)
 				{
-					onMouseEnter?.Invoke(this, new EventArgs());
+					OnMouseEnter?.Invoke(this, new EventArgs());
 				}
 				if (!MousePrevLeftButton && MouseLeftButton)
 				{
 					leftButtonDown = true;
-					if (onMouseDown != null && !mouseDownHandled)
+					if (OnMouseDown != null && !mouseDownHandled)
 					{
-						onMouseDown(this, 0);
+						OnMouseDown(this, 0);
 					}
 				}
 				if (MousePrevLeftButton && !MouseLeftButton)
 				{
-					if (onMouseUp != null && !mouseUpHandled)
+					if (OnMouseUp != null && !mouseUpHandled)
 					{
-						onMouseUp(this, 0);
+						OnMouseUp(this, 0);
 					}
-					if (leftButtonDown && onLeftClick != null)
+					if (leftButtonDown && OnLeftClick != null)
 					{
-						onLeftClick(this, EventArgs.Empty);
+						OnLeftClick(this, EventArgs.Empty);
 					}
 				}
 				if (!MousePrevRightButton && MouseRightButton)
 				{
 					rightButtonDown = true;
-					onMouseDown?.Invoke(this, 1);
+					OnMouseDown?.Invoke(this, 1);
 				}
 				if (MousePrevRightButton && !MouseRightButton)
 				{
-					onMouseUp?.Invoke(this, 1);
-					if (rightButtonDown && onRightClick != null)
+					OnMouseUp?.Invoke(this, 1);
+					if (rightButtonDown && OnRightClick != null)
 					{
-						onRightClick(this, EventArgs.Empty);
+						OnRightClick(this, EventArgs.Empty);
 					}
 				}
 				mousePreviouslyIn = true;
 			}
 			else
 			{
-				if (onMouseLeave != null)
+				if (OnMouseLeave != null)
 				{
 				}
 				if (mousePreviouslyIn)
 				{
-					onMouseLeave?.Invoke(this, new EventArgs());
+					OnMouseLeave?.Invoke(this, new EventArgs());
 				}
 				mousePreviouslyIn = false;
 			}
@@ -376,54 +297,36 @@ namespace HEROsMod.UIKit
 				leftButtonDown = false;
 			}
 			if (!MouseRightButton)
+			{
 				rightButtonDown = false;
-		}
-
-		private float width = 0;
-		private float height = 0;
-
-		protected virtual void SetWidth(float width)
-		{
-			this.width = width;
-		}
-
-		protected virtual void SetHeight(float height)
-		{
-			this.height = height;
-		}
-
-		protected virtual float GetWidth()
-		{
-			return width;
-		}
-
-		protected virtual float GetHeight()
-		{
-			return height;
+			}
 		}
 
 		protected virtual Vector2 GetOrigin()
 		{
 			float centerX = Width / 2;
 			float centerY = Height / 2;
-			if (Anchor == AnchorPosition.TopLeft)
-				return Vector2.Zero;
-			else if (Anchor == AnchorPosition.Left)
-				return new Vector2(0, centerY);
-			else if (Anchor == AnchorPosition.Right)
-				return new Vector2(Width, centerY);
-			else if (Anchor == AnchorPosition.Top)
-				return new Vector2(centerX, 0);
-			else if (Anchor == AnchorPosition.Bottom)
-				return new Vector2(centerX, Height);
-			else if (Anchor == AnchorPosition.Center)
-				return new Vector2(centerX, centerY);
-			else if (Anchor == AnchorPosition.TopRight)
-				return new Vector2(Width, 0);
-			else if (Anchor == AnchorPosition.BottomLeft)
-				return new Vector2(0, Height);
-			else if (Anchor == AnchorPosition.BottomRight)
-				return new Vector2(Width, Height);
+			switch (Anchor)
+			{
+				case AnchorPosition.TopLeft:
+					return Vector2.Zero;
+				case AnchorPosition.Left:
+					return new Vector2(0, centerY);
+				case AnchorPosition.Right:
+					return new Vector2(Width, centerY);
+				case AnchorPosition.Top:
+					return new Vector2(centerX, 0);
+				case AnchorPosition.Bottom:
+					return new Vector2(centerX, Height);
+				case AnchorPosition.Center:
+					return new Vector2(centerX, centerY);
+				case AnchorPosition.TopRight:
+					return new Vector2(Width, 0);
+				case AnchorPosition.BottomLeft:
+					return new Vector2(0, Height);
+				case AnchorPosition.BottomRight:
+					return new Vector2(Width, Height);
+			}
 			return Vector2.Zero;
 		}
 
@@ -457,20 +360,11 @@ namespace HEROsMod.UIKit
 			return new Vector2(w / 2, h / 2);
 		}
 
-		public void CenterToParent()
-		{
-			Position = GetParentCenter();
-		}
+		public void CenterToParent() => Position = GetParentCenter();
 
-		public void CenterXAxisToParentCenter()
-		{
-			Position = new Vector2(GetParentCenter().X, Position.Y);
-		}
+		public void CenterXAxisToParentCenter() => Position = new Vector2(GetParentCenter().X, Position.Y);
 
-		public void CenterYAxisToParentCenter()
-		{
-			Position = new Vector2(Position.X, GetParentCenter().Y);
-		}
+		public void CenterYAxisToParentCenter() => Position = new Vector2(Position.X, GetParentCenter().Y);
 
 		public virtual void Draw(SpriteBatch spriteBatch)
 		{
@@ -484,58 +378,38 @@ namespace HEROsMod.UIKit
 						//Main.NewText("We broke");
 						break;
 					}
-					UIView child = children[i];
+					UIView child = Children[i];
 					if (child.UpdateWhenOutOfBounds || child.InParent())
 					{
-						if (child.Visible) child.Draw(spriteBatch);
+						if (child.Visible)
+						{
+							child.Draw(spriteBatch);
+						}
 					}
 				}
 			}
 		}
 
-		public UIView GetChild(int index)
-		{
-			return children[index];
-		}
-
-		public UIView GetLastChild()
-		{
-			return children[children.Count - 1];
-		}
-
 		public virtual void AddChild(UIView view)
 		{
 			view.Parent = this;
-			view.onMouseDown += new ClickEventHandler(view_onMouseDown);
-			view.onMouseUp += new ClickEventHandler(view_onMouseUp);
-			children.Add(view);
+			view.OnMouseDown += new ClickEventHandler(View_onMouseDown);
+			view.OnMouseUp += new ClickEventHandler(View_onMouseUp);
+			Children.Add(view);
 		}
 
-		public void RemoveAllChildren()
-		{
-			children.Clear();
-		}
+		public void RemoveAllChildren() => Children.Clear();
 
-		private void view_onMouseUp(object sender, byte button)
-		{
-			mouseUpHandled = true;
-		}
+		private void View_onMouseUp(object sender, byte button) => mouseUpHandled = true;
 
-		private void view_onMouseDown(object sender, byte button)
-		{
-			mouseDownHandled = true;
-		}
+		private void View_onMouseDown(object sender, byte button) => mouseDownHandled = true;
 
-		public void RemoveChild(UIView view)
-		{
-			childrenToRemove.Add(view);
-			//children.Remove(view);
-		}
+		public void RemoveChild(UIView view) => childrenToRemove.Add(view);
 
 		public void MoveToFront()
 		{
-            Parent.children.Remove(this);
-            Parent.children.Add(this);
+			Parent.Children.Remove(this);
+			Parent.Children.Add(this);
 		}
 	}
 }

@@ -14,18 +14,16 @@ namespace HEROsMod.HEROsModServices {
             HotbarParent = hotbar;
             _name = "World Purifier";
             _hotbarIcon = new UIKit.UIImage(HEROsMod.instance.GetTexture("Images/map"));
-            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+            _hotbarIcon.OnLeftClick += _hotbarIcon_onLeftClick;
             HotbarIcon.Tooltip = "Purify World";
             instance = this;
         }
 
-        public override void MyGroupUpdated() {
-            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("PurifyWorld");
-        }
+		public override void MyGroupUpdated() => HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("PurifyWorld");
 
-        private void _hotbarIcon_onLeftClick(object sender, EventArgs e) {
+		private void _hotbarIcon_onLeftClick(object sender, EventArgs e) {
             UIMessageBox mb = new UIMessageBox("Are you sure you want to purify the world?\nThis cannot be undone!", UIMessageBoxType.YesNo, true);
-            mb.yesClicked += Mb_yesClicked;
+            mb.YesClicked += Mb_yesClicked;
         }
 
         private void Mb_yesClicked(object sender, EventArgs e) {

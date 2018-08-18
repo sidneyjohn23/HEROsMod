@@ -8,14 +8,11 @@ namespace HEROsMod.HEROsModServices
 {
 	internal class InventoryManager : HEROsModService
 	{
-		private static float scale = .5f;
+		private static readonly float scale = .5f;
 
-		private static Player player
-		{
-			get { return Main.player[Main.myPlayer]; }
-		}
+		private static Player Player => Main.player[Main.myPlayer];
 
-		private static bool[] lockedSlots = new bool[40];
+		private static readonly bool[] lockedSlots = new bool[40];
 
 		public static string categoryName = "Inventory Manager";
 
@@ -25,18 +22,12 @@ namespace HEROsMod.HEROsModServices
 		private static KeyBinding kSortInventory;
 		private static KeyBinding kSwapHotbar;
 
-		private static int[] _itemSortArray;
+		private static readonly int[] _itemSortArray;
 		private static bool Loaded;
 
-		public InventoryManager()
-		{
-            _name = "Inventory Manager";
-		}
+		public InventoryManager() => _name = "Inventory Manager";
 
-		public override void Unload()
-		{
-			Loaded = false;
-		}
+		public override void Unload() => Loaded = false;
 
 		public static void SetKeyBindings()
 		{
@@ -86,13 +77,13 @@ namespace HEROsMod.HEROsModServices
 			Item[] tempItems = new Item[10];
 			for (int i = 0; i < 10; i++)
 			{
-				tempItems[i] = (Item)player.inventory[i].Clone();
-				player.inventory[i] = (Item)player.inventory[40 + i].Clone();
+				tempItems[i] = (Item)Player.inventory[i].Clone();
+				Player.inventory[i] = (Item)Player.inventory[40 + i].Clone();
 			}
 
 			for (int i = 0; i < 10; i++)
 			{
-				player.inventory[40 + i] = (Item)tempItems[i].Clone();
+				Player.inventory[40 + i] = (Item)tempItems[i].Clone();
 			}
 			Main.PlaySound(7, -1, -1, 1);
 		}
@@ -122,9 +113,6 @@ namespace HEROsMod.HEROsModServices
 			}
 		}
 
-		public override void Draw(SpriteBatch spriteBatch)
-		{
-			DrawLocks(spriteBatch);
-		}
+		public override void Draw(SpriteBatch spriteBatch) => DrawLocks(spriteBatch);
 	}
 }

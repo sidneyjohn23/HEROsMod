@@ -19,28 +19,24 @@ namespace HEROsMod.HEROsModServices {
             instance = this;
             _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/map"));
             HotbarIcon.Tooltip = "Hellevator Builder...";
-            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+            _hotbarIcon.OnLeftClick += _hotbarIcon_onLeftClick;
             window = new HellevatorBuilderWindow() {
                 Visible = false
             };
             AddUIView(window);
         }
 
-        public override void MyGroupUpdated() {
-            HasPermissionToUse = true;
-        }
+		public override void MyGroupUpdated() => HasPermissionToUse = true;
 
-        private void _hotbarIcon_onLeftClick(object sender, EventArgs e) {
-            window.Visible = !window.Visible;
-        }
-    }
+		private void _hotbarIcon_onLeftClick(object sender, EventArgs e) => window.Visible = !window.Visible;
+	}
 
     class HellevatorBuilderWindow : UIWindow {
         public HellevatorBuilderWindow() {
             CenterToParent();
             Position = new Microsoft.Xna.Framework.Vector2(Width / 2, Height / 2);
             CanMove = true;
-            int buttonWidth = 100;
+            //int buttonWidth = 100;
             Height = 150;
             Width = 250;
 
@@ -74,21 +70,19 @@ namespace HEROsMod.HEROsModServices {
                 Y = Height - Spacing
             };
             AddChild(bOK);
-            bOK.onLeftClick += BOK_onLeftClick;
+            bOK.OnLeftClick += BOK_onLeftClick;
             UIButton bCancel = new UIButton("Cancel") {
                 Anchor = AnchorPosition.BottomRight,
                 X = bOK.Position.X - bOK.Width - Spacing,
                 Y = bOK.Position.Y
             };
             AddChild(bCancel);
-            bCancel.onLeftClick += BCancel_onLeftClick;
+            bCancel.OnLeftClick += BCancel_onLeftClick;
         }
 
-        private void BCancel_onLeftClick(object sender, EventArgs e) {
-            Visible = false;
-        }
+		private void BCancel_onLeftClick(object sender, EventArgs e) => Visible = false;
 
-        private void BOK_onLeftClick(object sender, EventArgs e) {
+		private void BOK_onLeftClick(object sender, EventArgs e) {
         }
     }
 }

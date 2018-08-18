@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 
 namespace HEROsMod.HEROsModServices
@@ -15,8 +16,7 @@ namespace HEROsMod.HEROsModServices
 		/// </summary>
 		private UIView _iconView;
 
-		private List<UIView> _view = new List<UIView>();
-		private bool _collapsed = false;
+		private readonly List<UIView> _view = new List<UIView>();
 		private float _lerpAmount = 0f;
 		private UIImage collapseArrow;
 		private UIImage collapseButton;
@@ -26,40 +26,30 @@ namespace HEROsMod.HEROsModServices
 		/// <summary>
 		/// Target Y Position for the hotbar when not hidden.
 		/// </summary>
-		private float _shownYPosition
-		{
-			get
-			{
-				return Main.screenHeight - Height - 12;
-			}
-		}
+		private float _shownYPosition => Main.screenHeight - Height - 12;
 
 		/// <summary>
 		/// Target Y Position for the hotbar when hidden.
 		/// </summary>
-		private float _hiddenYPosition
-		{
-			get
-			{
-				return Main.screenHeight;
-			}
-		}
+		private float _hiddenYPosition => Main.screenHeight;
 
 		/// <summary>
 		/// Returns if the hotbar is collapsed or not
 		/// </summary>
-		public bool Collapsed
-		{
-			get { return _collapsed; }
-		}
+		public bool Collapsed { get; private set; } = false;
 
 		public Vector2 ChatOffsetPosition
 		{
 			get
 			{
 				if (Visible)
+				{
 					return new Vector2(0, Position.Y - Main.screenHeight - collapseArrow.Height);
-				else return Vector2.Zero;
+				}
+				else
+				{
+					return Vector2.Zero;
+				}
 			}
 		}
 
@@ -80,11 +70,15 @@ namespace HEROsMod.HEROsModServices
 			for (int i = 0; i < HEROsMod.ServiceController.Services.Count; i++)
 			{
 				HEROsModService service = HEROsMod.ServiceController.Services[i];
-				if (service.HotbarIcon == null || !service.HasPermissionToUse) continue;
+				if (service.HotbarIcon == null || !service.HasPermissionToUse)
+				{
+					continue;
+				}
+
 				if (service.IsHotbar)
 				{
 					service.Hotbar.buttonView.RemoveAllChildren();
-					service.Hotbar.test();
+					service.Hotbar.Test();
 				}
 				if (service.IsInHotbar/* && service.HotbarParent.buttonView != null*/)
 				{
@@ -101,7 +95,7 @@ namespace HEROsMod.HEROsModServices
 					//_iconView.AddChild(icon);
 					//icon.CenterYAxisToParentCenter();
 
-					service.HotbarParent.test();
+					service.HotbarParent.Test();
 
 					//ModUtils.DebugText("added " + service.Name);
 				}
@@ -118,7 +112,7 @@ namespace HEROsMod.HEROsModServices
 			}
 			if (_iconView.ChildCount > 0)
 			{
-                Width = _iconView.GetLastChild().X + _iconView.GetLastChild().Width + Spacing;
+                Width = _iconView.Children.Last().X + _iconView.Children.Last().Width + Spacing;
 				_iconView.Width = Width;
 			}
 			collapseButton.CenterXAxisToParentCenter();
@@ -155,18 +149,18 @@ namespace HEROsMod.HEROsModServices
 			collapseButton.Position = new Vector2(0, -collapseButton.Height);
 			collapseButton.CenterXAxisToParentCenter();
 			collapseArrow.Position = collapseButton.Position;
-			collapseArrow.onLeftClick += collapseArrow_onLeftClick;
+			collapseArrow.OnLeftClick += CollapseArrow_onLeftClick;
 		}
 
-		private void collapseArrow_onLeftClick(object sender, EventArgs e)
+		private void CollapseArrow_onLeftClick(object sender, EventArgs e)
 		{
-			if (HotBarChild != null && HotBarChild.selected)
+			if (HotBarChild != null && HotBarChild.Selected)
 			{
-				HotBarChild.selected = false;
+				HotBarChild.Selected = false;
 				//HotBarChild = null;
 				return;
 			}
-			_collapsed = !Collapsed;
+			Collapsed = !Collapsed;
 			if (Collapsed)
 			{
 				//if(HotBarChild != null)
@@ -195,12 +189,18 @@ namespace HEROsMod.HEROsModServices
 			if (Collapsed)
 			{
 				_lerpAmount -= ModUtils.DeltaTime * moveSpeed;
-				if (_lerpAmount < 0f) _lerpAmount = 0f;
+				if (_lerpAmount < 0f)
+				{
+					_lerpAmount = 0f;
+				}
 			}
 			else
 			{
 				_lerpAmount += ModUtils.DeltaTime * moveSpeed;
-				if (_lerpAmount > 1f) _lerpAmount = 1f;
+				if (_lerpAmount > 1f)
+				{
+					_lerpAmount = 1f;
+				}
 			}
 			float yPos = MathHelper.SmoothStep(_hiddenYPosition, _shownYPosition, _lerpAmount);
             Position = new Vector2(X, yPos);
@@ -209,9 +209,6 @@ namespace HEROsMod.HEROsModServices
 			base.Update();
 		}
 
-		protected override bool IsMouseInside()
-		{
-			return base.IsMouseInside() || collapseArrow.MouseInside;
-		}
+		protected override bool IsMouseInside() => base.IsMouseInside() || collapseArrow.MouseInside;
 	}
 }

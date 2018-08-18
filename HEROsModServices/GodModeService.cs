@@ -14,19 +14,19 @@ namespace HEROsMod.HEROsModServices
 
 		public static bool Enabled
 		{
-			get { return _enabled; }
+			get => _enabled;
 			set
 			{
-                GodModeToggled?.Invoke(value, _enabled);
-                _enabled = value;
+				GodModeToggled?.Invoke(value, _enabled);
+				_enabled = value;
 			}
 		}
 
 		public GodModeService()
 		{
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/godMode")/*Main.itemTexture[1990]*/);
-			this.HotbarIcon.Tooltip = HEROsMod.HeroText("ToggleGodMode");
-			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
+			_hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/godMode")/*Main.itemTexture[1990]*/);
+			HotbarIcon.Tooltip = HEROsMod.HeroText("ToggleGodMode");
+			HotbarIcon.OnLeftClick += HotbarIcon_onLeftClick;
 			GodModeToggled += GodModeService_GodModeToggled;
 			Enabled = false;
 		}
@@ -36,14 +36,20 @@ namespace HEROsMod.HEROsModServices
 			if (enabled)
 			{
 				if (enabled != prevEnabled)
+				{
 					Main.NewText(HEROsMod.HeroText("GodModeEnabled"));
-				this.HotbarIcon.Opacity = 1f;
+				}
+
+				HotbarIcon.Opacity = 1f;
 			}
 			else
 			{
 				if (enabled != prevEnabled)
+				{
 					Main.NewText(HEROsMod.HeroText("GodModeDisabled"));
-				this.HotbarIcon.Opacity = .5f;
+				}
+
+				HotbarIcon.Opacity = .5f;
 			}
 		}
 

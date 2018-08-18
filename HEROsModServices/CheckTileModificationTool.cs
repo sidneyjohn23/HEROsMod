@@ -14,16 +14,13 @@ namespace HEROsMod.HEROsModServices
 		public CheckTileModificationTool()
 		{
 			MultiplayerOnly = true;
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/tileModification")/*Main.itemTexture[1999]*/);
-			this.HotbarIcon.Tooltip = HEROsMod.HeroText("CheckTileForLastModification");
-			this.HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
-			this.HasPermissionToUse = true;
+			_hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/tileModification")/*Main.itemTexture[1999]*/);
+			HotbarIcon.Tooltip = HEROsMod.HeroText("CheckTileForLastModification");
+			HotbarIcon.OnLeftClick += HotbarIcon_onLeftClick;
+			HasPermissionToUse = true;
 		}
 
-		private void HotbarIcon_onLeftClick(object sender, EventArgs e)
-		{
-			ListeningForInput = !ListeningForInput;
-		}
+		private void HotbarIcon_onLeftClick(object sender, EventArgs e) => ListeningForInput = !ListeningForInput;
 
 		public override void Update()
 		{
@@ -53,11 +50,7 @@ namespace HEROsMod.HEROsModServices
 			}
 		}
 
-		public override void MyGroupUpdated()
-		{
-            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("CheckTiles");
-			//base.MyGroupUpdated();
-		}
+		public override void MyGroupUpdated() => HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("CheckTiles");//base.MyGroupUpdated();
 
 		public override void Destroy()
 		{

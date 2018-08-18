@@ -30,7 +30,7 @@ namespace HEROsMod.HEROsModServices
 
 		internal static void HotKeyPressed(string name)
 		{
-			foreach (var hotkey in bindings)
+			foreach (KeyBinding hotkey in bindings)
 			{
 				if (hotkey.name == name)
 				{
@@ -42,7 +42,7 @@ namespace HEROsMod.HEROsModServices
 
 		internal static void DoPreviousKeyState()
 		{
-			foreach (var hotkey in bindings)
+			foreach (KeyBinding hotkey in bindings)
 			{
 				hotkey.PreviousDown = hotkey.Down;
 				hotkey.Down = false;
@@ -165,13 +165,7 @@ namespace HEROsMod.HEROsModServices
 	{
 		public string name;
 
-		private bool _keyInputLocked
-		{
-			get
-			{
-				return Main.blockInput || Main.editChest || Main.editSign || Main.drawingPlayerChat;
-			}
-		}
+		private bool _keyInputLocked => Main.blockInput || Main.editChest || Main.editSign || Main.drawingPlayerChat;
 
 		public bool Down;
 		public bool PreviousDown;
@@ -180,7 +174,10 @@ namespace HEROsMod.HEROsModServices
 		{
 			get
 			{
-				if (_keyInputLocked) return false;
+				if (_keyInputLocked)
+				{
+					return false;
+				}
 				//if (key != Keys.None)
 				{
 					//if (Main.keyState.IsKeyDown(key) && ModUtils.PreviousKeyboardState.IsKeyUp(key))
@@ -197,7 +194,10 @@ namespace HEROsMod.HEROsModServices
 		{
 			get
 			{
-				if (_keyInputLocked) return true;
+				if (_keyInputLocked)
+				{
+					return true;
+				}
 				//if (key != Keys.None)
 				{
 					if (!Down)
@@ -214,7 +214,10 @@ namespace HEROsMod.HEROsModServices
 		{
 			get
 			{
-				if (_keyInputLocked) return false;
+				if (_keyInputLocked)
+				{
+					return false;
+				}
 				//if (key != Keys.None)
 				{
 					//if (Main.keyState.IsKeyDown(key))
@@ -227,10 +230,7 @@ namespace HEROsMod.HEROsModServices
 			}
 		}
 
-		public KeyBinding(string name)
-		{
-			this.name = name;
-		}
+		public KeyBinding(string name) => this.name = name;
 	}
 
 	//class BindCategory

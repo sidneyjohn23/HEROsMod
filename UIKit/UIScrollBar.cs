@@ -21,29 +21,16 @@ namespace HEROsMod.UIKit
 					{
 						fillColors[x] = edgeColors[x + (ScrollbarTexture.Height - 1) * ScrollbarTexture.Width];
 					}
-					scrollbarFill = new Texture2D(UIView.graphics, fillColors.Length, 1);
+					scrollbarFill = new Texture2D(Graphics, fillColors.Length, 1);
 					scrollbarFill.SetData(fillColors);
 				}
 				return scrollbarFill;
 			}
 		}
 
-		private float height = 100;
+		public UIScrollBar() => Height = 100;
 
-		protected override float GetHeight()
-		{
-			return height;
-		}
-
-		protected override void SetHeight(float height)
-		{
-			this.height = height;
-		}
-
-		protected override float GetWidth()
-		{
-			return ScrollbarTexture.Width;
-		}
+		protected new float Width => ScrollbarTexture.Width;
 
 		private void DrawScrollBar(SpriteBatch spriteBatch)
 		{
@@ -56,7 +43,7 @@ namespace HEROsMod.UIKit
 			spriteBatch.Draw(ScrollbarTexture, pos, null, Color.White * Opacity, 0f, Origin, 1f, SpriteEffects.FlipVertically, 0f);
 		}
 
-		public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch)
+		public override void Draw(SpriteBatch spriteBatch)
 		{
 			DrawScrollBar(spriteBatch);
 			base.Draw(spriteBatch);

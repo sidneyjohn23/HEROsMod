@@ -8,15 +8,16 @@ namespace HEROsMod.HEROsModNetwork
     {
         public static Dictionary<int, TileChange[,]> TileChanges { get; set; }
 
-        public static void Init()
-        {
-            TileChanges = new Dictionary<int, TileChange[,]>();
-        }
+		public static void Init() => TileChanges = new Dictionary<int, TileChange[,]>();
 
-        public static void RecordChanges(HEROsModPlayer player, int x, int y)
+		public static void RecordChanges(HEROsModPlayer player, int x, int y)
         {
-            if (player.ID < 0) return;
-            if (!TileChanges.ContainsKey(player.ID))
+            if (player.ID < 0)
+			{
+				return;
+			}
+
+			if (!TileChanges.ContainsKey(player.ID))
             {
                 TileChanges.Add(player.ID, new TileChange[Main.maxTilesX, Main.maxTilesY]);
             }
@@ -28,8 +29,12 @@ namespace HEROsMod.HEROsModNetwork
 
         public static void RestoreTileChangesMadeByPlayer(int playerID)
         {
-            if (!TileChanges.ContainsKey(playerID)) return;
-            TileChange[,] changes = TileChanges[playerID];
+            if (!TileChanges.ContainsKey(playerID))
+			{
+				return;
+			}
+
+			TileChange[,] changes = TileChanges[playerID];
             for (int y = 0; y < changes.GetLength(1); y++)
             {
                 for (int x = 0; x < changes.GetLength(0); x++)

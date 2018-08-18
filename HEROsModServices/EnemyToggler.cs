@@ -15,11 +15,11 @@ namespace HEROsMod.HEROsModServices
 
 		public EnemyToggler()
 		{
-			this._name = "Enemy Toggler";
-			this._hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/npcIcon"));
-			this._hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
-			this.HotbarIcon.Tooltip = HEROsMod.HeroText("DisableEnemySpawns");
-			this._hotbarIcon.Opacity = 1f;
+			_name = "Enemy Toggler";
+			_hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/npcIcon"));
+			_hotbarIcon.OnLeftClick += _hotbarIcon_onLeftClick;
+			HotbarIcon.Tooltip = HEROsMod.HeroText("DisableEnemySpawns");
+			_hotbarIcon.Opacity = 1f;
 			HEROsModNetwork.GeneralMessages.EnemiesToggledByServer += GeneralMessages_EnemiesToggledByServer;
 		}
 
@@ -27,13 +27,13 @@ namespace HEROsMod.HEROsModServices
 		{
 			if (enemiesCanSpawn)
 			{
-				this._hotbarIcon.Opacity = 1f;
-				this.HotbarIcon.Tooltip = HEROsMod.HeroText("DisableEnemySpawns");
+				_hotbarIcon.Opacity = 1f;
+				HotbarIcon.Tooltip = HEROsMod.HeroText("DisableEnemySpawns");
 			}
 			else
 			{
-				this._hotbarIcon.Opacity = .5f;
-				this.HotbarIcon.Tooltip = HEROsMod.HeroText("EnableEnemySpawns");
+				_hotbarIcon.Opacity = .5f;
+				HotbarIcon.Tooltip = HEROsMod.HeroText("EnableEnemySpawns");
 			}
 		}
 
@@ -53,7 +53,10 @@ namespace HEROsMod.HEROsModServices
 				if (Main.npc[i] != null && !Main.npc[i].townNPC && !(Main.npc[i].netID == NPCID.LunarTowerNebula || Main.npc[i].netID == NPCID.LunarTowerSolar || Main.npc[i].netID == NPCID.LunarTowerStardust || Main.npc[i].netID == NPCID.LunarTowerVortex))
 				{
 					Main.npc[i].life = 0;
-					if (Main.netMode == 2) NetMessage.SendData(23, -1, -1, null, i, 0f, 0f, 0f, 0);
+					if (Main.netMode == 2)
+					{
+						NetMessage.SendData(23, -1, -1, null, i, 0f, 0f, 0f, 0);
+					}
 				}
 			}
 		}
@@ -69,26 +72,26 @@ namespace HEROsMod.HEROsModServices
 				ToggleNPCs();
 				if (EnemiesAllowed)
 				{
-					this._hotbarIcon.Opacity = 1f;
-					this.HotbarIcon.Tooltip = HEROsMod.HeroText("DisableEnemySpawns");
+					_hotbarIcon.Opacity = 1f;
+					HotbarIcon.Tooltip = HEROsMod.HeroText("DisableEnemySpawns");
 				}
 				else
 				{
-					this._hotbarIcon.Opacity = .5f;
-					this.HotbarIcon.Tooltip = HEROsMod.HeroText("EnableEnemySpawns");
+					_hotbarIcon.Opacity = .5f;
+					HotbarIcon.Tooltip = HEROsMod.HeroText("EnableEnemySpawns");
 				}
 				if(EnemiesAllowed)
+				{
 					Main.NewText(HEROsMod.HeroText("EnemySpawnsEnabled"));
+				}
 				else
+				{
 					Main.NewText(HEROsMod.HeroText("EnemySpawnsDisabled"));
+				}
 			}
 		}
 
-		public override void MyGroupUpdated()
-		{
-            HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ToggleEnemies");
-			//base.MyGroupUpdated();
-		}
+		public override void MyGroupUpdated() => HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ToggleEnemies");//base.MyGroupUpdated();
 
 		public override void Destroy()
 		{

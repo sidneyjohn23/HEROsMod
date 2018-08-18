@@ -42,31 +42,18 @@ namespace HEROsMod.HEROsModNetwork
             new PermissionInfo("PurifyWorld", "Purify the World")
         };
 
-        private bool _isAdmin = false;
-        private string _name = String.Empty;
-        public int ID { get; set; }
+		public int ID { get; set; }
         public Dictionary<string, bool> Permissions { get; set; }
 
-        public string Name
-        {
-            get
-            {
-                return _name;
-            }
-        }
+		public string Name { get; } = string.Empty;
+		public bool IsAdmin { get; set; } = false;
 
-        public bool IsAdmin
-        {
-            get { return _isAdmin; }
-            set { _isAdmin = value; }
-        }
-
-        public Group(string name)
+		public Group(string name)
         {
             ID = -1;
-            _name = name;
+            Name = name;
             Permissions = new Dictionary<string, bool>();
-            foreach (var p in PermissionList)
+            foreach (PermissionInfo p in PermissionList)
             {
                 Permissions.Add(p.Key, false);
             }
@@ -77,8 +64,11 @@ namespace HEROsMod.HEROsModNetwork
         {
             if (Permissions.ContainsKey(permissionName))
             {
-                if (Permissions[permissionName]) return true;
-            }
+                if (Permissions[permissionName])
+				{
+					return true;
+				}
+			}
             return false;
         }
 
@@ -99,7 +89,7 @@ namespace HEROsMod.HEROsModNetwork
                         }
                     }
                     writer.Write(numberOfPermissions);
-                    foreach (var p in permissions)
+                    foreach (string p in permissions)
                     {
                         writer.Write(p);
                     }
@@ -114,7 +104,7 @@ namespace HEROsMod.HEROsModNetwork
         {
             for (int i = 0; i < Permissions.Count; i++)
             {
-                var entry = Permissions.ElementAt(i);
+				KeyValuePair<string, bool> entry = Permissions.ElementAt(i);
                 Permissions[entry.Key] = false;
             }
         }
@@ -158,10 +148,10 @@ namespace HEROsMod.HEROsModNetwork
         public void MakeAdmin()
         {
             ID = -1;
-            _isAdmin = true;
+            IsAdmin = true;
             for (int i = 0; i < Permissions.Count; i++)
             {
-                var entry = Permissions.ElementAt(i);
+				KeyValuePair<string, bool> entry = Permissions.ElementAt(i);
                 Permissions[entry.Key] = true;
             }
         }

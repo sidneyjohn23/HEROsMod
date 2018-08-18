@@ -6,33 +6,37 @@ using Terraria;
 
 namespace HEROsMod.HEROsModServices {
     internal class SelectionTool {
-        private static bool _dragging = false;
+        private static readonly bool _dragging = false;
         private static Vector2 _anchor = Vector2.Zero;
         public static bool ListeningForInput { get; set; }
         public static bool Visible { get; set; }
         public static int X { get; set; }
         public static int Y { get; set; }
 
-        public static Vector2 Position {
-            get { return new Vector2(X, Y); }
-            set {
-                X = (int) value.X;
-                Y = (int) value.Y;
-            }
-        }
+        public static Vector2 Position
+		{
+			get => new Vector2(X, Y);
+			set
+			{
+				X = (int)value.X;
+				Y = (int)value.Y;
+			}
+		}
 
-        public static int Width { get; set; }
+		public static int Width { get; set; }
         public static int Height { get; set; }
 
-        public static Vector2 Size {
-            get { return new Vector2(Width, Height); }
-            set {
-                Width = (int) value.X;
-                Height = (int) value.Y;
-            }
-        }
+        public static Vector2 Size
+		{
+			get => new Vector2(Width, Height);
+			set
+			{
+				Width = (int)value.X;
+				Height = (int)value.Y;
+			}
+		}
 
-        public static Vector2 LeftTop = Vector2.Zero;
+		public static Vector2 LeftTop = Vector2.Zero;
 
         public static Vector2 BottomRight = Vector2.Zero;
 

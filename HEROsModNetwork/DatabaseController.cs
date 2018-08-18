@@ -78,7 +78,7 @@ namespace HEROsMod.HEROsModNetwork
 
     internal class DatabaseController
     {
-        private static string jsonDatabaseFilename = "HEROsModDatabase";
+        private static readonly string jsonDatabaseFilename = "HEROsModDatabase";
 
         private static HEROsModDatabase database;
         private static DatabaseWorld currentDatabaseWorld;
@@ -130,12 +130,9 @@ namespace HEROsMod.HEROsModNetwork
             }
         }
 
-        internal static void SaveSetting()
-        {
-            SaveSetting(jsonDatabaseFilename);
-        }
+		internal static void SaveSetting() => SaveSetting(jsonDatabaseFilename);
 
-        public static void SaveSetting(string settingName)
+		public static void SaveSetting(string settingName)
         {
             if (!Main.dedServ && Main.netMode == 2)
             {
@@ -145,7 +142,7 @@ namespace HEROsMod.HEROsModNetwork
             if (currentDatabaseWorld != null)
             {
                 currentDatabaseWorld.waypoints.Clear();
-                foreach (var waypoint in Waypoints.points)
+                foreach (Waypoint waypoint in Waypoints.points)
                 {
                     currentDatabaseWorld.waypoints.Add(new DatabaseWaypoint() { name = waypoint.name, x = waypoint.position.X, y = waypoint.position.Y });
                 }
@@ -174,7 +171,7 @@ namespace HEROsMod.HEROsModNetwork
 
         public static void InitializeWorld()
         {
-            foreach (var world in database.worlds)
+            foreach (DatabaseWorld world in database.worlds)
             {
                 if (world.worldID == Main.worldID)
                 {
@@ -188,7 +185,7 @@ namespace HEROsMod.HEROsModNetwork
                 SaveSetting();
             }
             Waypoints.ClearPoints();
-            foreach (var waypoint in currentDatabaseWorld.waypoints)
+            foreach (DatabaseWaypoint waypoint in currentDatabaseWorld.waypoints)
             {
                 Waypoints.AddWaypoint(waypoint.name, new Vector2(waypoint.x, waypoint.y));
             }
@@ -232,7 +229,7 @@ namespace HEROsMod.HEROsModNetwork
 
         public static bool Login(ref string username, string password, ref int playerID, ref int groupID)
         {
-            foreach (var user in database.players)
+            foreach (DatabasePlayer user in database.players)
             {
 
                 if (user.username.ToLower() == username.ToLower() && user.password == BitConverter.ToString(md5hash.ComputeHash(password.ToByteArray())))
@@ -280,7 +277,7 @@ namespace HEROsMod.HEROsModNetwork
         private static int GetAvailablePlayerID()
         {
             int next = 0;
-            foreach (var item in database.players)
+            foreach (DatabasePlayer item in database.players)
             {
                 if (item.ID >= next)
                 {
@@ -293,7 +290,7 @@ namespace HEROsMod.HEROsModNetwork
         private static int GetAvailableGroupID()
         {
             int next = 0;
-            foreach (var item in database.groups)
+            foreach (DatabaseGroup item in database.groups)
             {
                 if (item.ID >= next)
                 {
@@ -306,7 +303,7 @@ namespace HEROsMod.HEROsModNetwork
         private static int GetAvailableRegionID()
         {
             int next = 0;
-            foreach (var item in currentDatabaseWorld.regions)
+            foreach (DatabaseRegion item in currentDatabaseWorld.regions)
             {
                 if (item.ID >= next)
                 {
@@ -316,12 +313,9 @@ namespace HEROsMod.HEROsModNetwork
             return next;
         }
 
-        public static UserWithID[] GetRegisteredUsers()
-        {
-            return database.players.Select((x) => new UserWithID() { Username = x.username, ID = x.ID, groupID = x.group }).ToArray();
-        }
+		public static UserWithID[] GetRegisteredUsers() => database.players.Select((x) => new UserWithID() { Username = x.username, ID = x.ID, groupID = x.group }).ToArray();
 
-        public static void SetPlayerGroup(int playerID, int groupID)
+		public static void SetPlayerGroup(int playerID, int groupID)
         {
             DatabasePlayer p = database.players.Where(x => x.ID == playerID).FirstOrDefault();
             if (p != null)
@@ -331,12 +325,9 @@ namespace HEROsMod.HEROsModNetwork
             SaveSetting(jsonDatabaseFilename);
         }
 
-        private static bool HasDefaultGroup()
-        {
-            return database.groups.Any(x => x.name == "Default");
-        }
+		private static bool HasDefaultGroup() => database.groups.Any(x => x.name == "Default");
 
-        public static void AddGroup(ref Group group)
+		public static void AddGroup(ref Group group)
         {
             int newid = GetAvailableGroupID();
             DatabaseGroup newGroup = new DatabaseGroup() { name = group.Name, ID = newid };
@@ -352,7 +343,7 @@ namespace HEROsMod.HEROsModNetwork
             DatabaseGroup databaseGroup = database.groups.Where(x => x.ID == group.ID).FirstOrDefault();
             if (databaseGroup != null)
             {
-                foreach (var player in database.players)
+                foreach (DatabasePlayer player in database.players)
                 {
                     if (player.group == databaseGroup.ID)
                     {

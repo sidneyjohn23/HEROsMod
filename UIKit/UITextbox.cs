@@ -7,7 +7,7 @@ namespace HEROsMod.UIKit
 {
 	internal class UITextbox : UIView
 	{
-		private RasterizerState _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
+		private readonly RasterizerState _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
 		internal static Texture2D textboxBackground;
 		internal static Texture2D textboxFill;
 
@@ -24,23 +24,19 @@ namespace HEROsMod.UIKit
 					{
 						fillColors[y] = edgeColors[textboxBackground.Width - 1 + y * textboxBackground.Width];
 					}
-					textboxFill = new Texture2D(UIView.graphics, 1, fillColors.Length);
+					textboxFill = new Texture2D(UIView.Graphics, 1, fillColors.Length);
 					textboxFill.SetData(fillColors);
 				}
 				return textboxFill;
 			}
 		}
-
-		private bool focused = false;
-		public bool HadFocus { get { return focused; } }
+		public bool HadFocus { get; private set; } = false;
 		public bool Numeric { get; set; }
 		public bool HasDecimal { get; set; }
-		private static float blinkTime = 1f;
+		private static readonly float blinkTime = 1f;
 		private static float timer = 0f;
 
 		//bool eventSet = false;
-		private float width = 200;
-
 		public delegate void KeyPressedHandler(object sender, char key);
 
 		public event EventHandler OnTabPress;
@@ -53,45 +49,33 @@ namespace HEROsMod.UIKit
 
 		private bool drawCarrot = false;
 		private UILabel label = new UILabel();
-		private static int padding = 4;
-		private string text = "";
+		private static readonly int padding = 4;
 
-		public string Text
-		{
-			get { return text; }
-			set { text = value; }
-		}
+		public string Text { get; set; } = "";
 
-		private int maxCharacters = 20;
+		public int MaxCharacters { get; set; } = 20;
 
-		public int MaxCharacters
-		{
-			get { return maxCharacters; }
-			set { maxCharacters = value; }
-		}
+		public bool PasswordBox { get; set; } = false;
 
-		private bool passwordBox = false;
-
-		public bool PasswordBox
-		{
-			get { return passwordBox; }
-			set { passwordBox = value; }
-		}
-
-		private string passwordString
+		private string PasswordString
 		{
 			get
 			{
 				string result = "";
-				for (int i = 0; i < Text.Length; i++) result += "*";
+				for (int i = 0; i < Text.Length; i++)
+				{
+					result += "*";
+				}
+
 				return result;
 			}
 		}
 
 		public UITextbox()
 		{
-			this.onLeftClick += new EventHandler(UITextbox_onLeftClick);
-			this.onRightClick += (a, b) => Text = "";
+			Width = 200;
+			OnLeftClick += new EventHandler(UITextbox_onLeftClick);
+			OnRightClick += (a, b) => Text = "";
 			label.ForegroundColor = Color.Black;
 			label.Scale = Height / label.Height;
 			label.TextOutline = false;
@@ -101,16 +85,13 @@ namespace HEROsMod.UIKit
             AddChild(label);
 		}
 
-		private void UITextbox_onLeftClick(object sender, EventArgs e)
-		{
-			Focus();
-		}
+		private void UITextbox_onLeftClick(object sender, EventArgs e) => Focus();
 
 		public void Focus()
 		{
-			if (!focused)
+			if (!HadFocus)
 			{
-				focused = true;
+				HadFocus = true;
 				//		Main.blockInput = true;
 				//		Main.clrInput();
 				timer = 0f;
@@ -123,9 +104,9 @@ namespace HEROsMod.UIKit
 
 		public void Unfocus()
 		{
-			if (focused)
+			if (HadFocus)
 			{
-				focused = false;
+				HadFocus = false;
 				//		Main.blockInput = false;
 
 				OnLostFocus?.Invoke(this, EventArgs.Empty);
@@ -204,9 +185,9 @@ namespace HEROsMod.UIKit
 			label.Position = new Vector2(padding, 0);
 
 			Vector2 size = label.font.MeasureString(Text + "|") * label.Scale;
-			if (passwordBox)
+			if (PasswordBox)
 			{
-				size = label.font.MeasureString(passwordString + "|") * label.Scale;
+				size = label.font.MeasureString(PasswordString + "|") * label.Scale;
 			}
 			if (size.X > Width - padding * 2)
 			{
@@ -214,20 +195,7 @@ namespace HEROsMod.UIKit
 			}
 		}
 
-		protected override float GetWidth()
-		{
-			return width;
-		}
-
-		protected override void SetWidth(float width)
-		{
-			this.width = width;
-		}
-
-		protected override float GetHeight()
-		{
-			return textboxBackground.Height;
-		}
+		protected new float Height => textboxBackground.Height;
 
 		public override void Update()
 		{
@@ -236,18 +204,28 @@ namespace HEROsMod.UIKit
 			{
 				Unfocus();
 			}
-			if (focused)
+			if (HadFocus)
 			{
 				timer += ModUtils.DeltaTime;
-				if (timer < blinkTime / 2) drawCarrot = true;
-				else drawCarrot = false;
-				if (timer >= blinkTime) timer = 0;
+				if (timer < blinkTime / 2)
+				{
+					drawCarrot = true;
+				}
+				else
+				{
+					drawCarrot = false;
+				}
+
+				if (timer >= blinkTime)
+				{
+					timer = 0;
+				}
 			}
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			if (focused)
+			if (HadFocus)
 			{
 				Terraria.GameInput.PlayerInput.WritingText = true;
 				Main.instance.HandleIME();
@@ -278,8 +256,16 @@ namespace HEROsMod.UIKit
 			pos.X += fillWidth;
 			spriteBatch.Draw(textboxBackground, pos, null, Color.White, 0f, Origin, 1f, SpriteEffects.FlipHorizontally, 0f);
 			string drawString = Text;
-			if (PasswordBox) drawString = passwordString;
-			if (drawCarrot && focused) drawString += "|";
+			if (PasswordBox)
+			{
+				drawString = PasswordString;
+			}
+
+			if (drawCarrot && HadFocus)
+			{
+				drawString += "|";
+			}
+
 			label.Text = drawString;
 
 			pos = DrawPosition - Origin;

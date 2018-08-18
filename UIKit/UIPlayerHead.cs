@@ -6,14 +6,9 @@ namespace HEROsMod.UIKit
 {
 	internal class UIPlayerHead : UIView
 	{
-		private Player _player;
 		public bool lookRight = true;
 
-		public Player DrawPlayer
-		{
-			get { return _player; }
-			set { _player = value; }
-		}
+		public Player DrawPlayer { get; set; }
 
 		public UIPlayerHead(Player player)
 		{

@@ -17,15 +17,9 @@ namespace HEROsMod.UIKit.UIComponents
 		//internal UIHotbar parentHotbar;
 		internal UIView HotBarParent;
 
-		internal float shownPosition
-		{
-			get
-			{
-				return (float)Main.screenHeight - base.Height * 2 - 12f + 6;
-			}
-		}
+		internal float ShownPosition => (float)Main.screenHeight - base.Height * 2 - 12f + 6;
 
-		internal float hiddenPosition
+		internal float HiddenPosition
 		{
 			get
 			{
@@ -57,7 +51,7 @@ namespace HEROsMod.UIKit.UIComponents
 			Visible = true;
 		}
 
-		public virtual void test()
+		public virtual void Test()
 		{
 		}
 
@@ -66,11 +60,9 @@ namespace HEROsMod.UIKit.UIComponents
 		public bool hidden;
 		internal bool arrived;
 
-		private bool _selected;
-
-		internal bool selected
+		internal bool Selected
 		{
-			get { return _selected; }
+			get => Selected;
 			set
 			{
 				if (value == false)
@@ -84,12 +76,12 @@ namespace HEROsMod.UIKit.UIComponents
 					//HotBarParent
 					if (HEROsMod.ServiceHotbar.HotBarChild != null && HEROsMod.ServiceHotbar.HotBarChild != this)
 					{
-						HEROsMod.ServiceHotbar.HotBarChild.selected = false;
+						HEROsMod.ServiceHotbar.HotBarChild.Selected = false;
 					}
 					HEROsMod.ServiceHotbar.HotBarChild = this;
 				}
 				arrived = false;
-				_selected = value;
+				Selected = value;
 			}
 		}
 
@@ -114,8 +106,8 @@ namespace HEROsMod.UIKit.UIComponents
                         //	Main.NewText("Arrived, Not Visible");
                         Visible = false;
 					}
-					float y = MathHelper.SmoothStep(hiddenPosition, shownPosition, lerpAmount);
-					base.Position = new Vector2(base.Position.X, y);
+					float y = MathHelper.SmoothStep(HiddenPosition, ShownPosition, lerpAmount);
+					Position = new Vector2(Position.X, y);
 				}
 				else
 				{
@@ -126,8 +118,8 @@ namespace HEROsMod.UIKit.UIComponents
 						arrived = true;
 						//	Main.NewText("Arrived, Visible");
 					}
-					float y2 = MathHelper.SmoothStep(hiddenPosition, shownPosition, lerpAmount);
-					base.Position = new Vector2(base.Position.X, y2);
+					float y2 = MathHelper.SmoothStep(HiddenPosition, ShownPosition, lerpAmount);
+					Position = new Vector2(Position.X, y2);
 				}
 			}
 		}
@@ -143,7 +135,7 @@ namespace HEROsMod.UIKit.UIComponents
 				//Parent.Position.Y
 				//		Main.NewText((int)Parent.Position.Y + " " + (int)shownPosition);
 				//	Rectangle scissorRectangle = new Rectangle((int)(base.X - base.Width / 2), (int)(shownPosition), (int)base.Width, (int)base.Height);
-				Rectangle scissorRectangle = new Rectangle((int)(base.X - base.Width / 2), (int)(shownPosition), (int)base.Width, (int)(HotBarParent.Position.Y - shownPosition));
+				Rectangle scissorRectangle = new Rectangle((int)(base.X - Width / 2), (int)(ShownPosition), (int)Width, (int)(HotBarParent.Position.Y - ShownPosition));
 				/*if (scissorRectangle.X < 0)
 				{
 					scissorRectangle.Width += scissorRectangle.X;
