@@ -165,9 +165,9 @@ namespace HEROsMod.HEROsModServices
 	{
 		public string name;
 
-		private bool _keyInputLocked => Main.blockInput || Main.editChest || Main.editSign || Main.drawingPlayerChat;
+        private bool _keyInputLocked => Main.blockInput || Main.editChest || Main.editSign || Main.drawingPlayerChat;
 
-		public bool Down;
+        public bool Down;
 		public bool PreviousDown;
 
 		public bool KeyPressed
@@ -175,11 +175,11 @@ namespace HEROsMod.HEROsModServices
 			get
 			{
 				if (_keyInputLocked)
-				{
-					return false;
-				}
-				//if (key != Keys.None)
-				{
+                {
+                    return false;
+                }
+                //if (key != Keys.None)
+                {
 					//if (Main.keyState.IsKeyDown(key) && ModUtils.PreviousKeyboardState.IsKeyUp(key))
 					if (Down && !PreviousDown)
 					{
@@ -195,11 +195,11 @@ namespace HEROsMod.HEROsModServices
 			get
 			{
 				if (_keyInputLocked)
-				{
-					return true;
-				}
-				//if (key != Keys.None)
-				{
+                {
+                    return true;
+                }
+                //if (key != Keys.None)
+                {
 					if (!Down)
 					//if (Main.keyState.IsKeyUp(key))
 					{
@@ -215,11 +215,11 @@ namespace HEROsMod.HEROsModServices
 			get
 			{
 				if (_keyInputLocked)
-				{
-					return false;
-				}
-				//if (key != Keys.None)
-				{
+                {
+                    return false;
+                }
+                //if (key != Keys.None)
+                {
 					//if (Main.keyState.IsKeyDown(key))
 					if (Down)
 					{
@@ -230,7 +230,10 @@ namespace HEROsMod.HEROsModServices
 			}
 		}
 
-		public KeyBinding(string name) => this.name = name;
+		public KeyBinding(string name)
+		{
+			this.name = name;
+		}
 	}
 
 	//class BindCategory

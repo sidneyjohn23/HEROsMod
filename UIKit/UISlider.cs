@@ -25,7 +25,7 @@ namespace HEROsMod.UIKit
 					{
 						fillColors[y] = edgeColors[barTexture.Width - 1 + y * barTexture.Width];
 					}
-					barFill = new Texture2D(UIView.Graphics, 1, fillColors.Length);
+					barFill = new Texture2D(UIView.graphics, 1, fillColors.Length);
 					barFill.SetData(fillColors);
 				}
 				return barFill;
@@ -34,12 +34,14 @@ namespace HEROsMod.UIKit
 
 		public delegate void SliderEventHandler(object sender, float value);
 
-		public event SliderEventHandler ValueChanged;
+		public event SliderEventHandler valueChanged;
+
+		private float width = 100f;
 		private float value = 0f;
 
 		public float Value
 		{
-			get => value;
+			get { return value; }
 			set
 			{
 				if (value < MinValue)
@@ -54,23 +56,28 @@ namespace HEROsMod.UIKit
 			}
 		}
 
+		private float minValue = 0f;
+		private float maxValue = 1f;
+
 		public float MinValue
 		{
-			get;
-			set;
-		} = 0f;
+			get { return minValue; }
+			set { minValue = value; }
+		}
 
 		public float MaxValue
 		{
-			get;
-			set;
-		} = 1f;
+			get { return maxValue; }
+			set { maxValue = value; }
+		}
 
-		protected new float Width { get; set; } = 100f;
+        protected override void SetWidth(float width) => this.width = width;
 
-		protected new float Height => sliderTexture.Height;
+        protected override float GetWidth() => width;
 
-		public override void Update()
+        protected override float GetHeight() => sliderTexture.Height;
+
+        public override void Update()
 		{
 			base.Update();
 			if (ModUtils.MouseState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Released)
@@ -81,18 +88,18 @@ namespace HEROsMod.UIKit
 			{
 				float sliderPos = UIView.MouseX - DrawPosition.X + Origin.X;
 				if (sliderPos < padding)
-				{
-					sliderPos = padding;
-				}
-				else if (sliderPos > Width - padding)
-				{
-					sliderPos = Width - padding;
-				}
+                {
+                    sliderPos = padding;
+                }
+                else if (sliderPos > Width - padding)
+                {
+                    sliderPos = Width - padding;
+                }
 
-				sliderPos -= padding;
+                sliderPos -= padding;
 				sliderPos /= Width - padding * 2;
-                Value = (MaxValue - MinValue) * sliderPos + MinValue;
-                ValueChanged?.Invoke(this, Value);
+                Value = (MaxValue - minValue) * sliderPos + minValue;
+                valueChanged?.Invoke(this, Value);
             }
 		}
 
@@ -108,7 +115,7 @@ namespace HEROsMod.UIKit
 			spriteBatch.Draw(barTexture, pos, null, BackgroundColor, 0f, Origin, 1f, SpriteEffects.FlipHorizontally, 0f);
 			Vector2 sliderPos = DrawPosition;
 			sliderPos.X += padding - sliderTexture.Width / 2;
-			sliderPos.X += (Width - padding * 2) * ((value - MinValue) / (MaxValue - MinValue));
+			sliderPos.X += (width - padding * 2) * ((value - MinValue) / (MaxValue - MinValue));
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
@@ -116,7 +123,7 @@ namespace HEROsMod.UIKit
 			DrawBackground(spriteBatch);
 			Vector2 sliderPos = DrawPosition;
 			sliderPos.X += padding - sliderTexture.Width / 2;
-			sliderPos.X += (Width - padding * 2) * ((value - MinValue) / (MaxValue - MinValue));
+			sliderPos.X += (width - padding * 2) * ((value - MinValue) / (MaxValue - MinValue));
 			spriteBatch.Draw(sliderTexture, sliderPos, null, BackgroundColor, 0f, Origin, 1f, SpriteEffects.None, 0f);
 
 			base.Draw(spriteBatch);

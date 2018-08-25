@@ -10,7 +10,7 @@ namespace HEROsMod.UIKit
 
 		public Color Color
 		{
-			get => Main.hslToRgb(Hue, Saturation, Luminosity);
+			get { return Main.hslToRgb(Hue, Saturation, Luminosity); }
 			set
 			{
 				Vector3 hsl = Main.rgbToHsl(value);
@@ -22,7 +22,7 @@ namespace HEROsMod.UIKit
 
 		public float Hue
 		{
-			get => hueSlider.Value;
+			get { return hueSlider.Value; }
 			set
 			{
 				hueSlider.Value = value;
@@ -33,7 +33,7 @@ namespace HEROsMod.UIKit
 
 		public float Saturation
 		{
-			get => saturationSlider.Value;
+			get { return saturationSlider.Value; }
 			set
 			{
 				saturationSlider.Value = value;
@@ -43,7 +43,7 @@ namespace HEROsMod.UIKit
 
 		public float Luminosity
 		{
-			get => luminositySlider.Value;
+			get { return luminositySlider.Value; }
 			set
 			{
 				luminositySlider.Value = value;
@@ -66,9 +66,9 @@ namespace HEROsMod.UIKit
             Width = hueSlider.Width;
             Height = luminositySlider.Y + luminositySlider.Height;
 
-			hueSlider.ValueChanged += HueSlider_valueChanged;
-			saturationSlider.ValueChanged += SaturationSlider_valueChanged;
-			luminositySlider.ValueChanged += LuminositySlider_valueChanged;
+			hueSlider.valueChanged += hueSlider_valueChanged;
+			saturationSlider.valueChanged += saturationSlider_valueChanged;
+			luminositySlider.valueChanged += luminositySlider_valueChanged;
 
             Color = Color.White;
 
@@ -77,21 +77,21 @@ namespace HEROsMod.UIKit
 			AddChild(luminositySlider);
 		}
 
-		private void TriggerColorChangedEvent() => ColorChanged?.Invoke(this, EventArgs.Empty);
+        private void TriggerColorChangedEvent() => ColorChanged?.Invoke(this, EventArgs.Empty);
 
-		private void LuminositySlider_valueChanged(object sender, float value)
+        private void luminositySlider_valueChanged(object sender, float value)
 		{
 			Luminosity = luminositySlider.Value;
 			TriggerColorChangedEvent();
 		}
 
-		private void SaturationSlider_valueChanged(object sender, float value)
+		private void saturationSlider_valueChanged(object sender, float value)
 		{
 			Saturation = saturationSlider.Value;
 			TriggerColorChangedEvent();
 		}
 
-		private void HueSlider_valueChanged(object sender, float value)
+		private void hueSlider_valueChanged(object sender, float value)
 		{
 			Hue = hueSlider.Value;
 			TriggerColorChangedEvent();

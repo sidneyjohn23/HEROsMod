@@ -5,9 +5,9 @@ namespace HEROsMod.UIKit
 {
 	internal class UIColorSlider : UISlider
 	{
-		protected new float Width => ModUtils.HueTexture.Width;
+        protected override float GetWidth() => ModUtils.HueTexture.Width;
 
-		public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
 		{
 			Vector2 pos = DrawPosition;
 			pos.Y += (sliderTexture.Height - ModUtils.HueTexture.Height) / 2;

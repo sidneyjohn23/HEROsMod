@@ -10,22 +10,25 @@ namespace HEROsMod.HEROsModNetwork {
 		private static BinaryWriter Writer => Network.writer;
 
 		public static Group MyGroup
-		{
-			get
-			{
-				if (Network.Players2.ContainsKey(Main.myPlayer))
-				{
-					return Network.Players2[Main.myPlayer].Group;
-				}
-				else
-				{
-					return null;
-				}
-			}
-			set => Network.Players2[Main.myPlayer].Group = value;
-		}
+        {
+            get
+            {
+                if (Network.Players.ContainsKey(Main.myPlayer))
+                {
+                    return Network.Players[Main.myPlayer].Group;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                Network.Players[Main.myPlayer].Group = value;
+            }
+        }
 
-		public static event EventHandler GroupChanged;
+        public static event EventHandler GroupChanged;
 
         public static event EventHandler MyGroupChanged;
 
@@ -128,25 +131,25 @@ namespace HEROsMod.HEROsModNetwork {
             int groupID = 0;
             int playerID = 0;
 
-            if (Network.Players2.Values.Any((x) => x.Username == username)) {
+            if (Network.Players.Values.Any((x) => x.Username == username)) {
 				Network.SendTextToPlayer(HEROsMod.HeroText("AccountAlreadyLoggedIn"), playerNumber);
 				return;
             }
             if (DatabaseController.Login(ref username, password, ref playerID, ref groupID)) {
 
-                Network.Players2[playerNumber].Username = username;
-                Network.Players2[playerNumber].ID = playerID;
+                Network.Players[playerNumber].Username = username;
+                Network.Players[playerNumber].ID = playerID;
                 if (groupID == 0) {
                     groupID = Network.DefaultGroup.ID;
                     DatabaseController.SetPlayerGroup(playerID, groupID);
                 }
-                Network.Players2[playerNumber].Group = Network.GetGroupByID(groupID);
-                if (Network.Players2[playerNumber].UsingHEROsMod)
+                Network.Players[playerNumber].Group = Network.GetGroupByID(groupID);
+                if (Network.Players[playerNumber].UsingHEROsMod)
 				{
 					LoginSuccess(playerNumber);
 				}
 
-				Network.SendTextToPlayer(string.Format(HEROsMod.HeroText("LoggedInSuccessfully"), Network.Players2[playerNumber].Group.Name), playerNumber, Color.Green);
+				Network.SendTextToPlayer(string.Format(HEROsMod.HeroText("LoggedInSuccessfully"), Network.Players[playerNumber].Group.Name), playerNumber, Color.Green);
 
 			}
 			else {
@@ -156,11 +159,11 @@ namespace HEROsMod.HEROsModNetwork {
 
         private static void LoginSuccess(int playerNumber) {
             if (Network.NetworkMode == NetworkMode.Server) {
-                if (Network.Players2[playerNumber].Group == null) {
-                    Network.Players2[playerNumber].Group = Network.DefaultGroup;
+                if (Network.Players[playerNumber].Group == null) {
+                    Network.Players[playerNumber].Group = Network.DefaultGroup;
                 }
                 WriteHeader(MessageType.LoginSucess);
-                Writer.Write(Network.Players2[playerNumber].Group.ID);
+                Writer.Write(Network.Players[playerNumber].Group.ID);
                 Network.SendDataToPlayer(playerNumber);
                 SendPlayerPermissions(playerNumber);
                 SendPlayerList(playerNumber);
@@ -170,7 +173,7 @@ namespace HEROsMod.HEROsModNetwork {
         private static void ProcessLoginSuccess(ref BinaryReader reader) {
             if (Network.NetworkMode != NetworkMode.Server) {
                 int id = reader.ReadInt32();
-                Network.Players2[Main.myPlayer].Group = Network.GetGroupByID(id);
+                Network.Players[Main.myPlayer].Group = Network.GetGroupByID(id);
                 HEROsModServices.Login.LoggedIn = true;
             }
         }
@@ -184,7 +187,7 @@ namespace HEROsMod.HEROsModNetwork {
 
         public static void ProcessLogoutRequest(int playerNumber) {
             if (Network.NetworkMode == NetworkMode.Server) {
-                HEROsModPlayer player = Network.Players2[playerNumber];
+                HEROsModPlayer player = Network.Players[playerNumber];
                 player.Group = Network.DefaultGroup;
                 player.Username = string.Empty;
                 if (player.UsingHEROsMod) {
@@ -202,7 +205,7 @@ namespace HEROsMod.HEROsModNetwork {
         private static void ProcessLogoutSuccess(ref BinaryReader reader) {
             if (Network.NetworkMode != NetworkMode.Server) {
                 int id = reader.ReadInt32();
-                Network.Players2[Main.myPlayer].Group = Network.GetGroupByID(id);
+                Network.Players[Main.myPlayer].Group = Network.GetGroupByID(id);
                 HEROsModServices.Login.LoggedIn = false;
             }
         }
@@ -225,7 +228,7 @@ namespace HEROsMod.HEROsModNetwork {
             switch (regResult) {
                 case DatabaseController.RegistrationResult.Sucess:
 					Network.SendTextToPlayer(HEROsMod.HeroText("SuccessfullyRegistered"), playerNumber);
-					foreach (KeyValuePair<int, HEROsModPlayer> player in Network.Players2) {
+					foreach (KeyValuePair<int, HEROsModPlayer> player in Network.Players) {
                         if (player.Value.ServerInstance.IsActive) {
                             GeneralMessages.SendRegisteredUsersToPlayer(player.Key);
                         }
@@ -250,7 +253,7 @@ namespace HEROsMod.HEROsModNetwork {
 
         private static void ProcessAddGroupReqest(ref BinaryReader reader, int playerNumber) {
             if (Network.NetworkMode == NetworkMode.Server) {
-                if (!Network.Players2[playerNumber].Group.IsAdmin)
+                if (!Network.Players[playerNumber].Group.IsAdmin)
 				{
 					return;
 				}
@@ -278,7 +281,7 @@ namespace HEROsMod.HEROsModNetwork {
 
         private static void ProcessDeleteGroupRequest(ref BinaryReader reader, int playerNumber) {
             if (Network.NetworkMode == NetworkMode.Server) {
-                if (!Network.Players2[playerNumber].Group.IsAdmin)
+                if (!Network.Players[playerNumber].Group.IsAdmin)
 				{
 					return;
 				}
@@ -286,7 +289,7 @@ namespace HEROsMod.HEROsModNetwork {
 				Group groupToDelete = Network.GetGroupByID(reader.ReadInt32());
                 if (groupToDelete != null) {
                     if (groupToDelete.Name.ToLower() != "default") {
-                        foreach (KeyValuePair<int, HEROsModPlayer> user in Network.Players2) {
+                        foreach (KeyValuePair<int, HEROsModPlayer> user in Network.Players) {
                             if (user.Value.Group == groupToDelete) {
                                 user.Value.Group = Network.DefaultGroup;
                                 SendPlayerPermissions(user.Key);
@@ -312,8 +315,8 @@ namespace HEROsMod.HEROsModNetwork {
         public static void SendPlayerList(int playerNumber) {
             if (Network.NetworkMode == NetworkMode.Server) {
                 WriteHeader(MessageType.PlayerList);
-                Writer.Write(Network.Players2.Count);
-                foreach (KeyValuePair<int, HEROsModPlayer> item in Network.Players2) {
+                Writer.Write(Network.Players.Count);
+                foreach (KeyValuePair<int, HEROsModPlayer> item in Network.Players) {
                     Writer.Write(item.Key);
                     Writer.Write(item.Value.Username);
                     Writer.Write(item.Value.ID);
@@ -346,7 +349,7 @@ namespace HEROsMod.HEROsModNetwork {
                     ModUtils.DebugText("Key: " + index + "; Username: " + item.Username + "; ID: " + item.ID + "; Index: " + item.Index);
 
                 }
-                Network.Players2 = players;
+                Network.Players = players;
             }
         }
 
@@ -385,7 +388,7 @@ namespace HEROsMod.HEROsModNetwork {
         }
 
         public static void SendAllPlayersPermissions() {
-            foreach (KeyValuePair<int, HEROsModPlayer> player in Network.Players2) {
+            foreach (KeyValuePair<int, HEROsModPlayer> player in Network.Players) {
                 if (player.Value.ServerInstance.IsActive) {
                     SendPlayerPermissions(player.Key);
                 }
@@ -395,7 +398,7 @@ namespace HEROsMod.HEROsModNetwork {
         public static void SendPlayerPermissions(int playerNumber) {
             if (Network.NetworkMode == NetworkMode.Server) {
                 WriteHeader(MessageType.SetPlayerGroup);
-                HEROsModPlayer player = Network.Players2[playerNumber];
+                HEROsModPlayer player = Network.Players[playerNumber];
                 Group group = player.Group;
                 Writer.Write(group.Name);
                 Writer.Write(group.ID);
@@ -438,7 +441,7 @@ namespace HEROsMod.HEROsModNetwork {
 
         private static void ProcessSetGroupPermissionsRequest(ref BinaryReader reader, int playerNumber) {
             if (Network.NetworkMode == NetworkMode.Server) {
-                if (!Network.Players2[playerNumber].Group.IsAdmin)
+                if (!Network.Players[playerNumber].Group.IsAdmin)
 				{
 					return;
 				}
@@ -449,7 +452,7 @@ namespace HEROsMod.HEROsModNetwork {
                 group.ImportPermissions(reader.ReadBytes(permissionsLength));
                 DatabaseController.SetGroupPermissions(group);
 
-                foreach (KeyValuePair<int, HEROsModPlayer> user in Network.Players2) {
+                foreach (KeyValuePair<int, HEROsModPlayer> user in Network.Players) {
                     if (user.Value.Group == group) {
                         SendPlayerPermissions(user.Key);
                     }
@@ -465,7 +468,7 @@ namespace HEROsMod.HEROsModNetwork {
         }
 
         private static void ProcessPlayerInfoRequest(ref BinaryReader reader, int playerNumber) {
-            Group playerGroup = Network.Players2[playerNumber].Group;
+            Group playerGroup = Network.Players[playerNumber].Group;
             if (playerGroup.IsAdmin) {
                 int indexOfRequestedPlayer = reader.ReadInt32();
                 SendPlayerInfo(indexOfRequestedPlayer, playerNumber);
@@ -474,7 +477,7 @@ namespace HEROsMod.HEROsModNetwork {
 
         private static void SendPlayerInfo(int indexOfRequestedPlayer, int playerNumber) {
             WriteHeader(MessageType.PlayerInfo);
-            HEROsModPlayer player = Network.Players2[indexOfRequestedPlayer];
+            HEROsModPlayer player = Network.Players[indexOfRequestedPlayer];
             Writer.Write(player.Username);
             Writer.Write(player.Group.ID);
             Writer.Write(indexOfRequestedPlayer);
@@ -485,8 +488,8 @@ namespace HEROsMod.HEROsModNetwork {
             string username = reader.ReadString();
             int groupID = reader.ReadInt32();
             int indexOfRequestedPlayer = reader.ReadInt32();
-            Network.Players2[indexOfRequestedPlayer].Username = username;
-            Network.Players2[indexOfRequestedPlayer].Group = Network.GetGroupByID(groupID);
+            Network.Players[indexOfRequestedPlayer].Username = username;
+            Network.Players[indexOfRequestedPlayer].Group = Network.GetGroupByID(groupID);
             if (HEROsModServices.PlayerList.playersWindow != null) {
                 HEROsModServices.PlayerList.playersWindow.OpenPlayerInfo(indexOfRequestedPlayer, false);
             }
@@ -500,13 +503,13 @@ namespace HEROsMod.HEROsModNetwork {
         }
 
         private static void ProcessSetPlayerGroupRequest(ref BinaryReader reader, int playerNumber) {
-            if (Network.Players2[playerNumber].Group.IsAdmin) {
+            if (Network.Players[playerNumber].Group.IsAdmin) {
                 int playerIndex = reader.ReadInt32();
                 int groupID = reader.ReadInt32();
 
-                Network.Players2[playerIndex].Group = Network.GetGroupByID(groupID);
+                Network.Players[playerIndex].Group = Network.GetGroupByID(groupID);
                 SendPlayerPermissions(playerIndex);
-                DatabaseController.SetPlayerGroup(Network.Players2[playerIndex].ID, groupID);
+                DatabaseController.SetPlayerGroup(Network.Players[playerIndex].ID, groupID);
             }
         }
 
@@ -518,14 +521,14 @@ namespace HEROsMod.HEROsModNetwork {
         }
 
         private static void ProcessSetOfflinePlayerGroupRequest(ref BinaryReader reader, int playerNumber) {
-            if (Network.Players2[playerNumber].Group.IsAdmin) {
+            if (Network.Players[playerNumber].Group.IsAdmin) {
                 int id = reader.ReadInt32();
                 int groupID = reader.ReadInt32();
 
                 //Network.Players[id].Group = Network.GetGroupByID(groupID);
                 //SendPlayerPermissions(id);
                 DatabaseController.SetPlayerGroup(id, groupID);
-                foreach (KeyValuePair<int, HEROsModPlayer> player in Network.Players2) {
+                foreach (KeyValuePair<int, HEROsModPlayer> player in Network.Players) {
                     if (player.Value.ServerInstance.IsActive) {
                         GeneralMessages.SendRegisteredUsersToPlayer(player.Key);
                     }

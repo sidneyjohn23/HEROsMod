@@ -22,7 +22,7 @@ namespace HEROsMod.UIKit
 					{
 						fillColors[y] = edgeColors[buttonBackground.Width - 1 + y * buttonBackground.Width];
 					}
-					buttonFill = new Texture2D(UIView.Graphics, 1, fillColors.Length);
+					buttonFill = new Texture2D(UIView.graphics, 1, fillColors.Length);
 					buttonFill.SetData(fillColors);
 				}
 				return buttonFill;
@@ -36,7 +36,7 @@ namespace HEROsMod.UIKit
 
 		public string Text
 		{
-			get => label.Text;
+			get { return label.Text; }
 			set
 			{
 				label.Text = value;
@@ -56,8 +56,8 @@ namespace HEROsMod.UIKit
             Text = text;
             BackgroundColor = new Color(28, 32, 119);
 			drawColor = BackgroundColor;
-            OnMouseEnter += new EventHandler(UIButton_onMouseEnter);
-            OnMouseLeave += new EventHandler(UIButton_onMouseLeave);
+            onMouseEnter += new EventHandler(UIButton_onMouseEnter);
+            onMouseLeave += new EventHandler(UIButton_onMouseLeave);
 		}
 
 		public UIButton(string text, Color backgroundColor, Color hoverColor)
@@ -68,64 +68,64 @@ namespace HEROsMod.UIKit
             BackgroundColor = backgroundColor;
 			drawColor = BackgroundColor;
 			this.hoverColor = hoverColor;
-            OnMouseEnter += new EventHandler(UIButton_onMouseEnter);
-            OnMouseLeave += new EventHandler(UIButton_onMouseLeave);
+            onMouseEnter += new EventHandler(UIButton_onMouseEnter);
+            onMouseLeave += new EventHandler(UIButton_onMouseLeave);
 		}
 
-		public void SetTextColor(Color color) => label.ForegroundColor = color;
+        public void SetTextColor(Color color) => label.ForegroundColor = color;
 
-		private void UIButton_onMouseLeave(object sender, EventArgs e) => drawColor = BackgroundColor;
+        private void UIButton_onMouseLeave(object sender, EventArgs e) => drawColor = BackgroundColor;
 
-		private void UIButton_onMouseEnter(object sender, EventArgs e) => drawColor = hoverColor;
+        private void UIButton_onMouseEnter(object sender, EventArgs e) => drawColor = hoverColor;
 
-		protected new float Width
+        private float width = 0;
+
+		protected override float GetWidth()
 		{
-			get
+			if (AutoSize)
 			{
-				if (AutoSize)
-				{
-					return label.Width + buttonBackground.Width * 2 + 30;
-				}
-				else
-				{
-					return Width;
-				}
+				return label.Width + buttonBackground.Width * 2 + 30;
 			}
-			set
+			else
 			{
-				Width = value;
-
-				ScaleText();
-				label.CenterToParent();
-				label.Position = new Vector2(label.Position.X, label.Position.Y + 2);
+				return width;
 			}
 		}
 
-		protected new float Height => buttonBackground.Height;
+		protected override void SetWidth(float width)
+		{
+			this.width = width;
 
-		private void ScaleText()
+			ScaleText();
+			label.CenterToParent();
+			label.Position = new Vector2(label.Position.X, label.Position.Y + 2);
+		}
+
+        protected override float GetHeight() => buttonBackground.Height;
+
+        private void ScaleText()
 		{
 			if (!AutoSize)
 			{
 				Vector2 size = label.font.MeasureString(label.Text);
-				if (size.X > Width - (buttonBackground.Width * 2 + 10))
+				if (size.X > width - (buttonBackground.Width * 2 + 10))
 				{
-					label.Scale = (Width - (buttonBackground.Width * 2 + 10)) / size.X;
+					label.Scale = (width - (buttonBackground.Width * 2 + 10)) / size.X;
 					if (size.Y * label.Scale > Height)
-					{
-						label.Scale = Height / size.Y;
-					}
-				}
+                    {
+                        label.Scale = Height / size.Y;
+                    }
+                }
 				else
-				{
-					label.Scale = Height / size.Y;
-				}
-			}
+                {
+                    label.Scale = Height / size.Y;
+                }
+            }
 			else
-			{
-				label.Scale = Height / label.font.MeasureString(label.Text).Y;
-			}
-		}
+            {
+                label.Scale = Height / label.font.MeasureString(label.Text).Y;
+            }
+        }
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{

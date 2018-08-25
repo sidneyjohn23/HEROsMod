@@ -14,16 +14,16 @@ namespace HEROsMod.HEROsModServices
 		/// </summary>
 		protected string _name;
 
-		public string Name => _name;
+        public string Name => _name;
 
-		/// <summary>
-		/// Icon that gets used if the service is added to the ServiceHotbar
-		/// </summary>
-		protected UIImage _hotbarIcon;
+        /// <summary>
+        /// Icon that gets used if the service is added to the ServiceHotbar
+        /// </summary>
+        protected UIImage _hotbarIcon;
 
-		public UIImage HotbarIcon => _hotbarIcon;
+        public UIImage HotbarIcon => _hotbarIcon;
 
-		public bool IsInHotbar { get; set; }
+        public bool IsInHotbar { get; set; }
 		public UIHotbar HotbarParent { get; set; }
 
 		public bool IsHotbar { get; set; }
@@ -54,16 +54,16 @@ namespace HEROsMod.HEROsModServices
 		{
 		}
 
-		/// <summary>
-		/// This method must be called before the Service is desposed.
-		/// </summary>
-		public virtual void Destroy() => RemoveAllUIViews();
+        /// <summary>
+        /// This method must be called before the Service is desposed.
+        /// </summary>
+        public virtual void Destroy() => RemoveAllUIViews();
 
-		/// <summary>
-		/// Add a UIView that belongs to this Service
-		/// </summary>
-		/// <param name="view">View to be added</param>
-		public virtual void AddUIView(UIView view)
+        /// <summary>
+        /// Add a UIView that belongs to this Service
+        /// </summary>
+        /// <param name="view">View to be added</param>
+        public virtual void AddUIView(UIView view)
 		{
 			_UIViews.Add(view);
 			MasterView.gameScreen.AddChild(view);

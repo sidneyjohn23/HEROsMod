@@ -4,10 +4,13 @@ namespace HEROsMod.UIKit
 {
 	internal class UIScreen : UIView
 	{
-		public UIScreen() => OverridesMouse = false;
+		public UIScreen()
+		{
+            OverridesMouse = false;
+		}
 
-		protected new float Width => Main.screenWidth;
+        protected override float GetWidth() => Main.screenWidth;
 
-		protected new float Height => Main.screenHeight;
-	}
+        protected override float GetHeight() => Main.screenHeight;
+    }
 }

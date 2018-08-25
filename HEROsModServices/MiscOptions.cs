@@ -13,11 +13,11 @@ namespace HEROsMod.HEROsModServices
 		{
 			IsHotbar = true;
 
-			_hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/settings")/*Main.buffTexture[BuffID.Confused]*/);
-			HotbarIcon.Tooltip = HEROsMod.HeroText("MiscOptions");
-			HotbarIcon.OnLeftClick += HotbarIcon_onLeftClick;
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/settings")/*Main.buffTexture[BuffID.Confused]*/);
+            HotbarIcon.Tooltip = HEROsMod.HeroText("MiscOptions");
+            HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 
-            _miscOptionsHotbar = new MiscOptionsWindow()
+            _miscOptionsHotbar = new MiscOptionsWindow
             {
                 HotBarParent = HEROsMod.ServiceHotbar
             };
@@ -32,9 +32,9 @@ namespace HEROsMod.HEROsModServices
 			//Main.NewText("Toggle Hotbar");
 
 			//_testHotbarWindow.Visible = !_testHotbarWindow.Visible;
-			if (_miscOptionsHotbar.Selected)
+			if (_miscOptionsHotbar.selected)
 			{
-				_miscOptionsHotbar.Selected = false;
+				_miscOptionsHotbar.selected = false;
 				_miscOptionsHotbar.Hide();
 				//	Main.NewText("Hide Hotbar");
 
@@ -43,7 +43,7 @@ namespace HEROsMod.HEROsModServices
 			else
 			{
 				//DisableAllWindows();
-				_miscOptionsHotbar.Selected = true;
+				_miscOptionsHotbar.selected = true;
 				_miscOptionsHotbar.Show();
 				//Main.NewText("Show Hotbar");
 
@@ -79,7 +79,7 @@ namespace HEROsMod.HEROsModServices
 		public MiscOptionsWindow()
 		{
             buttonView = new UIView();
-			Visible = false;
+			base.Visible = false;
 			//bStampTiles = new UIImage(Main.itemTexture[ItemID.Paintbrush]);
 			//bEyeDropper = new UIImage(Main.itemTexture[ItemID.EmptyDropper]);
 			//bFlipHorizontal = new UIImage(Main.itemTexture[ItemID.PadThai]);
@@ -99,24 +99,24 @@ namespace HEROsMod.HEROsModServices
 			//base.Width = 200f;
 			base.Height = 55f;
             buttonView.Height = base.Height;
-			Anchor = AnchorPosition.Top;
+			base.Anchor = AnchorPosition.Top;
             AddChild(buttonView);
-			Position = new Vector2(Position.X, HiddenPosition);
-			CenterXAxisToParentCenter();
+			base.Position = new Vector2(Position.X, hiddenPosition);
+			base.CenterXAxisToParentCenter();
 			float num = spacing;
-			for (int i = 0; i < buttonView.Children.Count; i++)
+			for (int i = 0; i < buttonView.children.Count; i++)
 			{
-                buttonView.Children[i].Anchor = AnchorPosition.Left;
-                buttonView.Children[i].Position = new Vector2(num, 0f);
-                buttonView.Children[i].CenterYAxisToParentCenter();
-                buttonView.Children[i].Visible = true;
-				//this.buttonView.Children[i].ForegroundColor = buttonUnselectedColor;
-				num += buttonView.Children[i].Width + spacing;
+                buttonView.children[i].Anchor = AnchorPosition.Left;
+                buttonView.children[i].Position = new Vector2(num, 0f);
+                buttonView.children[i].CenterYAxisToParentCenter();
+                buttonView.children[i].Visible = true;
+				//this.buttonView.children[i].ForegroundColor = buttonUnselectedColor;
+				num += buttonView.children[i].Width + spacing;
 			}
             Resize();
 		}
 
-		public override void Test()
+		public override void test()
 		{
 			//ModUtils.DebugText("TEST " + buttonView.ChildCount);
 			//base.Width = 200f;
@@ -125,16 +125,16 @@ namespace HEROsMod.HEROsModServices
 			//base.Anchor = AnchorPosition.Top;
 			//this.AddChild(this.buttonView);
 			//base.Position = new Vector2(Position.X, this.hiddenPosition);
-			CenterXAxisToParentCenter();
+			base.CenterXAxisToParentCenter();
 			float num = spacing;
-			for (int i = 0; i < buttonView.Children.Count; i++)
+			for (int i = 0; i < buttonView.children.Count; i++)
 			{
-                buttonView.Children[i].Anchor = AnchorPosition.Left;
-                buttonView.Children[i].Position = new Vector2(num, 0f);
-                buttonView.Children[i].CenterYAxisToParentCenter();
-                buttonView.Children[i].Visible = true;
-				//this.buttonView.Children[i].ForegroundColor = buttonUnselectedColor;
-				num += buttonView.Children[i].Width + spacing;
+                buttonView.children[i].Anchor = AnchorPosition.Left;
+                buttonView.children[i].Position = new Vector2(num, 0f);
+                buttonView.children[i].CenterYAxisToParentCenter();
+                buttonView.children[i].Visible = true;
+				//this.buttonView.children[i].ForegroundColor = buttonUnselectedColor;
+				num += buttonView.children[i].Width + spacing;
 			}
             Resize();
 			//buttonView.BackgroundColor = Color.Pink;
@@ -152,16 +152,16 @@ namespace HEROsMod.HEROsModServices
 		public void Resize()
 		{
 			float num = spacing;
-			for (int i = 0; i < buttonView.Children.Count; i++)
+			for (int i = 0; i < buttonView.children.Count; i++)
 			{
-				if (buttonView.Children[i].Visible)
+				if (buttonView.children[i].Visible)
 				{
-                    buttonView.Children[i].X = num;
-					num += buttonView.Children[i].Width + spacing;
+                    buttonView.children[i].X = num;
+					num += buttonView.children[i].Width + spacing;
 				}
 			}
-			Width = num;
-            buttonView.Width = Width;
+			base.Width = num;
+            buttonView.Width = base.Width;
 		}
 
 		//public void Hide()

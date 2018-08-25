@@ -100,9 +100,9 @@ namespace HEROsMod.HEROsModVideo.Services.MobHUD
 			Damping = 3.9f;
 			SpringStiffness = 30;
 			Mass = 0.5f;
-			Vector2 delta = _worldPos - desiredPosition;
-			Vector2 force = -SpringStiffness * delta - Damping * _velocity;
-			Vector2 acceleration = force / Mass;
+            Vector2 delta = _worldPos - desiredPosition;
+            Vector2 force = -SpringStiffness * delta - Damping * _velocity;
+            Vector2 acceleration = force / Mass;
 			_velocity += acceleration * elapsedSeconds;
             _worldPos += _velocity * elapsedSeconds;
 		}

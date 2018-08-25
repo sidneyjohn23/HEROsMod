@@ -14,27 +14,27 @@ namespace HEROsMod.HEROsModServices
 		public CheckTileModificationTool()
 		{
 			MultiplayerOnly = true;
-			_hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/tileModification")/*Main.itemTexture[1999]*/);
-			HotbarIcon.Tooltip = HEROsMod.HeroText("CheckTileForLastModification");
-			HotbarIcon.OnLeftClick += HotbarIcon_onLeftClick;
-			HasPermissionToUse = true;
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/tileModification")/*Main.itemTexture[1999]*/);
+            HotbarIcon.Tooltip = HEROsMod.HeroText("CheckTileForLastModification");
+            HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
+            HasPermissionToUse = true;
 		}
 
-		private void HotbarIcon_onLeftClick(object sender, EventArgs e) => ListeningForInput = !ListeningForInput;
+        private void HotbarIcon_onLeftClick(object sender, EventArgs e) => ListeningForInput = !ListeningForInput;
 
-		public override void Update()
+        public override void Update()
 		{
 			if (ListeningForInput && !Main.gameMenu)
 			{
-				if (ModUtils.MouseState.LeftButton == ButtonState.Pressed && ModUtils.PreviousMouseState.LeftButton == ButtonState.Released && !UIView.GameMouseOverwritten)
+				if (ModUtils.MouseState.LeftButton == ButtonState.Pressed && ModUtils.PreviousMouseState.LeftButton == ButtonState.Released && !UIKit.UIView.GameMouseOverwritten)
 				{
 					HEROsModNetwork.GeneralMessages.RequestTileModificationCheck(ModUtils.CursorTileCoords);
 				}
-				if (ModUtils.MouseState.RightButton == ButtonState.Pressed && ModUtils.PreviousMouseState.RightButton == ButtonState.Released && !UIView.GameMouseOverwritten)
+				if (ModUtils.MouseState.RightButton == ButtonState.Pressed && ModUtils.PreviousMouseState.RightButton == ButtonState.Released && !UIKit.UIView.GameMouseOverwritten)
 				{
 					ListeningForInput = false;
 				}
-				UIView.OverWriteGameMouseInput();
+				UIKit.UIView.OverWriteGameMouseInput();
 			}
 			base.Update();
 		}
@@ -50,9 +50,9 @@ namespace HEROsMod.HEROsModServices
 			}
 		}
 
-		public override void MyGroupUpdated() => HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("CheckTiles");//base.MyGroupUpdated();
+        public override void MyGroupUpdated() => HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("CheckTiles");//base.MyGroupUpdated();
 
-		public override void Destroy()
+        public override void Destroy()
 		{
 			ListeningForInput = false;
 			base.Destroy();

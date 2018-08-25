@@ -25,7 +25,7 @@ namespace HEROsMod.HEROsModServices {
 			_name = "Time Weather Control";
 			_hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/timeRain"));
 			HotbarIcon.Tooltip = HEROsMod.HeroText("ChangeTimeRain");
-			HotbarIcon.OnLeftClick += HotbarIcon_onLeftClick;
+			HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 
             timeSetWindow = new TimeSetWindow();
             AddUIView(timeSetWindow);
@@ -53,11 +53,11 @@ namespace HEROsMod.HEROsModServices {
         }
 
         private void HotbarIcon_onLeftClick(object sender, EventArgs e) {
-            if (timeWeatherHotbar.Selected) {
-                timeWeatherHotbar.Selected = false;
+            if (timeWeatherHotbar.selected) {
+                timeWeatherHotbar.selected = false;
                 timeWeatherHotbar.Hide();
             } else {
-                timeWeatherHotbar.Selected = true;
+                timeWeatherHotbar.selected = true;
                 timeWeatherHotbar.Show();
             }
 
@@ -171,19 +171,19 @@ namespace HEROsMod.HEROsModServices {
             //AddChild(bPause);
 
             //float xPos = spacing;
-            //for (int i = 0; i < Children.Count; i++)
+            //for (int i = 0; i < children.Count; i++)
             //{
-            //	if (Children[i].Visible)
+            //	if (children[i].Visible)
             //	{
-            //		Children[i].X = xPos;
-            //		xPos += Children[i].Width + spacing;
-            //		Children[i].Y = Height / 2 - Children[i].Height / 2;
+            //		children[i].X = xPos;
+            //		xPos += children[i].Width + spacing;
+            //		children[i].Y = Height / 2 - children[i].Height / 2;
             //	}
             //}
             //Width = xPos;
         }
 
-        public override void Test() {
+        public override void test() {
             //	ModUtils.DebugText("TEST " + buttonView.ChildCount);
 
             Height = 54;
@@ -195,8 +195,8 @@ namespace HEROsMod.HEROsModServices {
 				Tooltip = HEROsMod.HeroText("StartRain")
 			};
 			bStopRain.Tooltip = HEROsMod.HeroText("StopRain");
-			bStartRain.OnLeftClick += BStartRain_onLeftClick;
-			bStopRain.OnLeftClick += BStopRain_onLeftClick;
+			bStartRain.onLeftClick += BStartRain_onLeftClick;
+			bStopRain.onLeftClick += BStopRain_onLeftClick;
 			buttonView.AddChild(bStopRain);
 			buttonView.AddChild(bStartRain);
 
@@ -206,8 +206,8 @@ namespace HEROsMod.HEROsModServices {
 				Tooltip = HEROsMod.HeroText("StartSandstorm")
 			};
 			bStopSandstorm.Tooltip = HEROsMod.HeroText("StopSandstorm");
-			bStartSandstorm.OnLeftClick += BStartSandstorm_onLeftClick;
-			bStopSandstorm.OnLeftClick += BStopSandstorm_onLeftClick;
+			bStartSandstorm.onLeftClick += BStartSandstorm_onLeftClick;
+			bStopSandstorm.onLeftClick += BStopSandstorm_onLeftClick;
 			buttonView.AddChild(bStopSandstorm);
 			buttonView.AddChild(bStartSandstorm);
 
@@ -215,14 +215,14 @@ namespace HEROsMod.HEROsModServices {
 			{
 				Tooltip = HEROsMod.HeroText("Night")
 			};
-			nightButton.OnLeftClick += NightButton_onLeftClick;
+			nightButton.onLeftClick += NightButton_onLeftClick;
 			UIImage noonButton = new UIImage(HEROsMod.instance.GetTexture("Images/sunIcon"))
 			{
 				Tooltip = HEROsMod.HeroText("Noon")
 			};
-			noonButton.OnLeftClick += NoonButton_onLeftClick;
+			noonButton.onLeftClick += NoonButton_onLeftClick;
 			bPause = new UIImage(TimeWeatherChanger.TimePaused ? PlayTexture : PauseTexture);
-			bPause.OnLeftClick += BPause_onLeftClick;
+			bPause.onLeftClick += BPause_onLeftClick;
 			bPause.Tooltip = TimeWeatherChanger.TimePaused ? HEROsMod.HeroText("ResumeTime") : HEROsMod.HeroText("PauseTime");// "Toggle Freeze Time";
 
             buttonView.AddChild(nightButton);
@@ -233,36 +233,36 @@ namespace HEROsMod.HEROsModServices {
 			{
 				Tooltip = HEROsMod.HeroText("ForceEnchantedSundial")
 			};
-			sundialButton.OnLeftClick += SundialButton_onLeftClick;
+			sundialButton.onLeftClick += SundialButton_onLeftClick;
 			buttonView.AddChild(sundialButton);
 
             UIImage changeTimeButton = new UIImage(HEROsMod.instance.GetTexture("Images/clockIcon")) {
                 Tooltip = "Change Time...",
             };
-            changeTimeButton.OnLeftClick += ChangeTimeButton_onLeftClick;
+            changeTimeButton.onLeftClick += ChangeTimeButton_onLeftClick;
             buttonView.AddChild(changeTimeButton);
 
 			//float xPos = spacing;
-			//for (int i = 0; i < Children.Count; i++)
+			//for (int i = 0; i < children.Count; i++)
 			//{
-			//	if (Children[i].Visible)
+			//	if (children[i].Visible)
 			//	{
-			//		Children[i].X = xPos;
-			//		xPos += Children[i].Width + spacing;
-			//		Children[i].Y = Height / 2 - Children[i].Height / 2;
+			//		children[i].X = xPos;
+			//		xPos += children[i].Width + spacing;
+			//		children[i].Y = Height / 2 - children[i].Height / 2;
 			//	}
 			//}
 			//Width = xPos;
 
 			CenterXAxisToParentCenter();
             float num = spacing;
-            for (int i = 0; i < buttonView.Children.Count; i++) {
-                buttonView.Children[i].Anchor = AnchorPosition.Left;
-                buttonView.Children[i].Position = new Vector2(num, 0f);
-                buttonView.Children[i].CenterYAxisToParentCenter();
-                buttonView.Children[i].Visible = true;
-                //this.buttonView.Children[i].ForegroundColor = buttonUnselectedColor;
-                num += buttonView.Children[i].Width + spacing;
+            for (int i = 0; i < buttonView.children.Count; i++) {
+                buttonView.children[i].Anchor = AnchorPosition.Left;
+                buttonView.children[i].Position = new Vector2(num, 0f);
+                buttonView.children[i].CenterYAxisToParentCenter();
+                buttonView.children[i].Visible = true;
+                //this.buttonView.children[i].ForegroundColor = buttonUnselectedColor;
+                num += buttonView.children[i].Width + spacing;
             }
 			//this.Resize();
 			Width = num;
@@ -278,12 +278,12 @@ namespace HEROsMod.HEROsModServices {
         //public void Resize()
         //{
         //	float num = this.spacing;
-        //	for (int i = 0; i < this.buttonView.Children.Count; i++)
+        //	for (int i = 0; i < this.buttonView.children.Count; i++)
         //	{
-        //		if (this.buttonView.Children[i].Visible)
+        //		if (this.buttonView.children[i].Visible)
         //		{
-        //			this.buttonView.Children[i].X = num;
-        //			num += this.buttonView.Children[i].Width + this.spacing;
+        //			this.buttonView.children[i].X = num;
+        //			num += this.buttonView.children[i].Width + this.spacing;
         //		}
         //	}
         //	base.Width = num;
@@ -490,10 +490,10 @@ namespace HEROsMod.HEROsModServices {
 
             Width = 100;
             SetButton = new UIButton("Set Time");
-            SetButton.OnLeftClick += SetButton_onLeftClick;
+            SetButton.onLeftClick += SetButton_onLeftClick;
 
             CancelButton = new UIButton("Cancel");
-            CancelButton.OnLeftClick += CancelButton_onLeftClick;
+            CancelButton.onLeftClick += CancelButton_onLeftClick;
             CancelButton.Position = new Vector2(spacing * 2 + SetButton.Width, Height - 40);
             UILabel SetTimeLabel = new UILabel("Set Time") {
                 X = spacing,

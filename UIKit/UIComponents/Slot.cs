@@ -25,7 +25,10 @@ namespace HEROsMod.UIKit.UIComponents
 			Init(itemNum, noclick);
 		}
 
-		public Slot(int itemNum, bool noclick = false) => Init(itemNum, noclick);
+		public Slot(int itemNum, bool noclick = false)
+		{
+			Init(itemNum, noclick);
+		}
 
 		private void Init(int netID, bool noclick)
 		{
@@ -33,20 +36,20 @@ namespace HEROsMod.UIKit.UIComponents
 			item.netDefaults(netID);
 			if (!noclick)
 			{
-                OnLeftClick += Slot2_onLeftClick;
-                OnRightClick += Slot2_onRightClick;
-                OnMouseDown += Slot2_onMouseDown;
+                onLeftClick += Slot2_onLeftClick;
+                onRightClick += Slot2_onRightClick;
+                onMouseDown += Slot2_onMouseDown;
 			}
-            OnHover += Slot2_onHover;
+            onHover += Slot2_onHover;
 		}
 
-		protected new float Width => backgroundTexture.Width * Scale;
+        protected override float GetWidth() => backgroundTexture.Width * Scale;
 
-		protected new float Height => backgroundTexture.Height * Scale;
+        protected override float GetHeight() => backgroundTexture.Height * Scale;
 
-		private void Slot2_onHover(object sender, EventArgs e) => HoverText = item.Name;//HoverItem = item.Clone();
+        private void Slot2_onHover(object sender, EventArgs e) => HoverText = item.Name;//HoverItem = item.Clone();
 
-		private void Slot2_onLeftClick(object sender, EventArgs e)
+        private void Slot2_onLeftClick(object sender, EventArgs e)
 		{
 			if (IsTrashCan)
 			{

@@ -243,7 +243,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessRequestKickPlayer(ref BinaryReader reader, int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("Kick"))
+			if (Network.Players[playerNumber].Group.HasPermission("Kick"))
 			{
 				string playerToKick = reader.ReadString();
 				ModUtils.DebugText("Server Kick request received: " + playerToKick);
@@ -268,7 +268,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessRequestBanPlayer(ref BinaryReader reader, int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("Ban"))
+			if (Network.Players[playerNumber].Group.HasPermission("Ban"))
 			{
 				string playertoban = reader.ReadString();
 				ModUtils.DebugText("Server Ban request received: " + playertoban);
@@ -296,7 +296,7 @@ namespace HEROsMod.HEROsModNetwork
 			if (Network.NetworkMode == NetworkMode.Server)
 			{
 				ModUtils.DebugText("ProcessPlayerUsingHEROsMod: " + playerNumber);
-				Network.Players2[playerNumber].UsingHEROsMod = true;
+				Network.Players[playerNumber].UsingHEROsMod = true;
 				Network.ProcessClientsUsingHEROsMod(playerNumber);
 				LoginService.SendGroupList(playerNumber);
 				LoginService.SendPlayerPermissions(playerNumber);
@@ -327,7 +327,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessTimeChangeRequest(ref BinaryReader reader, int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("ChangeTimeWeather"))
+			if (Network.Players[playerNumber].Group.HasPermission("ChangeTimeWeather"))
 			{
 				TimeChangeType tct = (TimeChangeType)reader.ReadByte();
 				switch (tct)
@@ -400,7 +400,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessClearGroundItemsRequest(int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("ClearItems"))
+			if (Network.Players[playerNumber].Group.HasPermission("ClearItems"))
 			{
 				Network.ClearGroundItems();
 				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("ItemsClearedBy"), Main.player[playerNumber].name));
@@ -417,7 +417,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessToggleEnemiesRequest(int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("ToggleEnemies"))
+			if (Network.Players[playerNumber].Group.HasPermission("ToggleEnemies"))
 			{
 				HEROsModServices.EnemyToggler.ToggleNPCs();
 				if (HEROsModServices.EnemyToggler.EnemiesAllowed)
@@ -461,7 +461,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessSpawnTownNPCRequest(ref BinaryReader reader, int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("SpawnNPCs"))
+			if (Network.Players[playerNumber].Group.HasPermission("SpawnNPCs"))
 			{
 				int npcId = reader.ReadInt32();
 				Network.SpawnNPC(npcId, Main.player[playerNumber].position);
@@ -478,7 +478,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessStartRainRequest(int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("ChangeTimeWeather"))
+			if (Network.Players[playerNumber].Group.HasPermission("ChangeTimeWeather"))
 			{
 				ModUtils.StartRain();
 				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("RainTurnedOnBy"), Main.player[playerNumber].name));
@@ -493,7 +493,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessStopRainRequest(int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("ChangeTimeWeather"))
+			if (Network.Players[playerNumber].Group.HasPermission("ChangeTimeWeather"))
 			{
 				ModUtils.StopRain();
 				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("RainTurnedOffBy"), Main.player[playerNumber].name));
@@ -510,7 +510,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessStartSandstormRequest(int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("ChangeTimeWeather"))
+			if (Network.Players[playerNumber].Group.HasPermission("ChangeTimeWeather"))
 			{
 				ModUtils.StartSandstorm();
 				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("SandstormTurnedOnBy"), Main.player[playerNumber].name));
@@ -525,7 +525,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessStopSandstormRequest(int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("ChangeTimeWeather"))
+			if (Network.Players[playerNumber].Group.HasPermission("ChangeTimeWeather"))
 			{
 				ModUtils.StopSandstorm();
 				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("SandstormTurnedOffBy"), Main.player[playerNumber].name));
@@ -542,7 +542,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessForcedSundialRequest(int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("ChangeTimeWeather"))
+			if (Network.Players[playerNumber].Group.HasPermission("ChangeTimeWeather"))
 			{
 				Main.fastForwardTime = true;
 				Main.sundialCooldown = 0;
@@ -593,7 +593,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessAddWaypointRequest(ref BinaryReader reader, int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("EditWaypoints"))
+			if (Network.Players[playerNumber].Group.HasPermission("EditWaypoints"))
 			{
 				string name = reader.ReadString();
 				Vector2 position = reader.ReadVector2();
@@ -617,7 +617,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessRemoveWaypointReqeust(ref BinaryReader reader, int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("EditWaypoints"))
+			if (Network.Players[playerNumber].Group.HasPermission("EditWaypoints"))
 			{
 				ModUtils.DebugText("ProcessRemoveWaypointReqeust: " + playerNumber);
 				List<HEROsModServices.Waypoint> points = HEROsModServices.Waypoints.points;
@@ -647,7 +647,7 @@ namespace HEROsMod.HEROsModNetwork
 			}
 
 			int playerIndex = reader.ReadInt32();
-			Network.Players2.Add(playerIndex, new HEROsModPlayer(playerIndex));
+			Network.Players.Add(playerIndex, new HEROsModPlayer(playerIndex));
 		}
 
 		public static void TellServerILeft()
@@ -660,13 +660,13 @@ namespace HEROsMod.HEROsModNetwork
 		{
 			if (Network.NetworkMode == NetworkMode.Server)
 			{
-				Network.Players2.Remove(playerIndex);
+				Network.Players.Remove(playerIndex);
 			}
 		}
 
 		public static void TellClientsPlayerLeft(int playerIndex)
 		{
-			foreach (HEROsModPlayer item in Network.Players2.Values)
+			foreach (HEROsModPlayer item in Network.Players.Values)
 			{
 				if (item.Index != playerIndex)
 				{
@@ -685,7 +685,7 @@ namespace HEROsMod.HEROsModNetwork
 			}
 
 			int playerIndex = reader.ReadInt32();
-			Network.Players2.Remove(playerIndex);
+			Network.Players.Remove(playerIndex);
 		}
 		#endregion
 
@@ -773,13 +773,13 @@ namespace HEROsMod.HEROsModNetwork
 		private static void ProcessCreateRegionRequest(ref BinaryReader reader, int playerNumber)
 		{
 			Region region = Region.GetRegionFromBinaryReader(ref reader);
-			int a = Network.RegisteredUsers.First(x => x.Username == Network.Players2[playerNumber].Username).ID;
+			int a = Network.RegisteredUsers.First(x => x.Username == Network.Players[playerNumber].Username).ID;
 			region.AllowedPlayersIDs.Add(a);
 			DatabaseController.AddRegion(ref region, ref a);
 			Network.Regions.Add(region);
 
 			SendRegionListToAllPlayers();
-			Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("RegionCreatedBy"), region.Name, Network.Players2[playerNumber].ServerInstance.Name));
+			Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("RegionCreatedBy"), region.Name, Network.Players[playerNumber].ServerInstance.Name));
 		}
 
 		public static void RequestRemoveRegion(Region region)
@@ -791,7 +791,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessRemoveRegionRequest(ref BinaryReader reader, int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.IsAdmin)
+			if (Network.Players[playerNumber].Group.IsAdmin)
 			{
 				int regionID = reader.ReadInt32();
 				Region region = Network.GetRegionByID(regionID);
@@ -814,7 +814,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessRegisteredUsersRequest(int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.IsAdmin)
+			if (Network.Players[playerNumber].Group.IsAdmin)
 			{
 				SendRegisteredUsersToPlayer(playerNumber);
 			}
@@ -881,7 +881,7 @@ namespace HEROsMod.HEROsModNetwork
 				return;
 			}
 
-			if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID)
+			if (Network.Players[playerNumber].Group.IsAdmin || region.Owner == Network.Players[playerNumber].ID)
 			{
 				int playerID = reader.ReadInt32();
 				if (region.AddPlayer(playerID))
@@ -908,7 +908,7 @@ namespace HEROsMod.HEROsModNetwork
 				return;
 			}
 
-			if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID)
+			if (Network.Players[playerNumber].Group.IsAdmin || region.Owner == Network.Players[playerNumber].ID)
 			{
 				int playerID = reader.ReadInt32();
 				if (region.RemovePlayer(playerID))
@@ -935,7 +935,7 @@ namespace HEROsMod.HEROsModNetwork
 				return;
 			}
 
-			if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID)
+			if (Network.Players[playerNumber].Group.IsAdmin || region.Owner == Network.Players[playerNumber].ID)
 			{
 				int groupID = reader.ReadInt32();
 				if (region.AddGroup(groupID))
@@ -962,7 +962,7 @@ namespace HEROsMod.HEROsModNetwork
 				return;
 			}
 
-			if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID)
+			if (Network.Players[playerNumber].Group.IsAdmin || region.Owner == Network.Players[playerNumber].ID)
 			{
 				int groupID = reader.ReadInt32();
 				if (region.RemoveGroup(groupID))
@@ -989,7 +989,7 @@ namespace HEROsMod.HEROsModNetwork
 				return;
 			}
 
-			if (Network.Players2[playerNumber].Group.IsAdmin || region.Owner == Network.Players2[playerNumber].ID)
+			if (Network.Players[playerNumber].Group.IsAdmin || region.Owner == Network.Players[playerNumber].ID)
 			{
 				Color color = reader.ReadRGB();
 
@@ -1012,13 +1012,13 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessRestoreTilesRequest(ref BinaryReader reader, int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.IsAdmin)
+			if (Network.Players[playerNumber].Group.IsAdmin)
 			{
 				int playerID = reader.ReadInt32();
 				bool onlinePlayer = reader.ReadBoolean();
 				if (onlinePlayer)
 				{
-					playerID = Network.Players2[playerID].ID;
+					playerID = Network.Players[playerID].ID;
 				}
 				TileChangeController.RestoreTileChangesMadeByPlayer(playerID);
 			}
@@ -1034,7 +1034,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessSetSpawnPointRequest(int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.IsAdmin)
+			if (Network.Players[playerNumber].Group.IsAdmin)
 			{
 				Player player = Main.player[playerNumber];
 
@@ -1055,7 +1055,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessToggleGravestonesRequest(int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("ToggleGravestones"))
+			if (Network.Players[playerNumber].Group.HasPermission("ToggleGravestones"))
 			{
 				Network.GravestonesAllowed = !Network.GravestonesAllowed;
 				if (Network.GravestonesAllowed)
@@ -1098,7 +1098,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessGodModeRequest(int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("GodMode"))
+			if (Network.Players[playerNumber].Group.HasPermission("GodMode"))
 			{
 				AllowGodMode(playerNumber);
 			}
@@ -1135,7 +1135,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessTileModificationCheckRequest(ref BinaryReader reader, int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("CheckTiles"))
+			if (Network.Players[playerNumber].Group.HasPermission("CheckTiles"))
 			{
 				int x = reader.ReadInt32();
 				int y = reader.ReadInt32();
@@ -1183,7 +1183,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessSpawnNPCRequest(ref BinaryReader reader, int playerNumber)
 		{
-			HEROsModPlayer player = Network.Players2[playerNumber];
+			HEROsModPlayer player = Network.Players[playerNumber];
 			if (player.Group.HasPermission("SpawnNPCs"))
 			{
 				int npcType = reader.ReadInt32();
@@ -1217,7 +1217,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessStartEventRequest(ref BinaryReader reader, int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("StartEvents"))
+			if (Network.Players[playerNumber].Group.HasPermission("StartEvents"))
 			{
 				HEROsModServices.Events e = (HEROsModServices.Events)reader.ReadByte();
 				HEROsModServices.InvasionService.StartEvent(e);
@@ -1232,10 +1232,10 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessStopEventsRequest(int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("StartEvents"))
+			if (Network.Players[playerNumber].Group.HasPermission("StartEvents"))
 			{
 				HEROsModServices.InvasionService.StopAllEvents();
-				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("EventsStoppedBy"), Network.Players2[playerNumber].GameInstance.name));
+				Network.SendTextToAllPlayers(string.Format(HEROsMod.HeroText("EventsStoppedBy"), Network.Players[playerNumber].GameInstance.name));
 			}
 		}
 		#endregion
@@ -1249,7 +1249,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessToggleBannedItemsRequest(int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("ToggleBannedItems"))
+			if (Network.Players[playerNumber].Group.HasPermission("ToggleBannedItems"))
 			{
 				HEROsModServices.ItemBanner.ItemsBanned = !HEROsModServices.ItemBanner.ItemsBanned;
 				if (HEROsModServices.ItemBanner.ItemsBanned)
@@ -1292,7 +1292,7 @@ namespace HEROsMod.HEROsModNetwork
 		}
 		private static void ProcessRequestTeleport(ref BinaryReader reader, int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("Teleport"))
+			if (Network.Players[playerNumber].Group.HasPermission("Teleport"))
 			{
 				Vector2 destination = reader.ReadVector2();
 				Main.player[playerNumber].Teleport(destination, 1, 0);
@@ -1313,16 +1313,16 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessToggleHardmodeEnemiesRequest(int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("ToggleHardmodeEnemies"))
+			if (Network.Players[playerNumber].Group.HasPermission("ToggleHardmodeEnemies"))
 			{
 				HEROsModServices.HardmodeEnemyToggler.ToggleHardModeEnemies();
 				if (Main.hardMode)
 				{
-					Network.SendTextToAllPlayers("Hardmode enemies enabled by " + Network.Players2[playerNumber].GameInstance.name);
+					Network.SendTextToAllPlayers("Hardmode enemies enabled by " + Network.Players[playerNumber].GameInstance.name);
 				}
 				else
 				{
-					Network.SendTextToAllPlayers("Hardmode enemies disabled by " + Network.Players2[playerNumber].GameInstance.name);
+					Network.SendTextToAllPlayers("Hardmode enemies disabled by " + Network.Players[playerNumber].GameInstance.name);
 				}
 			}
 		}
@@ -1340,7 +1340,7 @@ namespace HEROsMod.HEROsModNetwork
 
 		private static void ProcessPurifyWorldRequest(int playerNumber)
 		{
-			if (Network.Players2[playerNumber].Group.HasPermission("PurifyWorld"))
+			if (Network.Players[playerNumber].Group.HasPermission("PurifyWorld"))
 			{
 				Network.SendTextToAllPlayers("Please wait, the world is going to be purified, this may take a few moments to minutes...", Color.Crimson);
 				HEROsModServices.WorldPurifier.PurifyWorld();
@@ -1348,7 +1348,7 @@ namespace HEROsMod.HEROsModNetwork
 				{
 					if (Main.player[i].active)
 					{
-						Network.ResendPlayerAllTileData(Network.Players2[i]);
+						Network.ResendPlayerAllTileData(Network.Players[i]);
 					}
 				}
 				Network.SendTextToAllPlayers("Purifying the world complete!", Color.Crimson);

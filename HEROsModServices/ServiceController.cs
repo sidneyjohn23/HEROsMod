@@ -11,25 +11,28 @@ namespace HEROsMod.HEROsModServices
 
 		public event ServiceEventHandler ServiceRemoved;
 
-		/// <summary>
-		/// HEROsMod Services laoded into the controller
-		/// </summary>
-		public List<HEROsModService> Services { get; }
+		private List<HEROsModService> _services;
 
-		public ServiceController()
+        /// <summary>
+        /// HEROsMod Services laoded into the controller
+        /// </summary>
+        public List<HEROsModService> Services => _services;
+
+        public ServiceController()
 		{
-			Services = new List<HEROsModService>();
+			_services = new List<HEROsModService>();
 			HEROsModNetwork.LoginService.MyGroupChanged += LoginService_MyGroupChanged;
 		}
 
-		private void LoginService_MyGroupChanged(object sender, EventArgs e) => MyGroupChanged();
+        private void LoginService_MyGroupChanged(object sender, EventArgs e) => MyGroupChanged();
 
-		public void MyGroupChanged()
+        public void MyGroupChanged()
 		{
 			if (HEROsModNetwork.LoginService.MyGroup != null)
 			{
-				foreach (HEROsModService service in Services)
+				foreach (HEROsModService service in _services)
 				{
+					//ErrorLogger.Log("MyGroupChanged for " + service.Name);
 					service.MyGroupUpdated();
 				}
 				ServiceRemoved(null);
@@ -42,7 +45,7 @@ namespace HEROsMod.HEROsModServices
 		/// <param name="service">Service to add</param>
 		public void AddService(HEROsModService service)
 		{
-			Services.Add(service);
+			_services.Add(service);
 			ServiceAdded?.Invoke(service);
 		}
 
@@ -53,7 +56,7 @@ namespace HEROsMod.HEROsModServices
 		public void RemoveService(HEROsModService service)
 		{
 			service.Destroy();
-			Services.Remove(service);
+			_services.Remove(service);
 			ServiceRemoved?.Invoke(service);
 		}
 
@@ -62,12 +65,12 @@ namespace HEROsMod.HEROsModServices
 		/// </summary>
 		public void RemoveAllServices()
 		{
-			while (Services.Count > 0)
+			while (_services.Count > 0)
 			{
-				RemoveService(Services[0]);
+				RemoveService(_services[0]);
 			}
 		}
 
-		internal void ServiceRemovedCall() => ServiceRemoved(null);
-	}
+        internal void ServiceRemovedCall() => ServiceRemoved(null);
+    }
 }

@@ -18,17 +18,17 @@ namespace HEROsMod.UIKit
 		private UIButton yesButton = null;
 		private UIButton noButton = null;
 
-		public event EventHandler YesClicked;
+		public event EventHandler yesClicked;
 
-		public event EventHandler NoClicked;
+		public event EventHandler noClicked;
 
 		public string Text
 		{
-			get => label.Text;
+			get { return label.Text; }
 			set
 			{
 				label.Text = value;
-				Height = label.Height + 70;
+                Height = label.Height + 70;
 				PositionButtons();
 			}
 		}
@@ -39,27 +39,27 @@ namespace HEROsMod.UIKit
             Text = "";
 		}
 
-		public UIMessageBox(string text, bool ExclusiveControl = false)
+		public UIMessageBox(string text, bool exclusiveControl = false)
 		{
 			AddButtons();
             Text = text;
-			if (ExclusiveControl)
-			{
-				UIView.ExclusiveControl = this;
-			}
-		}
+			if (exclusiveControl)
+            {
+                UIView.exclusiveControl = this;
+            }
+        }
 
-		public UIMessageBox(string text, UIMessageBoxType messageBoxType, bool ExclusiveControl = false)
+		public UIMessageBox(string text, UIMessageBoxType messageBoxType, bool exclusiveControl = false)
 		{
             MessageType = messageBoxType;
 			AddButtons();
             Text = text;
 
-			if (ExclusiveControl)
-			{
-				UIView.ExclusiveControl = this;
-			}
-		}
+			if (exclusiveControl)
+            {
+                UIView.exclusiveControl = this;
+            }
+        }
 
 		private void AddButtons()
 		{
@@ -75,7 +75,7 @@ namespace HEROsMod.UIKit
                     Anchor = AnchorPosition.BottomRight
                 };
                 AddChild(okButton);
-				okButton.OnLeftClick += new EventHandler(OkButton_onLeftClick);
+				okButton.onLeftClick += new EventHandler(okButton_onLeftClick);
 			}
 			else if (MessageType == UIMessageBoxType.YesNo)
 			{
@@ -85,60 +85,62 @@ namespace HEROsMod.UIKit
 				yesButton.Anchor = AnchorPosition.BottomRight;
 				AddChild(noButton);
 				AddChild(yesButton);
-				noButton.OnLeftClick += NoButton_onLeftClick;
-				yesButton.OnLeftClick += YesButton_onLeftClick;
+				noButton.onLeftClick += noButton_onLeftClick;
+				yesButton.onLeftClick += yesButton_onLeftClick;
 			}
 		}
 
-		private void YesButton_onLeftClick(object sender, EventArgs e)
+		private void yesButton_onLeftClick(object sender, EventArgs e)
 		{
-            YesClicked?.Invoke(this, EventArgs.Empty);
+            yesClicked?.Invoke(this, EventArgs.Empty);
+
             if (Parent != null)
 			{
-				if (ExclusiveControl == this)
-				{
-					ExclusiveControl = null;
-				}
+				if (UIView.exclusiveControl == this)
+                {
+                    UIView.exclusiveControl = null;
+                }
 
-				Parent.RemoveChild(this);
+                Parent.RemoveChild(this);
 			}
 		}
 
-		private void NoButton_onLeftClick(object sender, EventArgs e)
+		private void noButton_onLeftClick(object sender, EventArgs e)
 		{
-            NoClicked?.Invoke(this, EventArgs.Empty);
+            noClicked?.Invoke(this, EventArgs.Empty);
+
             if (Parent != null)
 			{
-				if (ExclusiveControl == this)
-				{
-					ExclusiveControl = null;
-				}
+				if (UIView.exclusiveControl == this)
+                {
+                    UIView.exclusiveControl = null;
+                }
 
-				Parent.RemoveChild(this);
+                Parent.RemoveChild(this);
 			}
 		}
 
-		private void OkButton_onLeftClick(object sender, EventArgs e)
+		private void okButton_onLeftClick(object sender, EventArgs e)
 		{
 			if (Parent != null)
 			{
-				if (ExclusiveControl == this)
-				{
-					ExclusiveControl = null;
-				}
+				if (UIView.exclusiveControl == this)
+                {
+                    UIView.exclusiveControl = null;
+                }
 
-				Parent.RemoveChild(this);
+                Parent.RemoveChild(this);
 			}
 		}
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			if (Parent != null)
-			{
-				CenterToParent();
-			}
+            {
+                CenterToParent();
+            }
 
-			base.Draw(spriteBatch);
+            base.Draw(spriteBatch);
 		}
 
 		private void PositionButtons()

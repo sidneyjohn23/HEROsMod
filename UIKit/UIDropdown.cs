@@ -15,7 +15,7 @@ namespace HEROsMod.UIKit
 
 		public int SelectedItem
 		{
-			get => selectedItem;
+			get { return selectedItem; }
 			set
 			{
 				selectedItem = value;
@@ -25,14 +25,14 @@ namespace HEROsMod.UIKit
 
 		private List<string> items = new List<string>();
 		private UILabel selectedLabel = new UILabel("");
-		public int ItemCount => items.Count;
-		public string Text => selectedLabel.Text;
+        public int ItemCount => items.Count;
+        public string Text => selectedLabel.Text;
 
-		public event EventHandler SelectedChanged;
+        public event EventHandler selectedChanged;
 
-		public bool ItemsVisible => itemsWindow.Visible;
+        public bool ItemsVisible => itemsWindow.Visible;
 
-		public UIDropdown()
+        public UIDropdown()
 		{
             UpdateWhenOutOfBounds = true;
 			itemsWindow.UpdateWhenOutOfBounds = true;
@@ -42,16 +42,16 @@ namespace HEROsMod.UIKit
 			selectedLabel.TextOutline = false;
 			itemsWindow.UpdateWhenOutOfBounds = true;
 			itemsWindow.BackgroundColor = new Color(81, 91, 184);
-            OnLeftClick += UIDropdown_onLeftClick;
+            onLeftClick += UIDropdown_onLeftClick;
 			AddChild(selectedLabel);
 			AddChild(itemsWindow);
 			itemsWindow.Visible = false;
-			SelectedChanged += UIDropdown_selectedChanged;
+			selectedChanged += UIDropdown_selectedChanged;
 		}
 
-		private void UIDropdown_selectedChanged(object sender, EventArgs e) => MouseLeftButton = false;
+        private void UIDropdown_selectedChanged(object sender, EventArgs e) => MouseLeftButton = false;
 
-		private void UIDropdown_onLeftClick(object sender, EventArgs e)
+        private void UIDropdown_onLeftClick(object sender, EventArgs e)
 		{
             MoveToFront();
 			ToggleShowingItems();
@@ -60,14 +60,14 @@ namespace HEROsMod.UIKit
 		private void ToggleShowingItems()
 		{
 			if (itemsShown)
-			{
-				HideItems();
-			}
-			else
-			{
-				ShowItems();
-			}
-		}
+            {
+                HideItems();
+            }
+            else
+            {
+                ShowItems();
+            }
+        }
 
 		private void ShowItems()
 		{
@@ -85,11 +85,11 @@ namespace HEROsMod.UIKit
 		{
 			items.Add(item);
 			if (itemsWindow.ChildCount == 0)
-			{
-				selectedLabel.Text = item;
-			}
+            {
+                selectedLabel.Text = item;
+            }
 
-			UILabel label = new UILabel(item);
+            UILabel label = new UILabel(item);
 			UIRect bg = new UIRect();
 			label.Scale = .4f;
 			label.X = 8;
@@ -97,34 +97,34 @@ namespace HEROsMod.UIKit
 			bg.Y = Height + ((label.Height) * itemsWindow.ChildCount);
 			label.Tag = itemsWindow.ChildCount;
 			bg.Tag = label.Tag;
-			label.OnLeftClick += Label_onLeftClick;
-			bg.OnLeftClick += Label_onLeftClick;
+			label.onLeftClick += label_onLeftClick;
+			bg.onLeftClick += label_onLeftClick;
 			bg.Width = itemsWindow.Width - 6;
 			bg.Height = label.Height;
 			bg.ForegroundColor = Color.White * 0f;
-			bg.OnMouseEnter += Bg_onMouseEnter;
-			bg.OnMouseLeave += Bg_onMouseLeave;
+			bg.onMouseEnter += bg_onMouseEnter;
+			bg.onMouseLeave += bg_onMouseLeave;
 
 			itemsWindow.Height = bg.Y + bg.Height + 8;
 			bg.AddChild(label);
 			itemsWindow.AddChild(bg);
 		}
 
-		private void Bg_onMouseLeave(object sender, EventArgs e)
+		private void bg_onMouseLeave(object sender, EventArgs e)
 		{
 			UIRect rect = (UIRect)sender;
 			rect.ForegroundColor = Color.White * 0f;
 		}
 
-		private void Bg_onMouseEnter(object sender, EventArgs e)
+		private void bg_onMouseEnter(object sender, EventArgs e)
 		{
 			UIRect rect = (UIRect)sender;
 			rect.ForegroundColor = Color.Black * .1f;
 		}
 
-		public string GetItem(int index) => items[index];
+        public string GetItem(int index) => items[index];
 
-		public void ClearItems()
+        public void ClearItems()
 		{
 			itemsWindow.RemoveAllChildren();
 			selectedItem = 0;
@@ -132,7 +132,7 @@ namespace HEROsMod.UIKit
 			items.Clear();
 		}
 
-		private void Label_onLeftClick(object sender, EventArgs e)
+		private void label_onLeftClick(object sender, EventArgs e)
 		{
             MoveToFront();
 			UIView label = (UIView)sender;
@@ -141,36 +141,33 @@ namespace HEROsMod.UIKit
 			if (tag != selectedItem)
 			{
 				selectedItem = tag;
-                SelectedChanged?.Invoke(this, new EventArgs());
+                selectedChanged?.Invoke(this, new EventArgs());
             }
 			HideItems();
-			MouseLeftButton = false;
+			UIView.MouseLeftButton = false;
 		}
 
-		protected new float Width
+		private float width = 0;
+
+        protected override float GetWidth() => width;
+
+        protected override void SetWidth(float width)
 		{
-			get => Width;
-			set
-			{
-				Width = value;
-				itemsWindow.Width = value;
-			}
+			this.width = width;
+			itemsWindow.Width = width;
 		}
 
-		protected new float Height
+		protected override float GetHeight()
 		{
-			get
-			{
-				if (itemsWindow.Visible)
-				{
-					return itemsWindow.Height;
-				}
-				else
-				{
-					return UIButton.buttonBackground.Height;
-				}
-			}
-		}
+			if (itemsWindow.Visible)
+            {
+                return itemsWindow.Height;
+            }
+            else
+            {
+                return UIButton.buttonBackground.Height;
+            }
+        }
 
 		public override void Update()
 		{
@@ -192,15 +189,15 @@ namespace HEROsMod.UIKit
 			pos.X += fillWidth;
 			spriteBatch.Draw(UIButton.buttonBackground, pos, null, BackgroundColor, 0f, Origin, 1f, SpriteEffects.FlipHorizontally, 0f);
 			if (itemsWindow.Visible)
-			{
-				spriteBatch.Draw(capUp, new Vector2(DrawPosition.X + Width - capUp.Width, DrawPosition.Y), Color.White);
-			}
-			else
-			{
-				spriteBatch.Draw(capDown, new Vector2(DrawPosition.X + Width - capUp.Width, DrawPosition.Y), Color.White);
-			}
+            {
+                spriteBatch.Draw(capUp, new Vector2(DrawPosition.X + Width - capUp.Width, DrawPosition.Y), Color.White);
+            }
+            else
+            {
+                spriteBatch.Draw(capDown, new Vector2(DrawPosition.X + Width - capUp.Width, DrawPosition.Y), Color.White);
+            }
 
-			selectedLabel.Draw(spriteBatch);
+            selectedLabel.Draw(spriteBatch);
 		}
 	}
 }

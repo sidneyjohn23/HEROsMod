@@ -13,21 +13,21 @@ namespace HEROsMod.UIKit
 
 		public bool Selected
 		{
-			get => selected;
+			get { return selected; }
 			set
 			{
 				if (value != selected)
 				{
 					selected = value;
-					SelectedChanged?.Invoke(this, EventArgs.Empty);
-				}
+                    SelectedChanged?.Invoke(this, EventArgs.Empty);
+                }
 			}
 		}
 
 		public string Text
 		{
-			get => label.Text;
-			set => label.Text = value;
+			get { return label.Text; }
+			set { label.Text = value; }
 		}
 
 		public event EventHandler SelectedChanged;
@@ -44,25 +44,25 @@ namespace HEROsMod.UIKit
                 Position = new Vector2(checkboxTexture.Width + spacing, 0)
             };
             AddChild(label);
-            OnLeftClick += new EventHandler(UICheckbox_onLeftClick);
+            onLeftClick += new EventHandler(UICheckbox_onLeftClick);
 		}
 
-		private void UICheckbox_onLeftClick(object sender, EventArgs e) => Selected = !Selected;
+        private void UICheckbox_onLeftClick(object sender, EventArgs e) => Selected = !Selected;
 
-		protected new float Height => label.Height;
+        protected override float GetHeight() => label.Height;
 
-		protected new float Width => checkboxTexture.Width + spacing + label.Width;
+        protected override float GetWidth() => checkboxTexture.Width + spacing + label.Width;
 
-		public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
 		{
 			Vector2 pos = DrawPosition + new Vector2(0, (float)label.Height / 2 - (float)checkboxTexture.Height / 1.2f);
 			spriteBatch.Draw(checkboxTexture, pos, null, Color.White, 0f, Origin, 1f, SpriteEffects.None, 0f);
 			if (Selected)
-			{
-				spriteBatch.Draw(checkmarkTexture, pos, null, Color.White, 0f, Origin, 1f, SpriteEffects.None, 0f);
-			}
+            {
+                spriteBatch.Draw(checkmarkTexture, pos, null, Color.White, 0f, Origin, 1f, SpriteEffects.None, 0f);
+            }
 
-			base.Draw(spriteBatch);
+            base.Draw(spriteBatch);
 		}
 	}
 }

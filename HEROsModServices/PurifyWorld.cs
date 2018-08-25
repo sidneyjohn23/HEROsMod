@@ -14,7 +14,7 @@ namespace HEROsMod.HEROsModServices {
             HotbarParent = hotbar;
             _name = "World Purifier";
             _hotbarIcon = new UIKit.UIImage(HEROsMod.instance.GetTexture("Images/map"));
-            _hotbarIcon.OnLeftClick += _hotbarIcon_onLeftClick;
+            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
             HotbarIcon.Tooltip = "Purify World";
             instance = this;
         }
@@ -23,7 +23,7 @@ namespace HEROsMod.HEROsModServices {
 
 		private void _hotbarIcon_onLeftClick(object sender, EventArgs e) {
             UIMessageBox mb = new UIMessageBox("Are you sure you want to purify the world?\nThis cannot be undone!", UIMessageBoxType.YesNo, true);
-            mb.YesClicked += Mb_yesClicked;
+            mb.yesClicked += Mb_yesClicked;
         }
 
         private void Mb_yesClicked(object sender, EventArgs e) {

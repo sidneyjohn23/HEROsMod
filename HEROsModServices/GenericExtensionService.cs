@@ -41,8 +41,8 @@ namespace HEROsMod.HEROsModServices
             {
                 Tooltip = "Set Spawn Point"
             };
-            HotbarIcon.OnLeftClick += new EventHandler(Button_onLeftClick);
-			HotbarIcon.OnHover += new EventHandler(Button_onHover);
+            HotbarIcon.onLeftClick += new EventHandler(button_onLeftClick);
+			HotbarIcon.onHover += new EventHandler(button_onHover);
 		}
 
 		public override void MyGroupUpdated()
@@ -51,8 +51,8 @@ namespace HEROsMod.HEROsModServices
 			groupUpdated(HasPermissionToUse);
 		}
 
-		private void Button_onLeftClick(object sender, EventArgs e) => buttonClickedAction();
+        private void button_onLeftClick(object sender, EventArgs e) => buttonClickedAction();
 
-		private void Button_onHover(object sender, EventArgs e) => HotbarIcon.Tooltip = tooltip();
-	}
+        private void button_onHover(object sender, EventArgs e) => HotbarIcon.Tooltip = tooltip();
+    }
 }

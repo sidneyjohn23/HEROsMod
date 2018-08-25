@@ -9,83 +9,73 @@ namespace HEROsMod.UIKit
 	{
 		private static MouseState mouseState = Mouse.GetState();
 		private static MouseState previousMouseState = Mouse.GetState();
+		private static GameScreen _gameScreen = null;
 
-#pragma warning disable IDE1006 // Benennungsstile
 		public static GameScreen gameScreen
-#pragma warning restore IDE1006 // Benennungsstile
 		{
 			get
 			{
-				if (gameScreen == null)
+				if (_gameScreen == null)
 				{
-					gameScreen = new GameScreen();
-					AddChildToMaster(gameScreen);
+					_gameScreen = new GameScreen();
+					AddChildToMaster(_gameScreen);
 				}
-				return gameScreen;
+				return _gameScreen;
 			}
-			set => gameScreen = value;
 		}
 
 		private static MenuScreen _menuScreen = null;
 
-#pragma warning disable IDE1006 // Benennungsstile
 		public static MenuScreen menuScreen
-#pragma warning restore IDE1006 // Benennungsstile
 		{
 			get
 			{
-				if (menuScreen == null)
+				if (_menuScreen == null)
 				{
-					menuScreen = new MenuScreen();
-					AddChildToMaster(menuScreen);
+					_menuScreen = new MenuScreen();
+					AddChildToMaster(_menuScreen);
 				}
-				return menuScreen;
+				return _menuScreen;
 			}
-			set => menuScreen = value;
 		}
 
 		private static MapScreen _mapScreen = null;
 
-#pragma warning disable IDE1006 // Benennungsstile
 		public static MapScreen mapScreen
-#pragma warning restore IDE1006 // Benennungsstile
 		{
 			get
 			{
-				if (mapScreen == null)
+				if (_mapScreen == null)
 				{
-					mapScreen = new MapScreen();
-					AddChildToMaster(mapScreen);
+					_mapScreen = new MapScreen();
+					AddChildToMaster(_mapScreen);
 				}
-				return mapScreen;
+				return _mapScreen;
 			}
-			set => mapScreen = value;
 		}
 
-		private static MasterView masterView = new MasterView();
+        protected override float GetWidth() => Main.screenWidth;
 
-		public MasterView()
-		{
-			Width = Main.screenWidth;
-			Height = Main.screenHeight;
-		}
+        protected override float GetHeight() => Main.screenHeight;
+
+        private static MasterView masterView = new MasterView();
 
 		public static void ClearMasterView()
 		{
-			masterView.Children.Clear();
+			masterView.children.Clear();
 			_mapScreen = null;
 			_menuScreen = null;
-			gameScreen = null;
+			_gameScreen = null;
 		}
 
 		public static void UpdateMaster()
 		{
 			mouseState = Mouse.GetState();
-			MouseLeftButton = mouseState.LeftButton == ButtonState.Pressed;
-			MousePrevLeftButton = previousMouseState.LeftButton == ButtonState.Pressed;
-			MouseRightButton = mouseState.RightButton == ButtonState.Pressed;
-			MousePrevRightButton = previousMouseState.RightButton == ButtonState.Pressed;
-			ScrollAmount = PlayerInput.ScrollWheelDeltaForUI;
+			UIView.MouseLeftButton = mouseState.LeftButton == ButtonState.Pressed;
+			UIView.MousePrevLeftButton = previousMouseState.LeftButton == ButtonState.Pressed;
+			UIView.MouseRightButton = mouseState.RightButton == ButtonState.Pressed;
+			UIView.MousePrevRightButton = previousMouseState.RightButton == ButtonState.Pressed;
+			UIView.ScrollAmount = PlayerInput.ScrollWheelDeltaForUI;
 			// UIView.ScrollAmount = (mouseState.ScrollWheelValue - previousMouseState.ScrollWheelValue) / 2;
 			previousMouseState = mouseState;
 			//HoverItem = EmptyItem;
@@ -104,36 +94,42 @@ namespace HEROsMod.UIKit
 			//Console.WriteLine("update: " + UpdateCalls + "draws: " + DrawCalls);
 		}
 
-		public static void AddChildToMaster(UIView view) => masterView.AddChild(view);
+        public static void AddChildToMaster(UIView view) => masterView.AddChild(view);
 
-		public static void RemoveChildFromMaster(UIView view) => masterView.RemoveChild(view);
+        public static void RemoveChildFromMaster(UIView view) => masterView.RemoveChild(view);
 
-		public class GameScreen : UIView
+        public class GameScreen : UIView
 		{
-			public GameScreen() => OverridesMouse = false;
+			public GameScreen()
+			{
+                OverridesMouse = false;
+			}
 
 			public override void Update()
 			{
 				if (!Main.gameMenu && !Main.mapFullscreen)
-				{
-					Visible = true;
-				}
-				else
-				{
-					Visible = false;
-				}
+                {
+                    Visible = true;
+                }
+                else
+                {
+                    Visible = false;
+                }
 
-				base.Update();
+                base.Update();
 			}
 
-			protected new float Width => Parent.Width;
+            protected override float GetWidth() => Parent.Width;
 
-			protected new float Height => Parent.Height;
-		}
+            protected override float GetHeight() => Parent.Height;
+        }
 
 		public class MenuScreen : UIView
 		{
-			public MenuScreen() => OverridesMouse = false;
+			public MenuScreen()
+			{
+                OverridesMouse = false;
+			}
 
 			public override void Update()
 			{
@@ -141,14 +137,17 @@ namespace HEROsMod.UIKit
 				base.Update();
 			}
 
-			protected new float Width => Parent.Width;
+            protected override float GetWidth() => Parent.Width;
 
-			protected new float Height => Parent.Height;
-		}
+            protected override float GetHeight() => Parent.Height;
+        }
 
 		public class MapScreen : UIView
 		{
-			public MapScreen() => OverridesMouse = false;
+			public MapScreen()
+			{
+                OverridesMouse = false;
+			}
 
 			public override void Update()
 			{
@@ -156,9 +155,9 @@ namespace HEROsMod.UIKit
 				base.Update();
 			}
 
-			protected new float Width => Parent.Width;
+            protected override float GetWidth() => Parent.Width;
 
-			protected new float Height => Parent.Height;
-		}
+            protected override float GetHeight() => Parent.Height;
+        }
 	}
 }

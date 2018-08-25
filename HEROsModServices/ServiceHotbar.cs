@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Terraria;
 
 namespace HEROsMod.HEROsModServices
@@ -17,40 +16,41 @@ namespace HEROsMod.HEROsModServices
 		private UIView _iconView;
 
 		private readonly List<UIView> _view = new List<UIView>();
+		private bool _collapsed = false;
 		private float _lerpAmount = 0f;
 		private UIImage collapseArrow;
 		private UIImage collapseButton;
 
 		internal UIHotbar HotBarChild;
 
-		/// <summary>
-		/// Target Y Position for the hotbar when not hidden.
-		/// </summary>
-		private float _shownYPosition => Main.screenHeight - Height - 12;
+        /// <summary>
+        /// Target Y Position for the hotbar when not hidden.
+        /// </summary>
+        private float _shownYPosition => Main.screenHeight - Height - 12;
 
-		/// <summary>
-		/// Target Y Position for the hotbar when hidden.
-		/// </summary>
-		private float _hiddenYPosition => Main.screenHeight;
+        /// <summary>
+        /// Target Y Position for the hotbar when hidden.
+        /// </summary>
+        private float _hiddenYPosition => Main.screenHeight;
 
-		/// <summary>
-		/// Returns if the hotbar is collapsed or not
-		/// </summary>
-		public bool Collapsed { get; private set; } = false;
+        /// <summary>
+        /// Returns if the hotbar is collapsed or not
+        /// </summary>
+        public bool Collapsed => _collapsed;
 
-		public Vector2 ChatOffsetPosition
+        public Vector2 ChatOffsetPosition
 		{
 			get
 			{
 				if (Visible)
-				{
-					return new Vector2(0, Position.Y - Main.screenHeight - collapseArrow.Height);
-				}
-				else
-				{
-					return Vector2.Zero;
-				}
-			}
+                {
+                    return new Vector2(0, Position.Y - Main.screenHeight - collapseArrow.Height);
+                }
+                else
+                {
+                    return Vector2.Zero;
+                }
+            }
 		}
 
 		public ServiceHotbar()
@@ -71,14 +71,14 @@ namespace HEROsMod.HEROsModServices
 			{
 				HEROsModService service = HEROsMod.ServiceController.Services[i];
 				if (service.HotbarIcon == null || !service.HasPermissionToUse)
-				{
-					continue;
-				}
+                {
+                    continue;
+                }
 
-				if (service.IsHotbar)
+                if (service.IsHotbar)
 				{
 					service.Hotbar.buttonView.RemoveAllChildren();
-					service.Hotbar.Test();
+					service.Hotbar.test();
 				}
 				if (service.IsInHotbar/* && service.HotbarParent.buttonView != null*/)
 				{
@@ -95,7 +95,7 @@ namespace HEROsMod.HEROsModServices
 					//_iconView.AddChild(icon);
 					//icon.CenterYAxisToParentCenter();
 
-					service.HotbarParent.Test();
+					service.HotbarParent.test();
 
 					//ModUtils.DebugText("added " + service.Name);
 				}
@@ -112,7 +112,7 @@ namespace HEROsMod.HEROsModServices
 			}
 			if (_iconView.ChildCount > 0)
 			{
-                Width = _iconView.Children.Last().X + _iconView.Children.Last().Width + Spacing;
+                Width = _iconView.GetLastChild().X + _iconView.GetLastChild().Width + Spacing;
 				_iconView.Width = Width;
 			}
 			collapseButton.CenterXAxisToParentCenter();
@@ -126,7 +126,7 @@ namespace HEROsMod.HEROsModServices
             Anchor = AnchorPosition.Top;
             UpdateWhenOutOfBounds = true;
 			MasterView.gameScreen.AddChild(this);
-            _iconView = new UIView()
+            _iconView = new UIView
             {
                 Width = Width,
                 Height = Height
@@ -149,18 +149,18 @@ namespace HEROsMod.HEROsModServices
 			collapseButton.Position = new Vector2(0, -collapseButton.Height);
 			collapseButton.CenterXAxisToParentCenter();
 			collapseArrow.Position = collapseButton.Position;
-			collapseArrow.OnLeftClick += CollapseArrow_onLeftClick;
+			collapseArrow.onLeftClick += collapseArrow_onLeftClick;
 		}
 
-		private void CollapseArrow_onLeftClick(object sender, EventArgs e)
+		private void collapseArrow_onLeftClick(object sender, EventArgs e)
 		{
-			if (HotBarChild != null && HotBarChild.Selected)
+			if (HotBarChild != null && HotBarChild.selected)
 			{
-				HotBarChild.Selected = false;
+				HotBarChild.selected = false;
 				//HotBarChild = null;
 				return;
 			}
-			Collapsed = !Collapsed;
+			_collapsed = !Collapsed;
 			if (Collapsed)
 			{
 				//if(HotBarChild != null)
@@ -190,18 +190,18 @@ namespace HEROsMod.HEROsModServices
 			{
 				_lerpAmount -= ModUtils.DeltaTime * moveSpeed;
 				if (_lerpAmount < 0f)
-				{
-					_lerpAmount = 0f;
-				}
-			}
+                {
+                    _lerpAmount = 0f;
+                }
+            }
 			else
 			{
 				_lerpAmount += ModUtils.DeltaTime * moveSpeed;
 				if (_lerpAmount > 1f)
-				{
-					_lerpAmount = 1f;
-				}
-			}
+                {
+                    _lerpAmount = 1f;
+                }
+            }
 			float yPos = MathHelper.SmoothStep(_hiddenYPosition, _shownYPosition, _lerpAmount);
             Position = new Vector2(X, yPos);
             CenterXAxisToParentCenter();
@@ -209,6 +209,6 @@ namespace HEROsMod.HEROsModServices
 			base.Update();
 		}
 
-		protected override bool IsMouseInside() => base.IsMouseInside() || collapseArrow.MouseInside;
-	}
+        protected override bool IsMouseInside() => base.IsMouseInside() || collapseArrow.MouseInside;
+    }
 }

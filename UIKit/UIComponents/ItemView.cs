@@ -29,12 +29,12 @@ namespace HEROsMod.UIKit.UIComponents
 		{
             Scale = .85f;
 			this.item = item.Clone();
-            OnHover += Slot2_onHover;
+            onHover += Slot2_onHover;
 		}
 
-		private void Slot2_onHover(object sender, EventArgs e) => HoverText = item.Name;//HoverItem = item.Clone();
+        private void Slot2_onHover(object sender, EventArgs e) => HoverText = item.Name;//HoverItem = item.Clone();
 
-		public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
 		{
 			//Demon altar exception
 			Texture2D texture = null;

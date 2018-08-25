@@ -6,20 +6,23 @@ namespace HEROsMod.UIKit.UIComponents
 	{
 		public float Value
 		{
-			get => slider.Value;
-			set => slider.Value = value;
+			get { return slider.Value; }
+			set
+			{
+				slider.Value = value;
+			}
 		}
 
 		public float Min
 		{
-			get => slider.MinValue;
-			set => slider.MinValue = value;
+			get { return slider.MinValue; }
+			set { slider.MinValue = value; }
 		}
 
 		public float Max
 		{
-			get => slider.MaxValue;
-			set => slider.MaxValue = value;
+			get { return slider.MaxValue; }
+			set { slider.MaxValue = value; }
 		}
 
 		public event EventHandler ValueChanged;
@@ -29,16 +32,16 @@ namespace HEROsMod.UIKit.UIComponents
 
 		public SliderWithTextbox(float startValue, float minValue, float maxValue)
 		{
-            textbox = new UITextbox()
+            textbox = new UITextbox
             {
                 Width = 125
             };
-            textbox.KeyPressed += Textbox_KeyPressed;
-			textbox.OnLostFocus += Textbox_OnLostFocus;
+            textbox.KeyPressed += textbox_KeyPressed;
+			textbox.OnLostFocus += textbox_OnLostFocus;
 			textbox.Numeric = true;
 			textbox.HasDecimal = true;
 			slider = new UISlider();
-			slider.ValueChanged += Slider_valueChanged;
+			slider.valueChanged += slider_valueChanged;
 
 			slider.X = textbox.X + textbox.Width + Spacing;
 			AddChild(textbox);
@@ -54,9 +57,9 @@ namespace HEROsMod.UIKit.UIComponents
             Width = slider.X + slider.Width;
 		}
 
-		private void Textbox_OnLostFocus(object sender, EventArgs e) => textbox.Text = slider.Value.ToString();
+        private void textbox_OnLostFocus(object sender, EventArgs e) => textbox.Text = slider.Value.ToString();
 
-		private void Textbox_KeyPressed(object sender, char key)
+        private void textbox_KeyPressed(object sender, char key)
 		{
 			if (textbox.Text.Length == 0 || textbox.Text == "-")
 			{
@@ -67,7 +70,7 @@ namespace HEROsMod.UIKit.UIComponents
             ValueChanged?.Invoke(this, EventArgs.Empty);
         }
 
-		private void Slider_valueChanged(object sender, float value)
+		private void slider_valueChanged(object sender, float value)
 		{
 			if (!textbox.HadFocus)
 			{

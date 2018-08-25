@@ -15,9 +15,9 @@ namespace HEROsMod.HEROsModServices
 		{
             _hotbarIcon = new UIImage(Main.buffTexture[3]);
             HotbarIcon.Tooltip = "Test Hotbar";
-            HotbarIcon.OnLeftClick += HotbarIcon_onLeftClick;
+            HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 
-            _testHotbarWindow = new TestHotbarWindow()
+            _testHotbarWindow = new TestHotbarWindow
             {
                 HotBarParent = HEROsMod.ServiceHotbar
             };
@@ -30,9 +30,9 @@ namespace HEROsMod.HEROsModServices
 			//Main.NewText("Toggle Hotbar");
 
 			//_testHotbarWindow.Visible = !_testHotbarWindow.Visible;
-			if (_testHotbarWindow.Selected)
+			if (_testHotbarWindow.selected)
 			{
-				_testHotbarWindow.Selected = false;
+				_testHotbarWindow.selected = false;
 				_testHotbarWindow.Hide();
 				//Main.NewText("Hide Hotbar");
 
@@ -41,7 +41,7 @@ namespace HEROsMod.HEROsModServices
 			else
 			{
 				//DisableAllWindows();
-				_testHotbarWindow.Selected = true;
+				_testHotbarWindow.selected = true;
 				_testHotbarWindow.Show();
 				//Main.NewText("Show Hotbar");
 
@@ -52,7 +52,7 @@ namespace HEROsMod.HEROsModServices
 
 	internal class TestHotbarWindow : UIHotbar
 	{
-		new public UIView buttonView;
+		public new UIView buttonView;
 		public UIImage bStampTiles;
 		public UIImage bEyeDropper;
 		public UIImage bFlipHorizontal;
@@ -62,7 +62,7 @@ namespace HEROsMod.HEROsModServices
 		public TestHotbarWindow()
 		{
             buttonView = new UIView();
-			Visible = false;
+			base.Visible = false;
 			bStampTiles = new UIImage(Main.itemTexture[ItemID.Paintbrush]);
 			bEyeDropper = new UIImage(Main.itemTexture[ItemID.EmptyDropper]);
 			bFlipHorizontal = new UIImage(Main.itemTexture[ItemID.PadThai]);
@@ -78,22 +78,22 @@ namespace HEROsMod.HEROsModServices
 			buttonView.AddChild(bFlipHorizontal);
 			buttonView.AddChild(bFlipVertical);
 			buttonView.AddChild(bToggleTransparentSelection);
-			Width = 200f;
-			Height = 55f;
-            buttonView.Height = Height;
-			Anchor = AnchorPosition.Top;
+			base.Width = 200f;
+			base.Height = 55f;
+            buttonView.Height = base.Height;
+			base.Anchor = AnchorPosition.Top;
             AddChild(buttonView);
-			Position = new Vector2(Position.X, HiddenPosition);
-			CenterXAxisToParentCenter();
+			base.Position = new Vector2(Position.X, hiddenPosition);
+			base.CenterXAxisToParentCenter();
 			float num = spacing;
-			for (int i = 0; i < buttonView.Children.Count; i++)
+			for (int i = 0; i < buttonView.children.Count; i++)
 			{
-                buttonView.Children[i].Anchor = AnchorPosition.Left;
-                buttonView.Children[i].Position = new Vector2(num, 0f);
-                buttonView.Children[i].CenterYAxisToParentCenter();
-                buttonView.Children[i].Visible = true;
-                buttonView.Children[i].ForegroundColor = buttonUnselectedColor;
-				num += buttonView.Children[i].Width + spacing;
+                buttonView.children[i].Anchor = AnchorPosition.Left;
+                buttonView.children[i].Position = new Vector2(num, 0f);
+                buttonView.children[i].CenterYAxisToParentCenter();
+                buttonView.children[i].Visible = true;
+                buttonView.children[i].ForegroundColor = buttonUnselectedColor;
+				num += buttonView.children[i].Width + spacing;
 			}
             Resize();
 		}
@@ -108,25 +108,25 @@ namespace HEROsMod.HEROsModServices
 		public void Resize()
 		{
 			float num = spacing;
-			for (int i = 0; i < buttonView.Children.Count; i++)
+			for (int i = 0; i < buttonView.children.Count; i++)
 			{
-				if (buttonView.Children[i].Visible)
+				if (buttonView.children[i].Visible)
 				{
-                    buttonView.Children[i].X = num;
-					num += buttonView.Children[i].Width + spacing;
+                    buttonView.children[i].X = num;
+					num += buttonView.children[i].Width + spacing;
 				}
 			}
-			Width = num;
-            buttonView.Width = Width;
+			base.Width = num;
+            buttonView.Width = base.Width;
 		}
 
-		new public void Hide()
+		public new void Hide()
 		{
 			hidden = true;
 			arrived = false;
 		}
 
-		new public void Show()
+		public new void Show()
 		{
 			arrived = false;
 			hidden = false;

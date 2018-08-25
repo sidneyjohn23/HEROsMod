@@ -11,17 +11,17 @@ namespace HEROsMod.HEROsModServices
 		{
 			IsInHotbar = true;
 			HotbarParent = hotbar;
-			_name = "Spawn Point Setter";
-			_hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/spawn")/*Main.itemTexture[69]*/)
-			{
-				Tooltip = HEROsMod.HeroText("SetSpawnPoint")
-			};
-			HotbarIcon.OnLeftClick += HotbarIcon_onLeftClick;
+            _name = "Spawn Point Setter";
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/spawn")/*Main.itemTexture[69]*/)
+            {
+                Tooltip = HEROsMod.HeroText("SetSpawnPoint")
+            };
+            HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 		}
 
-		public override void MyGroupUpdated() => HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.IsAdmin;//base.MyGroupUpdated();
+        public override void MyGroupUpdated() => HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.IsAdmin;//base.MyGroupUpdated();
 
-		private void HotbarIcon_onLeftClick(object sender, EventArgs e)
+        private void HotbarIcon_onLeftClick(object sender, EventArgs e)
 		{
 			if (ModUtils.NetworkMode == NetworkMode.None)
 			{

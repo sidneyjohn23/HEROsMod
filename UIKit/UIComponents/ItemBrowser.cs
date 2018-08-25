@@ -3,6 +3,11 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
+//using System.Xml.Serialization;
+//using System.Xml;
+//using System.Reflection;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -17,6 +22,8 @@ namespace HEROsMod.UIKit.UIComponents
 		private ItemCollectionView _itemView;
 		private readonly Slot _trashCan;
 		private UIScrollView _categoryView;
+		private Category _selectedCategory;
+		private Item[] _currentItems;
 		private UIImage _bCollapseCategories;
 		private UIButton _bBack;
 		private UIImage _bClose;
@@ -24,27 +31,27 @@ namespace HEROsMod.UIKit.UIComponents
 		private UIImage _spacer;
 		private UIView _sortView;
 
-        private readonly Texture2D _collapseTexture;
-        private readonly Texture2D _expandTexture;
-        private readonly Texture2D _spacerTexture;
+		private readonly Texture2D _collapseTexture;
+		private readonly Texture2D _expandTexture;
+		private readonly Texture2D _spacerTexture;
 
-        private float _collapsePosition = 1f;
-        private bool _collapsed = false;
-        private readonly float shownWidth;
-        private readonly float hiddenWidth;
+		private float _collapsePosition = 1f;
+		private bool _collapsed = false;
+		private readonly float shownWidth;
+		private readonly float hiddenWidth;
 
-        public UITextbox SearchBox;
+		public UITextbox SearchBox;
 
-        internal Category SelectedCategory
+		internal Category SelectedCategory
 		{
-			get => SelectedCategory;
+			get { return _selectedCategory; }
 			set
 			{
-				if (SelectedCategory != value)
+				if (_selectedCategory != value)
 				{
 					SearchBox.Text = string.Empty;
 				}
-				SelectedCategory = value;
+				_selectedCategory = value;
 				if (CategoriesLoaded)
 				{
 					PopulateFilterView(); // mod/vanilla,
@@ -57,39 +64,42 @@ namespace HEROsMod.UIKit.UIComponents
 
 		private Item[] CurrentItems
 		{
-			get => CurrentItems;
+			get { return _currentItems; }
 			set
 			{
-				CurrentItems = value;
-				_itemView.Items = CurrentItems;
+				_currentItems = value;
+				_itemView.Items = _currentItems;
 			}
 		}
 
 		internal Sort SelectedSort;
-        internal Sort[] AvailableSorts = new Sort[0];
+		internal Sort[] AvailableSorts = new Sort[0];
+		//internal Sort[] DefaultSorts;
 
-        public ItemBrowser() {
+		public ItemBrowser()
+		{
             CanMove = true;
-            //Height = 420;
+			//Height = 420;
 
-            _expandTexture = HEROsMod.instance.GetTexture("Images/ExpandIcon");
-            _collapseTexture = HEROsMod.instance.GetTexture("Images/CollapseIcon");
-            _spacerTexture = HEROsMod.instance.GetTexture("Images/spacer");
+			_expandTexture = HEROsMod.instance.GetTexture("Images/ExpandIcon");
+			_collapseTexture = HEROsMod.instance.GetTexture("Images/CollapseIcon");
+			_spacerTexture = HEROsMod.instance.GetTexture("Images/spacer");
 
-            //UILabel lTitle = new UILabel("Item Browser");
-            //lTitle.Scale = .6f;
-            //lTitle.X = LargeSpacing;
-            //lTitle.Y = LargeSpacing;
-            //lTitle.OverridesMouse = false;
-            //AddChild(lTitle);
+			//UILabel lTitle = new UILabel("Item Browser");
+			//lTitle.Scale = .6f;
+			//lTitle.X = LargeSpacing;
+			//lTitle.Y = LargeSpacing;
+			//lTitle.OverridesMouse = false;
+			//AddChild(lTitle);
 
-            _itemView = new ItemCollectionView();
-            Height = LargeSpacing * 2 + _itemView.Height + 32;
-            _itemView.X = LargeSpacing;
-            _itemView.Y = Height - LargeSpacing - _itemView.Height;
-            AddChild(_itemView);
+			_itemView = new ItemCollectionView();
+			Height = LargeSpacing * 2 + _itemView.Height + 32;
+			_itemView.X = LargeSpacing;
+			_itemView.Y = Height - LargeSpacing - _itemView.Height;
+			AddChild(_itemView);
 
-            _categoryView = new UIScrollView() {
+            _categoryView = new UIScrollView
+            {
                 X = _itemView.X + _itemView.Width + LargeSpacing,
                 Y = _itemView.Y,
                 Width = 45 + numberCategoryColumns * 100,
@@ -97,36 +107,56 @@ namespace HEROsMod.UIKit.UIComponents
             };
             AddChild(_categoryView);
 
-            Width = _categoryView.X + _categoryView.Width + LargeSpacing;
+			Width = _categoryView.X + _categoryView.Width + LargeSpacing;
 
-            _bClose = new UIImage(HEROsMod.instance.GetTexture("Images/closeButton")) {
+            _bClose = new UIImage(HEROsMod.instance.GetTexture("Images/closeButton"))
+            {
                 Anchor = AnchorPosition.TopRight,
                 Position = new Vector2(Width - LargeSpacing, LargeSpacing)
             };
-            _bClose.OnLeftClick += BClose_onLeftClick;
-            AddChild(_bClose);
+            _bClose.onLeftClick += bClose_onLeftClick;
+			AddChild(_bClose);
 
-            SearchBox = new UITextbox() {
+            SearchBox = new UITextbox
+            {
                 Width = 125
             };
             SearchBox.X = _itemView.X + _itemView.Width - SearchBox.Width;
-            SearchBox.Y = _itemView.Y - SearchBox.Height - Spacing - 4;
-            SearchBox.KeyPressed += Textbox_KeyPressed;
-            AddChild(SearchBox);
+			SearchBox.Y = _itemView.Y - SearchBox.Height - Spacing - 4;
+			SearchBox.KeyPressed += textbox_KeyPressed;
+			AddChild(SearchBox);
 
-            _filterView = new UIView() {
+            _filterView = new UIView
+            {
                 Position = new Vector2(LargeSpacing, Spacing),
+                //_filterView.onLeftClick += _bViewAllItems_onLeftClick;
+                //{
+                //	UIImage test = new UIImage(HEROsMod.instance.GetTexture("Images/closeButton"));
+                //	test.onLeftClick += bClose_onLeftClick;
+                //	_filterView.AddChild(test);
+                //	UIImage test2 = new UIImage(HEROsMod.instance.GetTexture("Images/closeButton"));
+                //	test2.onLeftClick += bClose_onLeftClick;
+                //	test2.Position = test.Position;
+                //	test2.X += test.Width;
+                //	test2.ForegroundColor = Color.Azure;
+                //	_filterView.AddChild(test2);
+                //}
+                //	_filterView.ForegroundColor = Color.Red;
+                //	_filterView.BackgroundColor = Color.Pink;
+                //	_filterView.Width = 100;
                 Height = 40
             };
             AddChild(_filterView);
 
-            _spacer = new UIImage(_spacerTexture) {
+            _spacer = new UIImage(_spacerTexture)
+            {
                 Position = new Vector2(Spacing, LargeSpacing),
                 Height = 40
             };
             AddChild(_spacer);
 
-            _sortView = new UIView() {
+            _sortView = new UIView
+            {
                 Position = new Vector2(Spacing, Spacing),
                 //_sortView.onLeftClick += _bViewAllItems_onLeftClick;
                 //	_sortView.ForegroundColor = Color.Red;
@@ -136,84 +166,95 @@ namespace HEROsMod.UIKit.UIComponents
             };
             AddChild(_sortView);
 
-			//_trashCan = new Slot(0);
-			//_trashCan.IsTrachCan = true;
-			//_trashCan.X = _itemView.X;
-			//_trashCan.Y = _itemView.Y - _trashCan.Height - SmallSpacing/2;
-			//AddChild(_trashCan);
+            //_trashCan = new Slot(0);
+            //_trashCan.IsTrachCan = true;
+            //_trashCan.X = _itemView.X;
+            //_trashCan.Y = _itemView.Y - _trashCan.Height - SmallSpacing/2;
+            //AddChild(_trashCan);
 
-			_bBack = new UIButton(Language.GetTextValue("UI.Back"))
-			{
-				X = _categoryView.X
-			};
-			_bBack.Y = _categoryView.Y - _bBack.Height - Spacing;
-			_bBack.OnLeftClick += _bViewAllItems_onLeftClick;
+            _bBack = new UIButton(Language.GetTextValue("UI.Back"))
+            {
+                X = _categoryView.X
+            };
+            _bBack.Y = _categoryView.Y - _bBack.Height - Spacing;
+			_bBack.onLeftClick += _bViewAllItems_onLeftClick;
 			AddChild(_bBack);
 
-            _bCollapseCategories = new UIImage(_collapseTexture);
-            _bCollapseCategories.X = Width - _bCollapseCategories.Width - LargeSpacing;
-            _bCollapseCategories.Y = _categoryView.Y - _bCollapseCategories.Height - Spacing;
-            _bCollapseCategories.OnLeftClick += _bCollapseCategories_onLeftClick;
-            AddChild(_bCollapseCategories);
+			_bCollapseCategories = new UIImage(_collapseTexture);
+			_bCollapseCategories.X = Width - _bCollapseCategories.Width - LargeSpacing;
+			_bCollapseCategories.Y = _categoryView.Y - _bCollapseCategories.Height - Spacing;
+			_bCollapseCategories.onLeftClick += _bCollapseCategories_onLeftClick;
+			AddChild(_bCollapseCategories);
 
-            shownWidth = _categoryView.X + _categoryView.Width + LargeSpacing;
-            hiddenWidth = _itemView.X + _itemView.Width + LargeSpacing;
+			shownWidth = _categoryView.X + _categoryView.Width + LargeSpacing;
+			hiddenWidth = _itemView.X + _itemView.Width + LargeSpacing;
 
-            //ParseList2();
-            SelectedCategory = null;
-        }
+			//ParseList2();
+			SelectedCategory = null;
+		}
 
-        private void _bViewAllItems_onLeftClick(object sender, EventArgs e) {
-            if (SelectedCategory != null) {
-                SelectedCategory = SelectedCategory.ParentCategory;
-            }
-            if (SelectedCategory == null) {
-                ((UIButton) sender).Visible = false;
-            }
-        }
-
-        private void _bCollapseCategories_onLeftClick(object sender, EventArgs e) {
-            _collapsed = !_collapsed;
-            if (_collapsed) {
-                _bCollapseCategories.Texture = _expandTexture;
-            } else {
-                _bCollapseCategories.Texture = _collapseTexture;
-            }
-        }
-
-        private void WhiteAllCategoryButtons() {
-            for (int i = 1; i < _categoryView.Children.Count; i++) {
-                ((UIButton) _categoryView.Children[i]).SetTextColor(Color.White);
-            }
-        }
-
-        private static int numberCategoryColumns = 1;
-
-        private void PopulateCategoryView() {
-            Category[] categories = Categories;
-            if (SelectedCategory != null) {
-                categories = SelectedCategory.SubCategories.ToArray();
-                if (categories.Length == 0)
-				{
-					return;
-				}
+		private void _bViewAllItems_onLeftClick(object sender, EventArgs e)
+		{
+			if (SelectedCategory != null)
+			{
+				SelectedCategory = SelectedCategory.ParentCategory;
 			}
+			if (SelectedCategory == null)
+			{
+				((UIButton)sender).Visible = false;
+			}
+		}
+
+		private void _bCollapseCategories_onLeftClick(object sender, EventArgs e)
+		{
+			_collapsed = !_collapsed;
+			if (_collapsed)
+			{
+				_bCollapseCategories.Texture = _expandTexture;
+			}
+			else
+			{
+				_bCollapseCategories.Texture = _collapseTexture;
+			}
+		}
+
+		private void WhiteAllCategoryButtons()
+		{
+			for (int i = 1; i < _categoryView.children.Count; i++)
+			{
+				((UIButton)_categoryView.children[i]).SetTextColor(Color.White);
+			}
+		}
+
+		private static int numberCategoryColumns = 1;
+
+		private void PopulateCategoryView()
+		{
+			Category[] categories = Categories;
+			if (SelectedCategory != null)
+			{
+				categories = SelectedCategory.SubCategories.ToArray();
+				if (categories.Length == 0)
+                {
+                    return;
+                }
+            }
 
 			_categoryView.ClearContent();
 			float yPos = 0;
 			for (int i = 0; i < categories.Length; i++)
 			{
-				UIButton button = new UIButton(categories[i].LocalizedName)
-				{
-					Tag = categories[i],
-					AutoSize = false,
-					Width = 100
-				};
-				int x = i % numberCategoryColumns;
+                UIButton button = new UIButton(categories[i].LocalizedName)
+                {
+                    Tag = categories[i],
+                    AutoSize = false,
+                    Width = 100
+                };
+                int x = i % numberCategoryColumns;
 				int y = i / numberCategoryColumns;
 				button.X = Spacing + x * (button.Width + Spacing);
 				button.Y = Spacing + y * (button.Height + Spacing);
-				button.OnLeftClick += Button_onLeftClick;
+				button.onLeftClick += button_onLeftClick;
 				yPos = button.Y + button.Height + Spacing;
 				_categoryView.AddChild(button);
 			}
@@ -233,34 +274,39 @@ namespace HEROsMod.UIKit.UIComponents
 			}
 			List<Sort> sorts = DefaultSorts.ToList();
 
-            if (SelectedCategory != null) {
-                if (SelectedCategory.ParentCategory != null) {
-                    foreach (Sort item in SelectedCategory.ParentCategory.Sorts) {
-                        sorts.Add(item);
-                    }
-                }
-                foreach (Sort item in SelectedCategory.Sorts) {
-                    sorts.Add(item);
-                }
-            }
+			if (SelectedCategory != null)
+			{
+				if (SelectedCategory.ParentCategory != null)
+				{
+					foreach (Sort item in SelectedCategory.ParentCategory.Sorts)
+					{
+						sorts.Add(item);
+					}
+				}
+				foreach (Sort item in SelectedCategory.Sorts)
+				{
+					sorts.Add(item);
+				}
+			}
 
-            AvailableSorts = sorts.ToArray();
+			AvailableSorts = sorts.ToArray();
 
-            _sortView.RemoveAllChildren();
-            _sortView.X = _spacer.X + _spacer.Width;
-            float xPos = 0;
-            for (int i = 0; i < AvailableSorts.Length; i++) {
-                UIImage button = AvailableSorts[i].button;
-                button.Width = 20;
-                int x = i / 1;
-                int y = i % 1;
-                button.X = Spacing + x * (button.Width + Spacing);
-                button.Y = Spacing + y * (button.Height + Spacing);
-                xPos = button.X + button.Width + Spacing;
-                _sortView.AddChild(button);
-            }
-            _sortView.Width = xPos;
-        }
+			_sortView.RemoveAllChildren();
+			_sortView.X = _spacer.X + _spacer.Width;
+			float xPos = 0;
+			for (int i = 0; i < AvailableSorts.Length; i++)
+			{
+				UIImage button = AvailableSorts[i].button;
+				button.Width = 20;
+				int x = i / 1;
+				int y = i % 1;
+				button.X = Spacing + x * (button.Width + Spacing);
+				button.Y = Spacing + y * (button.Height + Spacing);
+				xPos = button.X + button.Width + Spacing;
+				_sortView.AddChild(button);
+			}
+			_sortView.Width = xPos;
+		}
 
 		private void PopulateFilterView()
 		{
@@ -278,328 +324,346 @@ namespace HEROsMod.UIKit.UIComponents
 			//	if (categories.Length == 0) return;
 			//}
 
-            _filterView.RemoveAllChildren();
-            float xPos = 0;
-            for (int i = 0; i < Filters.Length; i++) {
-                Filter f = Filters[i];
-
-                UIImage button = Filters[i].button;
-                if (f.enabled) {
-                    button.ForegroundColor = Color.White;
-                } else {
-                    button.ForegroundColor = Color.Gray;
-                }
-
-                //button.Tag = categories[i];
-                //button.AutoSize = false;
-                button.Width = 20;
-                int x = i / 1;
-                int y = i % 1;
-                button.X = Spacing + x * (button.Width + Spacing);
-                button.Y = Spacing + y * (button.Height + Spacing);
-                //button.onLeftClick += (s, e) => {
-                //	f.enabled = !f.enabled;
-                //	Main.NewText(f.button.Tooltip + " " + f.enabled);
-                //};
-                //button.onLeftClick += (s, e) => Main.NewText(((UIImage)s).Tooltip);
-                xPos = button.X + button.Width + Spacing;
-                _filterView.AddChild(button);
-            }
-            _filterView.Width = xPos;
-            _spacer.X = _filterView.X + _filterView.Width;
-        }
-
-        private void Button_onLeftClick(object sender, EventArgs e) {
-            UIButton button = (UIButton) sender;
-            WhiteAllCategoryButtons();
-            button.SetTextColor(Color.Yellow);
-            SelectedCategory = (Category) button.Tag;
-        }
-
-        public override void Update() {
-            if (!Main.playerInventory)
+			_filterView.RemoveAllChildren();
+			float xPos = 0;
+			for (int i = 0; i < Filters.Length; i++)
 			{
-				Visible = false;
-			}
+				Filter f = Filters[i];
 
-			float moveSpeed = 5f;
-            _categoryView.Visible = true;
-            _bBack.Visible = SelectedCategory != null;
-            if (_collapsed) {
-                _collapsePosition -= ModUtils.DeltaTime * moveSpeed;
-                if (_collapsePosition < 0f) {
-                    _categoryView.Visible = false;
-                    _bBack.Visible = false;
-                    _collapsePosition = 0f;
-                }
-            } else {
-                _collapsePosition += ModUtils.DeltaTime * moveSpeed;
-                if (_collapsePosition > 1f)
+				UIImage button = Filters[i].button;
+				if (f.enabled)
 				{
-					_collapsePosition = 1f;
+					button.ForegroundColor = Color.White;
+				}
+				else
+				{
+					button.ForegroundColor = Color.Gray;
+				}
+
+				//button.Tag = categories[i];
+				//button.AutoSize = false;
+				button.Width = 20;
+				int x = i / 1;
+				int y = i % 1;
+				button.X = Spacing + x * (button.Width + Spacing);
+				button.Y = Spacing + y * (button.Height + Spacing);
+				//button.onLeftClick += (s, e) => {
+				//	f.enabled = !f.enabled;
+				//	Main.NewText(f.button.Tooltip + " " + f.enabled);
+				//};
+				//button.onLeftClick += (s, e) => Main.NewText(((UIImage)s).Tooltip);
+				xPos = button.X + button.Width + Spacing;
+				_filterView.AddChild(button);
+			}
+			_filterView.Width = xPos;
+			_spacer.X = _filterView.X + _filterView.Width;
+		}
+
+		private void button_onLeftClick(object sender, EventArgs e)
+		{
+			UIButton button = (UIButton)sender;
+			WhiteAllCategoryButtons();
+			button.SetTextColor(Color.Yellow);
+			SelectedCategory = (Category)button.Tag;
+		}
+
+		public override void Update()
+		{
+			if (!Main.playerInventory)
+            {
+                Visible = false;
+            }
+
+            float moveSpeed = 5f;
+			_categoryView.Visible = true;
+			_bBack.Visible = SelectedCategory != null;
+			if (_collapsed)
+			{
+				_collapsePosition -= ModUtils.DeltaTime * moveSpeed;
+				if (_collapsePosition < 0f)
+				{
+					_categoryView.Visible = false;
+					_bBack.Visible = false;
+					_collapsePosition = 0f;
 				}
 			}
+			else
+			{
+				_collapsePosition += ModUtils.DeltaTime * moveSpeed;
+				if (_collapsePosition > 1f)
+                {
+                    _collapsePosition = 1f;
+                }
+            }
             Width = MathHelper.SmoothStep(hiddenWidth, shownWidth, _collapsePosition);
-            _categoryView.Opacity = MathHelper.SmoothStep(0, 1f, _collapsePosition);
-            _bBack.X = _categoryView.X;
-            _bBack.Opacity = _categoryView.Opacity;
-            _bCollapseCategories.X = Width - _bCollapseCategories.Width - LargeSpacing - 30;
-            _categoryView.X = Width - _categoryView.Width - LargeSpacing;
-            _bClose.X = Width - LargeSpacing;
-            SearchBox.X = _itemView.X + _itemView.Width - SearchBox.Width;
-            if (_bCollapseCategories.X - Spacing < SearchBox.X + SearchBox.Width) {
-                SearchBox.X = _bCollapseCategories.X + -SearchBox.Width - Spacing;
-            }
-            base.Update();
-        }
+			_categoryView.Opacity = MathHelper.SmoothStep(0, 1f, _collapsePosition);
+			_bBack.X = _categoryView.X;
+			_bBack.Opacity = _categoryView.Opacity;
+			_bCollapseCategories.X = Width - _bCollapseCategories.Width - LargeSpacing - 30;
+			_categoryView.X = Width - _categoryView.Width - LargeSpacing;
+			_bClose.X = Width - LargeSpacing;
+			SearchBox.X = _itemView.X + _itemView.Width - SearchBox.Width;
+			if (_bCollapseCategories.X - Spacing < SearchBox.X + SearchBox.Width)
+			{
+				SearchBox.X = _bCollapseCategories.X + -SearchBox.Width - Spacing;
+			}
+			base.Update();
+		}
 
-		private void BClose_onLeftClick(object sender, EventArgs e) => Visible = false;
+        private void bClose_onLeftClick(object sender, EventArgs e) => Visible = false;
 
-		private void Textbox_KeyPressed(object sender, char key) {
-            //if (_selectedCategory != null)
-            //{
-            //	_selectedCategory = null;
-            //	CurrentItems = GetItems();
-            //	PopulateCategoryView();
-            //}
+        private void textbox_KeyPressed(object sender, char key)
+		{
+			//if (_selectedCategory != null)
+			//{
+			//	_selectedCategory = null;
+			//	CurrentItems = GetItems();
+			//	PopulateCategoryView();
+			//}
 
-            //if (SearchBox.Text.Length > 0)
-            //{
-            //	List<Item> matches = new List<Item>();
-            //	foreach (Item item in CurrentItems)
-            //	{
-            //		if (item.name.ToLower().IndexOf(SearchBox.Text.ToLower(), System.StringComparison.Ordinal) != -1)
-            //		{
-            //			matches.Add(item);
-            //		}
-            //	}
-            //	if (matches.Count > 0)
-            //	{
-            //		_itemView.Items = matches.ToArray();
-            //	}
-            //	else
-            //	{
-            //		SearchBox.Text = SearchBox.Text.Substring(0, SearchBox.Text.Length - 1);
-            //	}
-            //}
-            //else
-            //{
-            //	_itemView.Items = CurrentItems;
-            //}
-            if (SearchBox.Text.Length > 0) {
-                bool match = false;
-                foreach (Item item in CurrentItems) {
-                    if (item.Name.ToLower().IndexOf(SearchBox.Text, StringComparison.OrdinalIgnoreCase) != -1) {
-                        match = true;
-                        break;
-                    }
-                }
-                if (!match) {
-                    SearchBox.Text = SearchBox.Text.Substring(0, SearchBox.Text.Length - 1);
-                }
-            }
+			//if (SearchBox.Text.Length > 0)
+			//{
+			//	List<Item> matches = new List<Item>();
+			//	foreach (Item item in CurrentItems)
+			//	{
+			//		if (item.name.ToLower().IndexOf(SearchBox.Text.ToLower(), System.StringComparison.Ordinal) != -1)
+			//		{
+			//			matches.Add(item);
+			//		}
+			//	}
+			//	if (matches.Count > 0)
+			//	{
+			//		_itemView.Items = matches.ToArray();
+			//	}
+			//	else
+			//	{
+			//		SearchBox.Text = SearchBox.Text.Substring(0, SearchBox.Text.Length - 1);
+			//	}
+			//}
+			//else
+			//{
+			//	_itemView.Items = CurrentItems;
+			//}
+			if (SearchBox.Text.Length > 0)
+			{
+				bool match = false;
+				foreach (Item item in CurrentItems)
+				{
+					if (item.Name.ToLower().IndexOf(SearchBox.Text, StringComparison.OrdinalIgnoreCase) != -1)
+					{
+						match = true;
+						break;
+					}
+				}
+				if (!match)
+				{
+					SearchBox.Text = SearchBox.Text.Substring(0, SearchBox.Text.Length - 1);
+				}
+			}
 
-            SelectedCategory = SelectedCategory;
-        }
+			SelectedCategory = SelectedCategory;
+		}
 
-        // Caller of Category.GetItems
-        public Item[] GetItems() {
-            foreach (Sort item in AvailableSorts) {
-                item.button.ForegroundColor = Color.Gray;
-            }
-            if (SelectedSort == null || !AvailableSorts.Contains(SelectedSort)) {
-                //ErrorLogger.Log("Default Sort Selected");
-                SelectedSort = DefaultSorts[0];
-            }
-            SelectedSort.button.ForegroundColor = Color.White;
+		// Caller of Category.GetItems
+		public Item[] GetItems()
+		{
+			foreach (Sort item in AvailableSorts)
+			{
+				item.button.ForegroundColor = Color.Gray;
+			}
+			if (SelectedSort == null || !AvailableSorts.Contains(SelectedSort))
+			{
+				//ErrorLogger.Log("Default Sort Selected");
+				SelectedSort = DefaultSorts[0];
+			}
+			SelectedSort.button.ForegroundColor = Color.White;
 
-            List<Item> result = new List<Item>();
-            if (SelectedCategory == null) {
-                foreach (Category category in Categories) {
-                    Item[] items = category.GetItems();
-                    foreach (Item item in items) {
-                        result.Add(item);
-                    }
-                }
-            } else {
-                result = SelectedCategory.GetItems().ToList();
-            }
-            result = result.Where(item => item.Name.IndexOf(SearchBox.Text, StringComparison.OrdinalIgnoreCase) != -1).ToList();
-            result = result.Distinct().Where(item => PassFilters(item)).ToList();
-            result.Sort(new MyComparer(this));
-            return result.ToArray();
-        }
+			List<Item> result = new List<Item>();
+			if (SelectedCategory == null)
+			{
+				foreach (Category category in Categories)
+				{
+					Item[] items = category.GetItems();
+					foreach (Item item in items)
+					{
+						result.Add(item);
+					}
+				}
+			}
+			else
+			{
+				result = SelectedCategory.GetItems().ToList();
+			}
+			result = result.Where(item => item.Name.IndexOf(SearchBox.Text, StringComparison.OrdinalIgnoreCase) != -1).ToList();
+			result = result.Distinct().Where(item => PassFilters(item)).ToList();
+			result.Sort(new MyComparer(this));
+			return result.ToArray();
+		}
 
-        //private int SortMethod(Item x, Item y)
-        //{
-        //	ErrorLogger.Log("SortMethod" + SelectedSort.button.Tooltip);
+		//private int SortMethod(Item x, Item y)
+		//{
+		//	ErrorLogger.Log("SortMethod" + SelectedSort.button.Tooltip);
 
-        //	if (!AvailableSorts.Contains(SelectedSort))
-        //	{
-        //		ErrorLogger.Log("Default Sort Selected");
-        //		SelectedSort = DefaultSorts[0];
-        //	}
-        //	return SelectedSort.sort(x, y);
-        //}
+		//	if (!AvailableSorts.Contains(SelectedSort))
+		//	{
+		//		ErrorLogger.Log("Default Sort Selected");
+		//		SelectedSort = DefaultSorts[0];
+		//	}
+		//	return SelectedSort.sort(x, y);
+		//}
 
-        //public override int CompareTo(object obj)
-        //{
-        //	switch (Interface.modBrowser.sortMode)
-        //	{
-        //		case SortModes.DisplayNameAtoZ:
-        //			return this.displayname.CompareTo((obj as UIModDownloadItem).displayname);
-        //		case SortModes.DisplayNameZtoA:
-        //			return -1 * this.displayname.CompareTo((obj as UIModDownloadItem).displayname);
-        //		case SortModes.DownloadsAscending:
-        //			return this.downloads.CompareTo((obj as UIModDownloadItem).downloads);
-        //		case SortModes.DownloadsDescending:
-        //			return -1 * this.downloads.CompareTo((obj as UIModDownloadItem).downloads);
-        //		case SortModes.RecentlyUpdated:
-        //			return -1 * this.timeStamp.CompareTo((obj as UIModDownloadItem).timeStamp);
-        //	}
-        //	return base.CompareTo(obj);
-        //}
+		//public override int CompareTo(object obj)
+		//{
+		//	switch (Interface.modBrowser.sortMode)
+		//	{
+		//		case SortModes.DisplayNameAtoZ:
+		//			return this.displayname.CompareTo((obj as UIModDownloadItem).displayname);
+		//		case SortModes.DisplayNameZtoA:
+		//			return -1 * this.displayname.CompareTo((obj as UIModDownloadItem).displayname);
+		//		case SortModes.DownloadsAscending:
+		//			return this.downloads.CompareTo((obj as UIModDownloadItem).downloads);
+		//		case SortModes.DownloadsDescending:
+		//			return -1 * this.downloads.CompareTo((obj as UIModDownloadItem).downloads);
+		//		case SortModes.RecentlyUpdated:
+		//			return -1 * this.timeStamp.CompareTo((obj as UIModDownloadItem).timeStamp);
+		//	}
+		//	return base.CompareTo(obj);
+		//}
 
-        public bool PassFilters(Item item) {
-            foreach (Filter filter in Filters) {
-                if (filter.enabled && !filter.filter(item)) {
-                    return false;
-                }
-            }
-            return true;
-        }
+		public bool PassFilters(Item item)
+		{
+			foreach (Filter filter in Filters)
+			{
+				if (filter.enabled && !filter.filter(item))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
 
-        public static bool CategoriesLoaded = false;
-        public static Category[] Categories { get; set; }
+		public static bool CategoriesLoaded = false;
+		public static Category[] Categories { get; set; }
 
-        public static Filter[] Filters { get; set; }
+		public static Filter[] Filters { get; set; }
 
-        public static Sort[] DefaultSorts { get; set; }
+		public static Sort[] DefaultSorts { get; set; }
 
-        internal static void Unload() {
-            //ErrorLogger.Log("Unloading Categories");
-            if (CategoriesLoaded) {
-                foreach (Category category in Categories) {
-                    foreach (Category subCategory in category.SubCategories) {
-                        subCategory.Items.Clear();
-                    }
-                    category.Items.Clear();
-                }
-            }
-            CategoriesLoaded = false;
-        }
+		internal static void Unload()
+		{
+			//ErrorLogger.Log("Unloading Categories");
+			if (CategoriesLoaded)
+			{
+				foreach (Category category in Categories)
+				{
+					foreach (Category subCategory in category.SubCategories)
+					{
+						subCategory.Items.Clear();
+					}
+					category.Items.Clear();
+				}
+			}
+			CategoriesLoaded = false;
+		}
 
-        public static void ParseList2() {
-            Category modCategory = new Category("Mod") {
+		public static void ParseList2()
+		{
+            Category modCategory = new Category("Mod")
+            {
                 SubCategories = new List<Category>()
             };
-            foreach (Mod loadedMod in ModLoader.LoadedMods) {
-                if (loadedMod.Name != "ModLoader")
-				{
-					modCategory.SubCategories.Add(new Category(loadedMod.Name, x => x.modItem != null && x.modItem.mod.Name == loadedMod.Name));
-				}
-			}
-            Item a = new Item();
-            Categories = new Category[] {
-                new Category("Weapons") {
-                    SubCategories = new List<Category>() {
-                        new Category("Melee", x=>x.melee),
-                        new Category("Magic", x=>x.magic),
-                        new Category("Ranged", x=>x.ranged && x.ammo == 0) // TODO and ammo no
-						{
-                            Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortAmmo")){Tooltip = "Use Ammo Type"}, (x,y)=>x.useAmmo.CompareTo(y.useAmmo)), }
-                        },
-                        new Category("Throwing", x=>x.thrown),
-                        new Category("Summon", x=>x.summon && !x.sentry),
-                        new Category("Sentry", x=>x.summon && x.sentry),
-                    },
-                    Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortDamage")){Tooltip = "Damage"}, (x,y)=>x.damage.CompareTo(y.damage)), }
-                },
-                new Category("Tools") {
-                    SubCategories = new List<Category>() {
-                        new Category("Pickaxes", x=>x.pick>0) { Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortPick")){Tooltip = "Pick Power"}, (x,y)=>x.pick.CompareTo(y.pick)), } },
-                        new Category("Axes", x=>x.axe>0){ Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortAxe")){Tooltip = "Axe Power"}, (x,y)=>x.axe.CompareTo(y.axe)), } },
-                        new Category("Hammers", x=>x.hammer>0){ Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortHammer")){Tooltip = "Hammer Power"}, (x,y)=>x.hammer.CompareTo(y.hammer)), } },
-                        new Category("Mechanics", x => x.mech == true),
-                    },
-                },
-                new Category("Armor") {
-                    SubCategories = new List<Category>() {
-                        new Category("Head", x=>x.headSlot!=-1),
-                        new Category("Body", x=>x.bodySlot!=-1),
-                        new Category("Legs", x=>x.legSlot!=-1),
-                    },
-                    Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortDefense")){Tooltip = "Defense"}, (x,y)=>x.defense.CompareTo(y.defense)), }
-                },
-                new Category("Placeables") {
-                    SubCategories = new List<Category>() {
-                        new Category("Tiles", x=>x.createTile!=-1),
-                        new Category("Walls", x=>x.createWall!=-1),
-                        new Category("Bars", x => x.createTile == 239),
-                        new Category("Gems", x => x.createTile == 178),
-                        new Category("Plant Seeds", x => x.createTile == 82)
-                    }
-                },
-                new Category("Accessories", x=>x.accessory),
-                new Category("Ammo", x=>x.ammo!=0)
+            foreach (Mod loadedMod in ModLoader.LoadedMods)
+			{
+				if (loadedMod.Name != "ModLoader")
                 {
-                    Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortAmmo")){Tooltip = "Ammo Type"}, (x,y)=>x.ammo.CompareTo(y.ammo)), }
-                },
-                new Category("Potions", x=>(x.UseSound != null && x.UseSound.Style == 3)) {
-                    SubCategories = new List<Category>() {
-                        new Category("Hair Dye", x => x.hairDye != -1),
-                        new Category("Flasks", x => x.buffType >= BuffID.WeaponImbueVenom && x.buffType <= BuffID.WeaponImbuePoison),
-                        new Category("Health", x => x.healLife > 0) {
-                            Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortLife")) { Tooltip = "Life heal" }, (x,y) => x.healLife.CompareTo(y.healLife))}
-                        },
-                        new Category("Mana", x => x.healMana > 0) {
-                            Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortMana")) { Tooltip = "Mana heal" }, (x,y) => x.healMana.CompareTo(y.healMana))}
-                        },
-                        new Category("Well Fed", x => x.buffType == BuffID.WellFed) {
-                            Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortDuration")) { Tooltip = "Duration" }, (x,y) => x.buffTime.CompareTo(y.buffTime))}
-                        }
-                    }
-                },
-                new Category("Expert", x=>x.expert),
-                new Category("Pets"){
-                    SubCategories = new List<Category>() {
-                        new Category("Pets", x=>Main.vanityPet[x.buffType]),
-                        new Category("Light Pets", x=>Main.lightPet[x.buffType]),
-                    }
-                },
-                new Category("Mounts", x=>x.mountType != -1),
-                new Category("Dyes", x=>x.dye != 0),
-                new Category("Boss Summons", x=>ItemID.Sets.SortingPriorityBossSpawns[x.type] != -1 && x.type != ItemID.LifeCrystal && x.type != ItemID.ManaCrystal && x.type != ItemID.CellPhone && x.type != ItemID.IceMirror && x.type != ItemID.MagicMirror && x.type != ItemID.LifeFruit && x.type != ItemID.TreasureMap) {
-                    Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortDamage")){Tooltip = "Progression Order"}, (x,y)=>ItemID.Sets.SortingPriorityBossSpawns[x.type].CompareTo(ItemID.Sets.SortingPriorityBossSpawns[y.type])), }
-                },
-                new Category("Consumables", x=>x.consumable),
-                new Category("Fishing"){
-                    SubCategories = new List<Category>() {
-                        new Category("Poles", x=>x.fishingPole > 0) {Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortFish")){Tooltip = "Pole Power"}, (x,y)=>x.fishingPole.CompareTo(y.fishingPole)), } },
-                        new Category("Bait", x=>x.bait>0) {Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortBait")){Tooltip = "Bait Power"}, (x,y)=>x.bait.CompareTo(y.bait)), } },
-                        new Category("Quest Fish", x=>x.questItem),
-                    }
-                },
-                modCategory,
-                new Category("Other", x=>false)
-            };
-
-            foreach (Category parent in Categories) {
-                foreach (Category sub in parent.SubCategories) {
-                    sub.ParentCategory = parent;
+                    modCategory.SubCategories.Add(new Category(loadedMod.Name, x => x.modItem != null && x.modItem.mod.Name == loadedMod.Name, skipLocalization:true));
                 }
             }
 
-            //var cats = Categories.ToList();
-            //Category mod = new Category("Mod");
-            //modCategory.SubCategories = new List<Category>();
-            //foreach (Mod loadedMod in ModLoader.LoadedMods)
-            //{
-            //	if (loadedMod.Name != "ModLoader")
-            //		modCategory.SubCategories.Add(new Category(loadedMod.Name, x => x.modItem != null && x.modItem.mod.Name == loadedMod.Name));
-            //}
-            //cats.Insert(cats.Count - 1, modCategory);
-            //Categories = cats.ToArray();
+			Categories = new Category[] {
+				new Category("Weapons"/*, x=>x.damage>0*/) {
+					SubCategories = new List<Category>() {
+						new Category("Melee", x=>x.melee),
+						new Category("Magic", x=>x.magic),
+						new Category("Ranged", x=>x.ranged && x.ammo == 0) // TODO and ammo no
+						{
+							Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortAmmo")){Tooltip = HeroText("SortName.UseAmmoType")}, (x,y)=>x.useAmmo.CompareTo(y.useAmmo)), }
+						},
+						new Category("Throwing", x=>x.thrown),
+						new Category("Summon", x=>x.summon && !x.sentry),
+						new Category("Sentry", x=>x.summon && x.sentry),
+					},
+					Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortDamage")){Tooltip = HeroText("SortName.Damage")}, (x,y)=>x.damage.CompareTo(y.damage)), }
+				},
+				new Category("Tools"/*,x=>x.pick>0||x.axe>0||x.hammer>0*/) {
+					SubCategories = new List<Category>() {
+						new Category("Pickaxes", x=>x.pick>0) { Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortPick")){Tooltip = HeroText("SortName.PickPower")}, (x,y)=>x.pick.CompareTo(y.pick)), } },
+						new Category("Axes", x=>x.axe>0){ Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortAxe")){Tooltip = HeroText("SortName.AxePower")}, (x,y)=>x.axe.CompareTo(y.axe)), } },
+						new Category("Hammers", x=>x.hammer>0){ Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortHammer")){Tooltip = HeroText("SortName.HammerPower")}, (x,y)=>x.hammer.CompareTo(y.hammer)), } },
+					},
+				},
+				new Category("Armor"/*,  x=>x.headSlot!=-1||x.bodySlot!=-1||x.legSlot!=-1*/) {
+					SubCategories = new List<Category>() {
+						new Category("Head", x=>x.headSlot!=-1),
+						new Category("Body", x=>x.bodySlot!=-1),
+						new Category("Legs", x=>x.legSlot!=-1),
+					},
+					Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortDefense")){Tooltip = HeroText("SortName.Defense")}, (x,y)=>x.defense.CompareTo(y.defense)), }
+				},
+				new Category("Placeables"/*,  x=>x.createTile!=-1||x.createWall!=-1*/) {
+					SubCategories = new List<Category>() {
+						new Category("Tiles", x=>x.createTile!=-1),
+						new Category("Walls", x=>x.createWall!=-1),
+					}
+				},
+				new Category("Accessories", x=>x.accessory),
+				new Category("Ammo", x=>x.ammo!=0)
+				{
+					Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortAmmo")){Tooltip = HeroText("SortName.AmmoType")}, (x,y)=>x.ammo.CompareTo(y.ammo)), }
+				},
+				new Category("Potions", x=>(x.UseSound != null && x.UseSound.Style == 3)),
+				new Category("Expert", x=>x.expert),
+				new Category("Pets"/*, x=> x.buffType > 0 && (Main.vanityPet[x.buffType] || Main.lightPet[x.buffType])*/){
+					SubCategories = new List<Category>() {
+						new Category("Pets", x=>Main.vanityPet[x.buffType]),
+						new Category("LightPets", x=>Main.lightPet[x.buffType]),
+					}
+				},
+				new Category("Mounts", x=>x.mountType != -1),
+				new Category("Dyes", x=>x.dye != 0),
+				new Category("BossSummons", x=>ItemID.Sets.SortingPriorityBossSpawns[x.type] != -1 && x.type != ItemID.LifeCrystal && x.type != ItemID.ManaCrystal && x.type != ItemID.CellPhone && x.type != ItemID.IceMirror && x.type != ItemID.MagicMirror && x.type != ItemID.LifeFruit && x.netID != ItemID.TreasureMap || x.netID == ItemID.PirateMap) { // vanilla bug.
+					Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortDamage")){Tooltip = HeroText("SortName.ProgressionOrder")}, (x,y)=>ItemID.Sets.SortingPriorityBossSpawns[x.type].CompareTo(ItemID.Sets.SortingPriorityBossSpawns[y.type])), }
+				},
+				new Category("Consumables", x=>x.consumable),
+				new Category("Fishing"/*, x=> x.fishingPole > 0 || x.bait>0|| x.questItem*/){
+					SubCategories = new List<Category>() {
+						new Category("Poles", x=>x.fishingPole > 0) {Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortFish")){Tooltip = HeroText("SortName.PolePower")}, (x,y)=>x.fishingPole.CompareTo(y.fishingPole)), } },
+						new Category("Bait", x=>x.bait>0) {Sorts = new Sort[] { new Sort(new UIImage(HEROsMod.instance.GetTexture("Images/sortBait")){Tooltip = HeroText("SortName.BaitPower")}, (x,y)=>x.bait.CompareTo(y.bait)), } },
+						new Category("QuestFish", x=>x.questItem),
+					}
+				},
+				modCategory,
+				new Category("Other", x=>false),
+			};
+
+			foreach (Category parent in Categories)
+			{
+				foreach (Category sub in parent.SubCategories)
+				{
+					sub.ParentCategory = parent;
+				}
+			}
+
+			//var cats = Categories.ToList();
+			//Category mod = new Category("Mod");
+			//modCategory.SubCategories = new List<Category>();
+			//foreach (Mod loadedMod in ModLoader.LoadedMods)
+			//{
+			//	if (loadedMod.Name != "ModLoader")
+			//		modCategory.SubCategories.Add(new Category(loadedMod.Name, x => x.modItem != null && x.modItem.mod.Name == loadedMod.Name));
+			//}
+			//cats.Insert(cats.Count - 1, modCategory);
+			//Categories = cats.ToArray();
 
 			for (int i = 1; i < Main.itemTexture.Length; i++)
 			{
@@ -646,75 +710,86 @@ namespace HEROsMod.UIKit.UIComponents
 		}
 	}
 
-    internal class MyComparer : IComparer<Item> {
-        internal ItemBrowser br;
+	internal class MyComparer : IComparer<Item>
+	{
+		internal ItemBrowser br;
 
-		public MyComparer(ItemBrowser br) => this.br = br;
+		public MyComparer(ItemBrowser br)
+		{
+			this.br = br;
+		}
 
-		public int Compare(Item a, Item b) =>
-			//if (br.SelectedSort.reversed)
-			//{
-			//	return br.SelectedSort.sort(b, a);
-			//}
-			//else
-			//{
-			//	return br.SelectedSort.sort(a, b);
-			//}
-			br.SelectedSort.sort(a, b);
+        public int Compare(Item a, Item b) =>
+            //if (br.SelectedSort.reversed)
+            //{
+            //	return br.SelectedSort.sort(b, a);
+            //}
+            //else
+            //{
+            //	return br.SelectedSort.sort(a, b);
+            //}
+            br.SelectedSort.sort(a, b);
+    }
+
+	internal class Filter
+	{
+		public Predicate<Item> filter;
+		internal UIImage button;
+		internal bool enabled = false;
+
+		public Filter(UIImage button, Predicate<Item> filter)
+		{
+			this.filter = filter;
+			this.button = button;
+			button.onLeftClick += Button_onLeftClick;
+		}
+
+		private void Button_onLeftClick(object sender, EventArgs e)
+		{
+			enabled = !enabled;
+			//Main.NewText(button.Tooltip + " " + enabled);
+			(button.Parent.Parent as ItemBrowser).SelectedCategory = (button.Parent.Parent as ItemBrowser).SelectedCategory;
+		}
 	}
 
-    internal class Filter {
-        public Predicate<Item> filter;
-        internal UIImage button;
-        internal bool enabled = false;
+	internal class Sort
+	{
+		public Func<Item, Item, int> sort;
+		internal UIImage button;
 
-        public Filter(UIImage button, Predicate<Item> filter) {
-            this.filter = filter;
-            this.button = button;
-            button.OnLeftClick += Button_onLeftClick;
-        }
+		//internal bool enabled = false;
+		public Sort(UIImage button, Func<Item, Item, int> sort)
+		{
+			this.sort = sort;
+			this.button = button;
+			button.onLeftClick += Button_onLeftClick;
+		}
 
-        private void Button_onLeftClick(object sender, EventArgs e) {
-            enabled = !enabled;
-            //Main.NewText(button.Tooltip + " " + enabled);
-            (button.Parent.Parent as ItemBrowser).SelectedCategory = (button.Parent.Parent as ItemBrowser).SelectedCategory;
-        }
-    }
+		private void Button_onLeftClick(object sender, EventArgs e)
+		{
+			//enabled = !enabled;
+			//Main.NewText(button.Tooltip + " " + enabled);
+			(button.Parent.Parent as ItemBrowser).SelectedSort = this;
+			(button.Parent.Parent as ItemBrowser).SelectedCategory = (button.Parent.Parent as ItemBrowser).SelectedCategory;
+		}
+	}
 
-    internal class Sort {
-        public Func<Item, Item, int> sort;
-        internal UIImage button;
+	//public class Sort
+	//{
+	//	public Predicate<Item> filter;
+	//	internal UIImage button;
+	//}
 
-        //internal bool enabled = false;
-        public Sort(UIImage button, Func<Item, Item, int> sort) {
-            this.sort = sort;
-            this.button = button;
-            button.OnLeftClick += Button_onLeftClick;
-        }
+	public class Category
+	{
+		//private Category _parentCategory = null;
+		public Category ParentCategory;
 
-        private void Button_onLeftClick(object sender, EventArgs e) {
-            //enabled = !enabled;
-            //Main.NewText(button.Tooltip + " " + enabled);
-            (button.Parent.Parent as ItemBrowser).SelectedSort = this;
-            (button.Parent.Parent as ItemBrowser).SelectedCategory = (button.Parent.Parent as ItemBrowser).SelectedCategory;
-        }
-    }
+		//{
+		//	get { return _parentCategory; }
+		//}
 
-    //public class Sort
-    //{
-    //	public Predicate<Item> filter;
-    //	internal UIImage button;
-    //}
-
-    public class Category {
-        //private Category _parentCategory = null;
-        public Category ParentCategory;
-
-        //{
-        //	get { return _parentCategory; }
-        //}
-
-        public Predicate<Item> belongs;
+		public Predicate<Item> belongs;
 
 		public string Name { get; set; }
 		public string LocalizedName { get; set; }
@@ -724,47 +799,51 @@ namespace HEROsMod.UIKit.UIComponents
 
 		public Category(string name)
 		{
-			Name = name;
-			LocalizedName = HEROsMod.HeroText($"ItemBrowser.CategoryName.{name}");
+            Name = name;
+            LocalizedName = HEROsMod.HeroText($"ItemBrowser.CategoryName.{name}");
 			Items = new List<Item>();
 			SubCategories = new List<Category>();
 			Sorts = new Sort[0];
-			belongs = x => false;
+            belongs = x => false;
 		}
 
 		public Category(string name, Predicate<Item> belongs, bool skipLocalization = false)
 		{
-			Name = name;
-			LocalizedName = skipLocalization ? name : HEROsMod.HeroText($"ItemBrowser.CategoryName.{name}");
+            Name = name;
+            LocalizedName = skipLocalization ? name : HEROsMod.HeroText($"ItemBrowser.CategoryName.{name}");
 			Items = new List<Item>();
 			SubCategories = new List<Category>();
 			Sorts = new Sort[0];
 			this.belongs = belongs;
 		}
 
-        //public void AddCategory(Category category)
-        //{
-        //	category._parentCategory = this;
-        //	SubCategories.Add(category);
-        //	SubCategories = SubCategories.OrderBy(x => x.Name).ToList();
-        //}
+		//public void AddCategory(Category category)
+		//{
+		//	category._parentCategory = this;
+		//	SubCategories.Add(category);
+		//	SubCategories = SubCategories.OrderBy(x => x.Name).ToList();
+		//}
 
-        public Item[] GetItems() {
-            List<Item> result = new List<Item>();
-            foreach (Item item in Items) {
-                result.Add(item);
-            }
-            foreach (Category subCategory in SubCategories) {
-                Item[] subItems = subCategory.GetItems();
-                foreach (Item subItem in subItems) {
-                    result.Add(subItem);
-                }
-            }
-            return result.ToArray();
-        }
+		public Item[] GetItems()
+		{
+			List<Item> result = new List<Item>();
+			foreach (Item item in Items)
+			{
+				result.Add(item);
+			}
+			foreach (Category subCategory in SubCategories)
+			{
+				Item[] subItems = subCategory.GetItems();
+				foreach (Item subItem in subItems)
+				{
+					result.Add(subItem);
+				}
+			}
+			return result.ToArray();
+		}
 
-		public override string ToString() => Name + " - Item Count: " + Items.Count;
-	}
+        public override string ToString() => Name + " - Item Count: " + Items.Count;
+    }
 }
 
 //[Serializable()]

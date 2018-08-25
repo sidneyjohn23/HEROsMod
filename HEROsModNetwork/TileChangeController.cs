@@ -57,7 +57,7 @@ namespace HEROsMod.HEROsModNetwork
             {
                 if (Main.player[i].active)
                 {
-                    Network.ResendPlayerTileData(Network.Players2[i]);
+                    Network.ResendPlayerTileData(Network.Players[i]);
                 }
             }
         }

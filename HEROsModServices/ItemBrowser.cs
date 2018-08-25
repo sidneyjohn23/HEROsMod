@@ -11,10 +11,10 @@ namespace HEROsMod.HEROsModServices
 
 		public ItemBrowser()
 		{
-			_name = "Item Browser";
-			_hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/items")/*Main.itemTexture[10]*/);
-			HotbarIcon.OnLeftClick += _hotbarIcon_onLeftClick;
-			HotbarIcon.Tooltip = HEROsMod.HeroText("ItemBrowser");
+            _name = "Item Browser";
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/items")/*Main.itemTexture[10]*/);
+            HotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+            HotbarIcon.Tooltip = HEROsMod.HeroText("ItemBrowser");
 
 			_itemBrowserWindow = new UIKit.UIComponents.ItemBrowser();
 			_itemBrowserWindow.CenterToParent();
@@ -52,6 +52,6 @@ namespace HEROsMod.HEROsModServices
 			//base.MyGroupUpdated();
 		}
 
-		public override void Unload() => UIKit.UIComponents.ItemBrowser.Unload();
-	}
+        public override void Unload() => global::HEROsMod.UIKit.UIComponents.ItemBrowser.Unload();
+    }
 }

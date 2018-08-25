@@ -7,13 +7,13 @@ namespace HEROsMod.UIKit
 {
 	internal class UILabel : UIView
 	{
-		public static DynamicSpriteFont DefaultFont => Main.fontDeathText;
-		public DynamicSpriteFont font;
+        public static DynamicSpriteFont defaultFont => Main.fontDeathText;
+        public DynamicSpriteFont font;
 		private string text = "";
 
 		public string Text
 		{
-			get => text;
+			get { return text; }
 			set
 			{
 				text = value;
@@ -21,26 +21,32 @@ namespace HEROsMod.UIKit
 			}
 		}
 
-		public bool TextOutline { get; set; } = true;
+		private bool textOutline = true;
+
+		public bool TextOutline
+		{
+			get { return textOutline; }
+			set { textOutline = value; }
+		}
 
 		private float width = 0;
 		private float height = 0;
 
 		public UILabel(string text)
 		{
-			font = DefaultFont;
+			font = defaultFont;
             Text = text;
 		}
 
 		public UILabel()
 		{
-			font = DefaultFont;
+			font = defaultFont;
             Text = "";
 		}
 
-		protected override Vector2 GetOrigin() => base.GetOrigin();
+        protected override Vector2 GetOrigin() => base.GetOrigin();
 
-		private void SetWidthHeight()
+        private void SetWidthHeight()
 		{
 			if (Text != null)
 			{
@@ -55,36 +61,33 @@ namespace HEROsMod.UIKit
 			}
 		}
 
-		protected new float Width => width * Scale;
+        protected override float GetWidth() => width * Scale;
 
-		protected new float Height
+        protected override float GetHeight()
 		{
-			get
+			if (height == 0)
 			{
-				if (height == 0)
-				{
-					return font.MeasureString("H").Y * Scale;
-				}
-				else
-				{
-					return height * Scale;
-				}
+				return font.MeasureString("H").Y * Scale;
 			}
-		}
+			else
+            {
+                return height * Scale;
+            }
+        }
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			if (Text != null)
 			{
 				if (TextOutline)
-				{
-					Utils.DrawBorderStringFourWay(spriteBatch, font, Text, DrawPosition.X, DrawPosition.Y, ForegroundColor, Color.Black * Opacity, Origin / Scale, Scale);
-				}
-				else
-				{
-					spriteBatch.DrawString(font, Text, DrawPosition, ForegroundColor * Opacity, 0f, Origin / Scale, Scale, SpriteEffects.None, 0f);
-				}
-			}
+                {
+                    Utils.DrawBorderStringFourWay(spriteBatch, font, Text, DrawPosition.X, DrawPosition.Y, ForegroundColor, Color.Black * Opacity, Origin / Scale, Scale);
+                }
+                else
+                {
+                    spriteBatch.DrawString(font, Text, DrawPosition, ForegroundColor * Opacity, 0f, Origin / Scale, Scale, SpriteEffects.None, 0f);
+                }
+            }
 			base.Draw(spriteBatch);
 		}
 	}

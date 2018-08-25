@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Terraria;
@@ -26,7 +25,7 @@ namespace HEROsMod.UIKit
 					{
 						fillColors[x] = edgeColors[x + (ScrollbgTexture.Height - 1) * ScrollbgTexture.Width];
 					}
-					scrollbgFill = new Texture2D(UIView.Graphics, fillColors.Length, 1);
+					scrollbgFill = new Texture2D(UIView.graphics, fillColors.Length, 1);
 					scrollbgFill.SetData(fillColors);
 				}
 				return scrollbgFill;
@@ -34,11 +33,26 @@ namespace HEROsMod.UIKit
 		}
 
 		protected UIScrollBar scrollBar = new UIScrollBar();
+		private float width = 150;
+		private float height = 250;
+		private float contentHeight = 0;
 		private bool dragging = false;
 		private Vector2 dragAnchor = Vector2.Zero;
 		public bool OverrideDrawAndUpdate = false;
 
-		public float ContentHeight { get; set; } = 0;
+		public float ContentHeight
+		{
+			get
+			{
+				return contentHeight;
+				/*
+                float result = contentHeight - Height;
+                if (result < Height) result = Height;
+                return result;
+                 */
+			}
+			set { contentHeight = value; }
+		}
 
 		private float scrollPosition = 0;
 
@@ -48,43 +62,41 @@ namespace HEROsMod.UIKit
 			{
 				float result = scrollPosition;
 				if (scrollPosition < 0 || Height > ContentHeight)
-				{
-					result = 0;
-				}
+                {
+                    result = 0;
+                }
 
-				if (scrollPosition > ContentHeight)
-				{
-					result = ContentHeight;
-				}
+                if (scrollPosition > ContentHeight)
+                {
+                    result = ContentHeight;
+                }
 
-				return result;
+                return result;
 			}
 			set
 			{
 				if (value < 0)
-				{
-					value = 0;
-				}
+                {
+                    value = 0;
+                }
 
-				if (value > ContentHeight)
-				{
-					value = ContentHeight;
-				}
+                if (value > ContentHeight)
+                {
+                    value = ContentHeight;
+                }
 
-				scrollPosition = value;
+                scrollPosition = value;
 				UpdateChildOffset();
 			}
 		}
 
 		public UIScrollView()
 		{
-			Width = 150;
-			Height = 250;
-			scrollBar.OnMouseDown += new ClickEventHandler(ScrollBar_onMouseDown);
+			scrollBar.onMouseDown += new ClickEventHandler(scrollBar_onMouseDown);
             AddChild(scrollBar);
 		}
 
-		private void ScrollBar_onMouseDown(object sender, byte button)
+		private void scrollBar_onMouseDown(object sender, byte button)
 		{
 			if (button == 0)
 			{
@@ -93,10 +105,18 @@ namespace HEROsMod.UIKit
 			}
 		}
 
-		public override void AddChild(UIView view)
+        protected override float GetHeight() => height;
+
+        protected override float GetWidth() => width;
+
+        protected override void SetWidth(float width) => this.width = width;
+
+        protected override void SetHeight(float height) => this.height = height;
+
+        public override void AddChild(UIView view)
 		{
 			//view.SetInScrollView(this);
-			if (Children.Count > 0 && ContentHeight > 0)
+			if (children.Count > 0 && contentHeight > 0)
 			{
 				float dest = (ScrollPosition / ContentHeight) * (ContentHeight - Height);
 				view.Offset = new Vector2(view.Offset.X, -dest);
@@ -107,11 +127,11 @@ namespace HEROsMod.UIKit
 		public void ClearContent()
 		{
 			ScrollPosition = 0;
-			if (Children.Count > 1)
+			if (children.Count > 1)
 			{
-				for (int i = 1; i < Children.Count; i++)
+				for (int i = 1; i < children.Count; i++)
 				{
-					RemoveChild(Children.First());
+					RemoveChild(GetChild(i));
 				}
 			}
 		}
@@ -123,27 +143,27 @@ namespace HEROsMod.UIKit
 				scrollBar.Update();
 			}
 			else
-			{
-				base.Update();
-			}
+            {
+                base.Update();
+            }
 
-			if (!MouseLeftButton)
-			{
-				dragging = false;
-			}
+            if (!MouseLeftButton)
+            {
+                dragging = false;
+            }
 
-			float sbHeight = Height / ContentHeight * Height;
+            float sbHeight = Height / ContentHeight * Height;
 			if (sbHeight < 20)
-			{
-				sbHeight = 20;
-			}
+            {
+                sbHeight = 20;
+            }
 
-			if (sbHeight > Height)
-			{
-				sbHeight = Height;
-			}
+            if (sbHeight > Height)
+            {
+                sbHeight = Height;
+            }
 
-			float scrollSpace = Height - sbHeight;
+            float scrollSpace = Height - sbHeight;
 			if (dragging)
 			{
 				float mouseOffset = (MouseY - DrawPosition.Y + Origin.Y) - dragAnchor.Y;
@@ -160,7 +180,7 @@ namespace HEROsMod.UIKit
 				PlayerInput.ScrollWheelDelta = 0;
 				PlayerInput.ScrollWheelDeltaForUI *= -1;
 
-				foreach (UIView child in Children)
+				foreach (UIView child in children)
 				{
 					if (child.GetType() != typeof(UIScrollBar))
 					{
@@ -176,7 +196,7 @@ namespace HEROsMod.UIKit
 
 		public void UpdateChildOffset()
 		{
-			foreach (UIView child in Children)
+			foreach (UIView child in children)
 			{
 				if (child.GetType() != typeof(UIScrollBar))
 				{
@@ -251,11 +271,11 @@ namespace HEROsMod.UIKit
 					scrollBar.Draw(spriteBatch);
 				}
 				else
-				{
-					base.Draw(spriteBatch);
-				}
+                {
+                    base.Draw(spriteBatch);
+                }
 
-				spriteBatch.GraphicsDevice.ScissorRectangle = currentRect;
+                spriteBatch.GraphicsDevice.ScissorRectangle = currentRect;
 				spriteBatch.End();
 				spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, null, null, null, null, Main.UIScaleMatrix);
 				scrollBar.Draw(spriteBatch);

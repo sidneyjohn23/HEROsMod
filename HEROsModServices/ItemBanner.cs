@@ -30,12 +30,12 @@ namespace HEROsMod.HEROsModServices
 			IsInHotbar = true;
 			HotbarParent = hotbar;
 			MultiplayerOnly = true;
-			_name = "Item Banner";
-			_hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/explosives")/*Main.itemTexture[888]*/)
-			{
-				Tooltip = HEROsMod.HeroText("BanDestructiveExplosives")
-			};
-			_hotbarIcon.OnLeftClick += _hotbarIcon_onLeftClick;
+            _name = "Item Banner";
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/explosives")/*Main.itemTexture[888]*/)
+            {
+                Tooltip = HEROsMod.HeroText("BanDestructiveExplosives")
+            };
+            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
 			HEROsModNetwork.GeneralMessages.ItemBannerToggleByServer += GeneralMessages_BannedItemsToggleByServer;
 		}
 
@@ -47,19 +47,19 @@ namespace HEROsMod.HEROsModServices
 			}
 		}
 
-		public override void MyGroupUpdated() => HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ToggleBannedItems");//base.MyGroupUpdated();
+        public override void MyGroupUpdated() => HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("ToggleBannedItems");//base.MyGroupUpdated();
 
-		public void GeneralMessages_BannedItemsToggleByServer(bool itemsbanned)
+        public void GeneralMessages_BannedItemsToggleByServer(bool itemsbanned)
 		{
 			if (itemsbanned)
 			{
-				_hotbarIcon.Opacity = .5f;
-				HotbarIcon.Tooltip = HEROsMod.HeroText("UnbanDestructiveExplosives");
+                _hotbarIcon.Opacity = .5f;
+                HotbarIcon.Tooltip = HEROsMod.HeroText("UnbanDestructiveExplosives");
 			}
 			else
 			{
-				_hotbarIcon.Opacity = 1f;
-				HotbarIcon.Tooltip = HEROsMod.HeroText("BanDestructiveExplosives");
+                _hotbarIcon.Opacity = 1f;
+                HotbarIcon.Tooltip = HEROsMod.HeroText("BanDestructiveExplosives");
 			}
 			ItemsBanned = itemsbanned;
 		}

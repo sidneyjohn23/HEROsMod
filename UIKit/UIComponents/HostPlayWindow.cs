@@ -23,8 +23,8 @@ namespace HEROsMod.UIKit.UIComponents
 			bPost.X = bOk.X - bPost.Width - 16f;
 			Height = bOk.Y + bOk.Height + 16f;
 
-			bOk.OnLeftClick += BOk_onLeftClick;
-			bPost.OnLeftClick += BPost_onLeftClick;
+			bOk.onLeftClick += bOk_onLeftClick;
+			bPost.onLeftClick += bPost_onLeftClick;
 
             AddChild(label);
             AddChild(bOk);
@@ -32,9 +32,9 @@ namespace HEROsMod.UIKit.UIComponents
             CenterToParent();
 		}
 
-		private void BPost_onLeftClick(object sender, EventArgs e) => System.Diagnostics.Process.Start("http://HEROsModMod.com/Terraria_Forum/thread/Host__Play-2348");
+        private void bPost_onLeftClick(object sender, EventArgs e) => System.Diagnostics.Process.Start("http://HEROsModMod.com/Terraria_Forum/thread/Host__Play-2348");
 
-		private void BOk_onLeftClick(object sender, EventArgs e)
+        private void bOk_onLeftClick(object sender, EventArgs e)
 		{
 			Main.menuMode = 12;
             Parent.RemoveChild(this);

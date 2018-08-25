@@ -16,24 +16,24 @@ namespace HEROsMod.HEROsModServices
 
 		public InvasionService()
 		{
-			_hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/event")/*Main.itemTexture[14]*/)
-			{
-				Tooltip = HEROsMod.HeroText("OpenEventStarter")
-			};
-			_hotbarIcon.OnLeftClick += _hotbarIcon_onLeftClick;
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/event")/*Main.itemTexture[14]*/)
+            {
+                Tooltip = HEROsMod.HeroText("OpenEventStarter")
+            };
+            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
 
-            _eventWindow = new EventWindow()
+            _eventWindow = new EventWindow
             {
                 Visible = false
             };
             AddUIView(_eventWindow);
 		}
 
-		private void _hotbarIcon_onLeftClick(object sender, EventArgs e) => _eventWindow.Visible = !_eventWindow.Visible;
+        private void _hotbarIcon_onLeftClick(object sender, EventArgs e) => _eventWindow.Visible = !_eventWindow.Visible;
 
-		public override void MyGroupUpdated() => HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("StartEvents");
+        public override void MyGroupUpdated() => HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("StartEvents");//base.MyGroupUpdated();
 
-		public static void StopAllEvents()
+        public static void StopAllEvents()
 		{
 			if (ModUtils.NetworkMode != NetworkMode.Client)
 			{
@@ -96,7 +96,7 @@ namespace HEROsMod.HEROsModServices
 				Main.invasionX = 0.0;
 				return;
 			}
-			Main.invasionX = Main.maxTilesX;
+			Main.invasionX = (double)Main.maxTilesX;
 			ModUtils.InvasionWarning();
 		}
 
@@ -201,25 +201,22 @@ namespace HEROsMod.HEROsModServices
                 "Slime Rain"
 			};
 
-            CenterToParent();
-            Position = new Microsoft.Xna.Framework.Vector2(Width / 2, Height / 2);
-
             CanMove = true;
 			int buttonWidth = 175;
 
-			UILabel lTitle = new UILabel(HEROsMod.HeroText("Events"))
-			{
-				Scale = .6f,
-				X = LargeSpacing,
-				Y = LargeSpacing,
-				OverridesMouse = false
-			};
-			AddChild(lTitle);
+            UILabel lTitle = new UILabel(HEROsMod.HeroText("Events"))
+            {
+                Scale = .6f,
+                X = LargeSpacing,
+                Y = LargeSpacing,
+                OverridesMouse = false
+            };
+            AddChild(lTitle);
 
 			UIImage bClose = new UIImage(closeTexture);
 			bClose.X = buttonWidth + LargeSpacing - bClose.Width;
 			bClose.Y = LargeSpacing;
-			bClose.OnLeftClick += BClose_onLeftClick;
+			bClose.onLeftClick += bClose_onLeftClick;
 			AddChild(bClose);
 
 			UIButton[] buttons = new UIButton[buttonText.Length];
@@ -234,30 +231,30 @@ namespace HEROsMod.HEROsModServices
                     Y = yPos,
                     Tag = i
                 };
-                buttons[i].OnLeftClick += EventWindow_onLeftClick;
+                buttons[i].onLeftClick += EventWindow_onLeftClick;
 				yPos += buttons[i].Height + Spacing;
 				AddChild(buttons[i]);
 			}
 
-			UIButton bStopEvents = new UIButton(HEROsMod.HeroText("Stop Events"))
-			{
-				AutoSize = false,
-				Width = buttonWidth,
-				X = LargeSpacing,
-				Y = yPos + Spacing
-			};
-			bStopEvents.OnLeftClick += BStopEvents_onLeftClick;
+            UIButton bStopEvents = new UIButton(HEROsMod.HeroText("Stop Events"))
+            {
+                AutoSize = false,
+                Width = buttonWidth,
+                X = LargeSpacing,
+                Y = yPos + Spacing
+            };
+            bStopEvents.onLeftClick += bStopEvents_onLeftClick;
 			AddChild(bStopEvents);
 
             Height = bStopEvents.Y + bStopEvents.Height + LargeSpacing;
             Width = buttonWidth + LargeSpacing * 2;
 		}
 
-		private void BClose_onLeftClick(object sender, EventArgs e) => Visible = false;
+        private void bClose_onLeftClick(object sender, EventArgs e) => Visible = false;
 
-		private void BStopEvents_onLeftClick(object sender, EventArgs e) => InvasionService.StopAllEvents();
+        private void bStopEvents_onLeftClick(object sender, EventArgs e) => InvasionService.StopAllEvents();
 
-		private void EventWindow_onLeftClick(object sender, EventArgs e)
+        private void EventWindow_onLeftClick(object sender, EventArgs e)
 		{
 			UIButton button = (UIButton)sender;
 			Events ev = (Events)((int)button.Tag);

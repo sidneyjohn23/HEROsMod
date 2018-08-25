@@ -14,7 +14,7 @@ namespace HEROsMod.HEROsModNetwork {
 		public static bool LoggedIn { get; set; }
 
         public static List<Group> Groups { get; set; }
-        public static Dictionary<int, HEROsModPlayer> Players2 = new Dictionary<int, HEROsModPlayer>();
+        public static Dictionary<int, HEROsModPlayer> Players = new Dictionary<int, HEROsModPlayer>();
         public static List<Region> Regions { get; set; }
         public static List<UserWithID> RegisteredUsers { get; set; }
         public static bool GravestonesAllowed { get; set; }
@@ -203,7 +203,7 @@ namespace HEROsMod.HEROsModNetwork {
                         short placeType = binaryReader.ReadInt16();
                         int style = binaryReader.ReadByte();
                         bool fail = placeType == 1;
-                        HEROsModPlayer player = Players2[playerNumber];
+                        HEROsModPlayer player = Players[playerNumber];
 
                         Tile tile;
                         if (x >= 0 && y >= 0 && x < Main.maxTilesX && y < Main.maxTilesY) {
@@ -305,7 +305,7 @@ namespace HEROsMod.HEROsModNetwork {
                         int x = binaryReader.ReadInt16();
                         int y = binaryReader.ReadInt16();
                         byte paintColor = binaryReader.ReadByte();
-                        HEROsModPlayer player = Players2[playerNumber];
+                        HEROsModPlayer player = Players[playerNumber];
 
 						if (PlayerHasPermissionToBuildAtBlock(player, x, y))
 						{
@@ -327,7 +327,7 @@ namespace HEROsMod.HEROsModNetwork {
                         int x = binaryReader.ReadInt16();
                         int y = binaryReader.ReadInt16();
                         byte paintColor = binaryReader.ReadByte();
-                        HEROsModPlayer player = Players2[playerNumber];
+                        HEROsModPlayer player = Players[playerNumber];
 
 						if (PlayerHasPermissionToBuildAtBlock(player, x, y))
 						{
@@ -365,10 +365,10 @@ namespace HEROsMod.HEROsModNetwork {
 
         private static void PlayerJoined(int playerNumber) {
             ModUtils.DebugText("New player");
-            ModUtils.DebugText("Players2 Count: " + Players2.Count);
+            ModUtils.DebugText("Players Count: " + Players.Count);
             HEROsModPlayer user = new HEROsModPlayer(playerNumber);
             ModUtils.DebugText("Add player");
-            Players2.Add(playerNumber, user);
+            Players.Add(playerNumber, user);
             // chat message hack: SendTextToPlayer(HEROsModCheckMessage, playerNumber, Color.Red);
             ModUtils.DebugText("Get Packet");
 			Terraria.ModLoader.ModPacket packet = HEROsMod.instance.GetPacket();
@@ -396,12 +396,12 @@ namespace HEROsMod.HEROsModNetwork {
 
 
         public static void PlayerLeft(int playerIndex) {
-            Players2.Remove(playerIndex);
+            Players.Remove(playerIndex);
             GeneralMessages.TellClientsPlayerLeft(playerIndex);
         }
 
         private static void FreezeNonLoggedInPlayers() {
-            foreach (HEROsModPlayer player in Players2.Values) {
+            foreach (HEROsModPlayer player in Players.Values) {
                 if (player.ServerInstance.IsActive) {
                     if (player.Username == string.Empty) {
                         //player.GameInstance.AddBuff(47, 7200);
@@ -458,7 +458,7 @@ namespace HEROsMod.HEROsModNetwork {
         }
 
         public static void SendDataToAllHEROsModUsers() {
-            foreach (KeyValuePair<int, HEROsModPlayer> user in Players2) {
+            foreach (KeyValuePair<int, HEROsModPlayer> user in Players) {
                 byte[] bytes = memoryStream.ToArray();
                 if (user.Value != null && user.Value.UsingHEROsMod) {
 					Terraria.ModLoader.ModPacket a = HEROsMod.instance.GetPacket();
@@ -542,7 +542,7 @@ namespace HEROsMod.HEROsModNetwork {
 			}
 		}
 
-		public static void ResetAllPlayers() => Players2.Clear();
+		public static void ResetAllPlayers() => Players.Clear();
 
 		public static void ResendPlayerTileData(HEROsModPlayer player) {
             int sectionX = Netplay.GetSectionX((int) (player.GameInstance.position.X / 16f));

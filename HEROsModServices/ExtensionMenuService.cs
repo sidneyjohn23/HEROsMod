@@ -19,11 +19,11 @@ namespace HEROsMod.HEROsModServices
 
 			IsHotbar = true;
 
-			_hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/extensions"));
-			HotbarIcon.Tooltip = HEROsMod.HeroText("ExtensionTools");
-			HotbarIcon.OnLeftClick += HotbarIcon_onLeftClick;
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/extensions"));
+            HotbarIcon.Tooltip = HEROsMod.HeroText("ExtensionTools");
+            HotbarIcon.onLeftClick += HotbarIcon_onLeftClick;
 
-            _extensionMenuHotbar = new ExtensionMenuWindow()
+            _extensionMenuHotbar = new ExtensionMenuWindow
             {
                 HotBarParent = HEROsMod.ServiceHotbar
             };
@@ -42,14 +42,14 @@ namespace HEROsMod.HEROsModServices
 			}
 			if (childAvailable)
 			{
-				if (_extensionMenuHotbar.Selected)
+				if (_extensionMenuHotbar.selected)
 				{
-					_extensionMenuHotbar.Selected = false;
+					_extensionMenuHotbar.selected = false;
 					_extensionMenuHotbar.Hide();
 				}
 				else
 				{
-					_extensionMenuHotbar.Selected = true;
+					_extensionMenuHotbar.selected = true;
 					_extensionMenuHotbar.Show();
 				}
 			}
@@ -74,45 +74,45 @@ namespace HEROsMod.HEROsModServices
 			}
 		}
 
-		internal void AddGeneric(GenericExtensionService genericService) => genericServices.Add(genericService);
-	}
+        internal void AddGeneric(GenericExtensionService genericService) => genericServices.Add(genericService);
+    }
 
 	internal class ExtensionMenuWindow : UIHotbar
 	{
 		public ExtensionMenuWindow()
 		{
             buttonView = new UIView();
-			Visible = false;
+			base.Visible = false;
 
 			base.Height = 55f;
             buttonView.Height = base.Height;
-			Anchor = AnchorPosition.Top;
+			base.Anchor = AnchorPosition.Top;
             AddChild(buttonView);
-			Position = new Vector2(Position.X, HiddenPosition);
-			CenterXAxisToParentCenter();
+			base.Position = new Vector2(Position.X, hiddenPosition);
+			base.CenterXAxisToParentCenter();
 			float num = spacing;
-			for (int i = 0; i < buttonView.Children.Count; i++)
+			for (int i = 0; i < buttonView.children.Count; i++)
 			{
-                buttonView.Children[i].Anchor = AnchorPosition.Left;
-                buttonView.Children[i].Position = new Vector2(num, 0f);
-                buttonView.Children[i].CenterYAxisToParentCenter();
-                buttonView.Children[i].Visible = true;
-				num += buttonView.Children[i].Width + spacing;
+                buttonView.children[i].Anchor = AnchorPosition.Left;
+                buttonView.children[i].Position = new Vector2(num, 0f);
+                buttonView.children[i].CenterYAxisToParentCenter();
+                buttonView.children[i].Visible = true;
+				num += buttonView.children[i].Width + spacing;
 			}
             Resize();
 		}
 
-		public override void Test()
+		public override void test()
 		{
-			CenterXAxisToParentCenter();
+			base.CenterXAxisToParentCenter();
 			float num = spacing;
-			for (int i = 0; i < buttonView.Children.Count; i++)
+			for (int i = 0; i < buttonView.children.Count; i++)
 			{
-                buttonView.Children[i].Anchor = AnchorPosition.Left;
-                buttonView.Children[i].Position = new Vector2(num, 0f);
-                buttonView.Children[i].CenterYAxisToParentCenter();
-                buttonView.Children[i].Visible = true;
-				num += buttonView.Children[i].Width + spacing;
+                buttonView.children[i].Anchor = AnchorPosition.Left;
+                buttonView.children[i].Position = new Vector2(num, 0f);
+                buttonView.children[i].CenterYAxisToParentCenter();
+                buttonView.children[i].Visible = true;
+				num += buttonView.children[i].Width + spacing;
 			}
             Resize();
 		}
@@ -126,16 +126,16 @@ namespace HEROsMod.HEROsModServices
 		public void Resize()
 		{
 			float num = spacing;
-			for (int i = 0; i < buttonView.Children.Count; i++)
+			for (int i = 0; i < buttonView.children.Count; i++)
 			{
-				if (buttonView.Children[i].Visible)
+				if (buttonView.children[i].Visible)
 				{
-                    buttonView.Children[i].X = num;
-					num += buttonView.Children[i].Width + spacing;
+                    buttonView.children[i].X = num;
+					num += buttonView.children[i].Width + spacing;
 				}
 			}
-			Width = num;
-            buttonView.Width = Width;
+			base.Width = num;
+            buttonView.Width = base.Width;
 		}
 	}
 }

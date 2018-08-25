@@ -13,29 +13,37 @@ namespace HEROsMod.HEROsModNetwork
         public int Y { get; set; }
 
         public Vector2 Position
-		{
-			get => new Vector2(X, Y);
-			set
-			{
-				X = (int)value.X;
-				Y = (int)value.Y;
-			}
-		}
+        {
+            get
+            {
+                return new Vector2(X, Y);
+            }
 
-		public int Width { get; set; }
+            set
+            {
+                X = (int)value.X;
+                Y = (int)value.Y;
+            }
+        }
+
+        public int Width { get; set; }
         public int Height { get; set; }
 
         public Vector2 Size
-		{
-			get => new Vector2(Width, Height);
-			set
-			{
-				Width = (int)value.X;
-				Height = (int)value.Y;
-			}
-		}
+        {
+            get
+            {
+                return new Vector2(Width, Height);
+            }
 
-		public int Owner { get; set; }
+            set
+            {
+                Width = (int)value.X;
+                Height = (int)value.Y;
+            }
+        }
+
+        public int Owner { get; set; }
         public List<int> AllowedPlayersIDs { get; set; }
         public List<int> AllowedGroupsIDs { get; set; }
 

@@ -6,15 +6,17 @@ namespace HEROsMod.UIKit
 {
 	internal class UIWrappingLabel : UIView
 	{
-		private DynamicSpriteFont font = UILabel.DefaultFont;
+		private DynamicSpriteFont font = UILabel.defaultFont;
+		private float width = 200;
 		private List<UILabel> labels = new List<UILabel>();
+		private string text;
 
 		public string Text
 		{
-			get => Text;
+			get { return text; }
 			set
 			{
-				Text = value;
+				text = value;
 				SetLabels();
 			}
 		}
@@ -22,7 +24,6 @@ namespace HEROsMod.UIKit
 		public UIWrappingLabel()
 		{
 			Scale = .5f;
-			Width = 200;
 		}
 
 		public UIWrappingLabel(string text, float width)
@@ -48,7 +49,7 @@ namespace HEROsMod.UIKit
 					Vector2 wordSize = font.MeasureString(words[i] + " ") * Scale;
 					if (currentLabel == null || currentLabel.Width + wordSize.X > Width)
 					{
-                        currentLabel = new UILabel()
+                        currentLabel = new UILabel
                         {
                             Scale = Scale,
                             font = font
@@ -59,24 +60,25 @@ namespace HEROsMod.UIKit
 					}
 					currentLabel.Text += words[i];
 					if (i != words.Length - 1)
-					{
-						currentLabel.Text += " ";
-					}
-				}
+                    {
+                        currentLabel.Text += " ";
+                    }
+                }
 			}
 		}
 
-		protected new float Height
+        protected override float GetWidth() => width;
+
+        protected override void SetWidth(float width) => this.width = width;
+
+        protected override float GetHeight()
 		{
-			get
+			float result = 0;
+			for (int i = 0; i < labels.Count; i++)
 			{
-				float result = 0;
-				for (int i = 0; i < labels.Count; i++)
-				{
-					result += labels[i].Height;
-				}
-				return result;
+				result += labels[i].Height;
 			}
+			return result;
 		}
 	}
 }

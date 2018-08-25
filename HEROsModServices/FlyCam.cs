@@ -31,11 +31,11 @@ namespace HEROsMod.HEROsModServices
 		{
 			Enabled = false;
 			LockCamera = false;
-			_name = "Fly Camera";
-			_hotbarIcon = new UIKit.UIImage(Main.itemTexture[493]);
-			_hotbarIcon.OnLeftClick += _hotbarIcon_onLeftClick;
-			_hotbarIcon.OnRightClick += _hotbarIcon_onRightClick;
-			HotbarIcon.Tooltip = HEROsMod.HeroText("FlyCamEnableTooltip");
+            _name = "Fly Camera";
+            _hotbarIcon = new UIKit.UIImage(Main.itemTexture[493]);
+            _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
+            _hotbarIcon.onRightClick += _hotbarIcon_onRightClick;
+            HotbarIcon.Tooltip = HEROsMod.HeroText("FlyCamEnableTooltip");
 			//Make sure FreeCamera is off by default
 			Disable();
 		}
@@ -45,7 +45,7 @@ namespace HEROsMod.HEROsModServices
             _hotbarIcon.Opacity = 1f;
 			Enabled = true;
 			LockCamera = false;
-			HotbarIcon.Tooltip = HEROsMod.HeroText("FlyCamDisableTooltip");
+            HotbarIcon.Tooltip = HEROsMod.HeroText("FlyCamDisableTooltip");
 		}
 
 		private void Disable()
@@ -53,7 +53,7 @@ namespace HEROsMod.HEROsModServices
             _hotbarIcon.Opacity = .5f;
 			Enabled = false;
 			LockCamera = false;
-			HotbarIcon.Tooltip = HEROsMod.HeroText("FlyCamEnableTooltip");
+            HotbarIcon.Tooltip = HEROsMod.HeroText("FlyCamEnableTooltip");
 		}
 
 		private void _hotbarIcon_onLeftClick(object sender, EventArgs e)
@@ -81,7 +81,7 @@ namespace HEROsMod.HEROsModServices
 			if (!LockCamera)
 			{
 				Enable();
-				_hotbarIcon.Opacity = .75f;
+                _hotbarIcon.Opacity = .75f;
 				LockCamera = true;
 				HotbarIcon.Tooltip = HEROsMod.HeroText("FlyCamDisableTooltip");
 			}
@@ -112,35 +112,35 @@ namespace HEROsMod.HEROsModServices
 				if (!LockCamera)
 				{
 					if (Main.keyState.IsKeyDown(Keys.LeftAlt))
-					{
-						speed *= .3f;
-					}
+                    {
+                        speed *= .3f;
+                    }
 
-					if (Main.keyState.IsKeyDown(Keys.LeftShift))
-					{
-						speed *= 1.5f;
-					}
+                    if (Main.keyState.IsKeyDown(Keys.LeftShift))
+                    {
+                        speed *= 1.5f;
+                    }
 
-					if (PlayerInput.Triggers.Current.KeyStatus["Left"])
-					{
-						FlyCamPosition.X -= speed;
-					}
+                    if (PlayerInput.Triggers.Current.KeyStatus["Left"])
+                    {
+                        FlyCamPosition.X -= speed;
+                    }
 
-					if (PlayerInput.Triggers.Current.KeyStatus["Right"])
-					{
-						FlyCamPosition.X += speed;
-					}
+                    if (PlayerInput.Triggers.Current.KeyStatus["Right"])
+                    {
+                        FlyCamPosition.X += speed;
+                    }
 
-					if (PlayerInput.Triggers.Current.KeyStatus["Up"])
-					{
-						FlyCamPosition.Y -= speed;
-					}
+                    if (PlayerInput.Triggers.Current.KeyStatus["Up"])
+                    {
+                        FlyCamPosition.Y -= speed;
+                    }
 
-					if (PlayerInput.Triggers.Current.KeyStatus["Down"])
-					{
-						FlyCamPosition.Y += speed;
-					}
-				}
+                    if (PlayerInput.Triggers.Current.KeyStatus["Down"])
+                    {
+                        FlyCamPosition.Y += speed;
+                    }
+                }
 
 				//Vector2 size = new Vector2(Main.screenWidth, Main.screenHeight);
 				//Main.screenPosition = FlyCamPosition - size / 2;
@@ -158,24 +158,24 @@ namespace HEROsMod.HEROsModServices
 					int mapWidth = Main.maxTilesX * 16;
 					int mapHeight = Main.maxTilesY * 16;
 					if (cursorWorldPosition.X < 0)
-					{
-						cursorWorldPosition.X = 0;
-					}
-					else if (cursorWorldPosition.X + player.width > mapWidth)
-					{
-						cursorWorldPosition.X = mapWidth - player.width;
-					}
+                    {
+                        cursorWorldPosition.X = 0;
+                    }
+                    else if (cursorWorldPosition.X + player.width > mapWidth)
+                    {
+                        cursorWorldPosition.X = mapWidth - player.width;
+                    }
 
-					if (cursorWorldPosition.Y < 0)
-					{
-						cursorWorldPosition.Y = 0;
-					}
-					else if (cursorWorldPosition.Y + player.height > mapHeight)
-					{
-						cursorWorldPosition.Y = mapHeight - player.height;
-					}
+                    if (cursorWorldPosition.Y < 0)
+                    {
+                        cursorWorldPosition.Y = 0;
+                    }
+                    else if (cursorWorldPosition.Y + player.height > mapHeight)
+                    {
+                        cursorWorldPosition.Y = mapHeight - player.height;
+                    }
 
-					player.position = cursorWorldPosition;
+                    player.position = cursorWorldPosition;
 					player.velocity = Vector2.Zero;
 					player.fallStart = (int)(player.position.Y / 16f);
 				}

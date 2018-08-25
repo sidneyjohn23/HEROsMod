@@ -4,12 +4,14 @@ namespace HEROsMod.UIKit.UIComponents
 {
 	internal class ItemCollectionView : UIScrollView
 	{
+		private Item[] _items;
+
 		public Item[] Items
 		{
-			get => Items;
+			get { return _items; }
 			set
 			{
-				Items = value;
+				_items = value;
 				RepopulateSlots();
 			}
 		}
