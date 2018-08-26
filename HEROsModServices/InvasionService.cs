@@ -96,7 +96,7 @@ namespace HEROsMod.HEROsModServices
 				Main.invasionX = 0.0;
 				return;
 			}
-			Main.invasionX = (double)Main.maxTilesX;
+			Main.invasionX = Main.maxTilesX;
 			ModUtils.InvasionWarning();
 		}
 

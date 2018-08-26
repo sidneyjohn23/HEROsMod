@@ -8,12 +8,18 @@ using Terraria.ID;
 namespace HEROsMod.HEROsModServices {
     internal class WorldPurifier : HEROsModService {
         public static WorldPurifier instance;
-
+        private UIMessageBox mb;
         public WorldPurifier(UIHotbar hotbar) {
+            mb = new UIMessageBox("Are you sure you want to purify the world?\nThis cannot be undone!", UIMessageBoxType.YesNo)
+            {
+                X = 200,
+                Y = 200
+            };
+            mb.yesClicked += Mb_yesClicked;
             IsInHotbar = true;
             HotbarParent = hotbar;
             _name = "World Purifier";
-            _hotbarIcon = new UIKit.UIImage(HEROsMod.instance.GetTexture("Images/map"));
+            _hotbarIcon = new UIImage(HEROsMod.instance.GetTexture("Images/map"));
             _hotbarIcon.onLeftClick += _hotbarIcon_onLeftClick;
             HotbarIcon.Tooltip = "Purify World";
             instance = this;
@@ -21,10 +27,7 @@ namespace HEROsMod.HEROsModServices {
 
 		public override void MyGroupUpdated() => HasPermissionToUse = HEROsModNetwork.LoginService.MyGroup.HasPermission("PurifyWorld");
 
-		private void _hotbarIcon_onLeftClick(object sender, EventArgs e) {
-            UIMessageBox mb = new UIMessageBox("Are you sure you want to purify the world?\nThis cannot be undone!", UIMessageBoxType.YesNo, true);
-            mb.yesClicked += Mb_yesClicked;
-        }
+        private void _hotbarIcon_onLeftClick(object sender, EventArgs e) => mb.Visible = true;
 
         private void Mb_yesClicked(object sender, EventArgs e) {
             if (Main.netMode != 1) {

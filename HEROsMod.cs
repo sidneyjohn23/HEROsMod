@@ -48,7 +48,7 @@ namespace HEROsMod
 
 				if (!Main.dedServ)
 				{
-					UIKit.UIButton.buttonBackground = HEROsMod.instance.GetTexture("Images/UIKit/buttonEdge");
+					UIKit.UIButton.buttonBackground = instance.GetTexture("Images/UIKit/buttonEdge");
 					UIKit.UIView.closeTexture = HEROsMod.instance.GetTexture("Images/closeButton");
 					UIKit.UITextbox.textboxBackground = HEROsMod.instance.GetTexture("Images/UIKit/textboxEdge");
 					UIKit.UISlider.barTexture = HEROsMod.instance.GetTexture("Images/UIKit/barEdge");
@@ -66,6 +66,10 @@ namespace HEROsMod
 			{
 				ModUtils.DebugText("Load:\n" + e.Message + "\n" + e.StackTrace + "\n");
 			}
+			ModUtils.DebugText("?tmodversion=" + ModLoader.version.ToString()
+                        + "&version=" + HEROsMod.instance.Version.ToString()
+                        + "&platform=" + ModLoader.compressedPlatformRepresentation
+                        + "&steamid64=" + ModUtils.SteamID);
 		}
 
         internal static string HeroText(string key) => translations[$"Mods.HEROsMod.{key}"].GetTranslation(Language.ActiveCulture);// This isn't good until after load....// return Language.GetTextValue($"Mods.HEROsMod.{category}.{key}");
@@ -77,18 +81,18 @@ namespace HEROsMod
 			UIKit.UIComponents.ItemBrowser.DefaultSorts = null;
 			UIKit.UIComponents.ItemBrowser.Categories = null;
 			UIKit.UIComponents.ItemBrowser.CategoriesLoaded = false;
-			UIKit.UIButton.buttonBackground = null;
-			UIKit.UIView.closeTexture = null;
-			UIKit.UITextbox.textboxBackground = null;
-			UIKit.UISlider.barTexture = null;
-			UIKit.UIScrollView.ScrollbgTexture = null;
-			UIKit.UIScrollBar.ScrollbarTexture = null;
-			UIKit.UIDropdown.capUp = null;
-			UIKit.UIDropdown.capDown = null;
-			UIKit.UICheckbox.checkboxTexture = null;
-			UIKit.UICheckbox.checkmarkTexture = null;
-			HEROsModServices.Login._loginTexture = null;
-			HEROsModServices.Login._logoutTexture = null;
+            UIButton.buttonBackground = null;
+            UIView.closeTexture = null;
+            UITextbox.textboxBackground = null;
+            UISlider.barTexture = null;
+            UIScrollView.ScrollbgTexture = null;
+            UIScrollBar.ScrollbarTexture = null;
+            UIDropdown.capUp = null;
+            UIDropdown.capDown = null;
+            UICheckbox.checkboxTexture = null;
+            UICheckbox.checkmarkTexture = null;
+            Login._loginTexture = null;
+            Login._logoutTexture = null;
 			try
 			{
 				KeybindController.bindings.Clear();
@@ -103,9 +107,9 @@ namespace HEROsMod
 					}
 					ServiceController.RemoveAllServices();
 				}
-				HEROsModNetwork.Network.ResetAllPlayers();
-				HEROsModNetwork.Network.ServerUsingHEROsMod = false;
-				HEROsModNetwork.Network.Regions.Clear();
+                Network.ResetAllPlayers();
+                Network.ServerUsingHEROsMod = false;
+                Network.Regions.Clear();
 				MasterView.ClearMasterView();
 			}
 			catch (Exception e)
@@ -150,13 +154,13 @@ namespace HEROsMod
 					{
 						try
 						{
-							HEROsMod.Update();
+                            Update();
 
-							HEROsMod.ServiceHotbar.Update();
+                            ServiceHotbar.Update();
 
-							HEROsMod.DrawBehindUI(Main.spriteBatch);
+                            DrawBehindUI(Main.spriteBatch);
 
-							HEROsMod.Draw(Main.spriteBatch);
+                            Draw(Main.spriteBatch);
 
 							KeybindController.DoPreviousKeyState();
 						}
@@ -394,7 +398,7 @@ namespace HEROsMod
 			ServiceController.AddService(new BuffService());
 			ServiceController.AddService(new GodModeService());
 			ServiceController.AddService(new PrefixEditor());
-			//		ServiceController.AddService(new InvasionService());
+			//ServiceController.AddService(new InvasionService());
 			ServiceController.AddService(new Teleporter());
 			ServiceController.AddService(new RegionService());
 			ServiceController.AddService(new CheckTileModificationTool());
@@ -580,7 +584,7 @@ namespace HEROsMod
 
 			float x = Main.fontMouseText.MeasureString(UIView.HoverText).X;
 			Vector2 vector = new Vector2((float)Main.mouseX, (float)Main.mouseY) + new Vector2(16f);
-			if (vector.Y > (float)(Main.screenHeight - 30))
+			if (vector.Y > Main.screenHeight - 30)
 			{
 				vector.Y = (float)(Main.screenHeight - 30);
 			}

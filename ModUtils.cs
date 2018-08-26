@@ -770,32 +770,40 @@ namespace HEROsMod
 			return Color.White;
 		}
 
-		private static readonly bool debug = false;
+        private static bool Debug => true;
 
-		public static void DebugText(string message)
-		{
-			if (debug)
-			{
-				string header = "HERO's Mod: ";
-				if (Main.dedServ)
-				{
-					Console.WriteLine(header + message);
-				}
-				else
-				{
-					if (Main.gameMenu)
-					{
-						ErrorLogger.Log(header + Main.myPlayer + ": " + message);
-					}
-					else
-					{
-						Main.NewText(header + message);
-					}
-				}
-			}
-		}
+        public static void DebugText(string message)
+        {
+            if (Debug)
+            {
+                string header = "HERO's Mod: ";
+                if (Main.dedServ)
+                {
+                    System.IO.StreamWriter file = new System.IO.StreamWriter("G:/terraria-debug-server.txt", true, System.Text.Encoding.UTF8);
+                    Console.WriteLine(header + message);
+                    file.WriteLine("Server: " + message);
+                    file.Flush();
+                    file.Close();
+                }
+                else
+                {
+                    System.IO.StreamWriter file = new System.IO.StreamWriter("G:/terraria-debug-client.txt", true, System.Text.Encoding.UTF8);
+                    if (Main.gameMenu)
+                    {
+                        ErrorLogger.Log(header + Main.myPlayer + ": " + message);
+                    }
+                    else
+                    {
+                        Main.NewText(header + message);
+                    }
+                    file.WriteLine("Client: " + message);
+                    file.Flush();
+                    file.Close();
+                }
+            }
+        }
 
-		public static Rectangle GetClippingRectangle(SpriteBatch spriteBatch, Rectangle r)
+        public static Rectangle GetClippingRectangle(SpriteBatch spriteBatch, Rectangle r)
 		{
 			//Vector2 vector = new Vector2(this._innerDimensions.X, this._innerDimensions.Y);
 			//Vector2 position = new Vector2(this._innerDimensions.Width, this._innerDimensions.Height) + vector;

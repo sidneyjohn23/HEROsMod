@@ -11,7 +11,7 @@ namespace HEROsMod.HEROsModServices
 
 		public event ServiceEventHandler ServiceRemoved;
 
-		private List<HEROsModService> _services;
+		private List<HEROsModService> _services = new List<HEROsModService>();
 
         /// <summary>
         /// HEROsMod Services laoded into the controller
@@ -20,7 +20,6 @@ namespace HEROsMod.HEROsModServices
 
         public ServiceController()
 		{
-			_services = new List<HEROsModService>();
 			HEROsModNetwork.LoginService.MyGroupChanged += LoginService_MyGroupChanged;
 		}
 
@@ -32,7 +31,7 @@ namespace HEROsMod.HEROsModServices
 			{
 				foreach (HEROsModService service in _services)
 				{
-					//ErrorLogger.Log("MyGroupChanged for " + service.Name);
+					ModUtils.DebugText("MyGroupChanged for " + service.Name);
 					service.MyGroupUpdated();
 				}
 				ServiceRemoved(null);
